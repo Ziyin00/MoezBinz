@@ -132,7 +132,7 @@ const AdminDashboard: React.FC = () => {
                 <div key={product._id} className="flex justify-between items-center">
                   <div className="flex items-center">
                     <img 
-                      src={`http://localhost:3001${product.imageUrl}`} 
+                      src={`https://moezbinz.onrender.com${product.imageUrl}`} 
                       alt={product.name}
                       className="w-10 h-10 rounded object-cover mr-3"
                     />

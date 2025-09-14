@@ -32,7 +32,7 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
     
     if (!transporter) {
       // Mock email sending for development
-      const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
+      const resetUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/reset-password?token=${resetToken}`;
       
       console.log('\n🎯 ===== MOCK PASSWORD RESET EMAIL SENT =====');
       console.log('📧 To:', email);
@@ -44,7 +44,7 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
       return { success: true, messageId: 'mock-email-' + Date.now() };
     }
     
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/reset-password?token=${resetToken}`;
     
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -151,7 +151,7 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
                   <strong style="color: #dc2626;">The MoezBinz Team</strong>
                 </p>
                 <div style="margin-top: 20px;">
-                  <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}" 
+                  <a href="${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}" 
                      style="color: #dc2626; text-decoration: none; font-size: 14px; font-weight: 500;">
                     🌟 Visit MoezBinz
                   </a>
@@ -262,7 +262,7 @@ const sendWelcomeEmail = async (email, userName) => {
               
               <!-- CTA Button -->
               <div style="text-align: center; margin: 40px 0;">
-                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/products" 
+                <a href="${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/products" 
                    style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
                           color: white; 
                           padding: 16px 40px; 

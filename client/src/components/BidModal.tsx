@@ -138,7 +138,7 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center space-x-4">
             <img 
-              src={`http://localhost:3001${product.imageUrl}`} 
+              src={`https://moezbinz.onrender.com${product.imageUrl}`} 
               alt={product.name}
               className="w-16 h-16 object-cover rounded-lg"
             />

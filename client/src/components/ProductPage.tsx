@@ -19,7 +19,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick }) => {
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-100">
       <div className="relative overflow-hidden">
         <img 
-          src={`http://localhost:3001${product.imageUrl}`} 
+          src={`https://moezbinz.onrender.com${product.imageUrl}`} 
           alt={product.name} 
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
         />
