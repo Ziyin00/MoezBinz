@@ -135,9 +135,12 @@ export const adminService = {
     Object.entries(productData).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         if (key === 'image') {
-          formData.append('image', value);
+          // Only append if value is an object (File or Blob)
+          if (typeof value === 'object' && value !== null && 'size' in value && 'type' in value) {
+            formData.append('image', value as Blob);
+          }
         } else {
-          formData.append(key, value.toString());
+          formData.append(key, String(value));
         }
       }
     });

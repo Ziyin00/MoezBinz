@@ -7,7 +7,6 @@ import ProductsTable from '../components/ProductsTable';
 import BidsTable from '../components/BidsTable';
 import CreateProductForm from '../components/CreateProductForm';
 import Header from '../components/Navbar';
-import Footer from '../components/Footer';
 import { useAppSelector } from '../store/hooks';
 
 type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product';
