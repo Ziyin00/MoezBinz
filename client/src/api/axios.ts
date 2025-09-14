@@ -6,7 +6,7 @@ import type { Store } from 'redux';
 const API_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) ||
   (typeof window !== 'undefined' && (window as any).VITE_API_URL) ||
-  'http://localhost:3001/api';
+  'https://moezbinz.onrender.com/api';
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_BASE,

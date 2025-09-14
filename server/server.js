@@ -21,7 +21,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ CORS configuration
 app.use(cors({
-  origin: 'http://localhost:5173',   // frontend origin
+  origin: 'https://moez-binz-sepia.vercel.app/',   // frontend origin
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
