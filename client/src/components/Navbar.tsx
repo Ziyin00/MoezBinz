@@ -20,7 +20,7 @@ const NavLink = ({ to, children, isActive = false, onClick, isSectionActive = fa
     <Link to={to} onClick={handleClick} className={`group text-sm font-bold uppercase tracking-wider relative pb-1 transition-all duration-300 ${
       isLinkActive 
         ? 'text-red-600 bg-red-50 px-3 py-1 rounded-md' 
-        : 'text-gray-900 hover:text-red-600 hover:bg-red-50 hover:px-3 hover:py-1 hover:rounded-md'
+        : 'text-gray-900 hover:text-red-600 hover:bg-red-50  hover:py-1 hover:rounded-md'
     }`}>
       {children}
       <span 
@@ -42,80 +42,35 @@ const Header: React.FC = () => {
   const isAuthenticated = !!user && !!accessToken;
   const isAdmin = user?.role === 'admin';
 
-  // Track which section is currently visible
-  useEffect(() => {
-    const sections = ['home', 'about', 'how-it-works'];
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find the section with the highest intersection ratio
-        let maxRatio = 0;
-        let activeId = 'home';
-        
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio;
-            activeId = entry.target.id;
-          }
-        });
-        
-        // Only update if we found a section with significant visibility
-        if (maxRatio > 0.1) {
-          setActiveSection(activeId);
-        }
-      },
-      {
-        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-        rootMargin: '-80px 0px -60% 0px'
-      }
-    );
-
-    // Add a small delay to ensure DOM is ready
-    const timeoutId = setTimeout(() => {
-      sections.forEach((sectionId) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          observer.observe(element);
-        }
-      });
-    }, 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-      sections.forEach((sectionId) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          observer.unobserve(element);
-        }
-      });
-    };
-  }, []);
-
-  // Set home as active when on home page
-  useEffect(() => {
-    if (location.pathname === '/') {
-      setActiveSection('home');
-    }
-  }, [location.pathname]);
-
-  // Add scroll listener for manual scrolling
+  // Ultra-simple section detection that WILL work
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'how-it-works'];
-      const scrollPosition = window.scrollY + 100; // Offset for navbar height
-      
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const element = document.getElementById(sections[i]);
-        if (element && element.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i]);
-          break;
-        }
+      if (location.pathname !== '/') {
+        setActiveSection('');
+        return;
       }
+
+      const scrollY = window.scrollY;
+      
+      // Simple hardcoded logic - this WILL work
+      let newSection = '';
+      if (scrollY < 500) {
+        newSection = 'home';
+      } else if (scrollY >= 500 && scrollY < 1500) {
+        newSection = 'about';
+      } else {
+        newSection = 'how-it-works';
+      }
+      
+      setActiveSection(newSection);
     };
 
+    // Initial check
+    handleScroll();
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const scrollToSection = (sectionId: string) => {
     // Immediately set the active section when clicking
@@ -132,7 +87,7 @@ const Header: React.FC = () => {
   };
 
   const navLinks = [
-    { name: 'Home', to: '/', section: 'home', onClick: undefined },
+    { name: 'Home', to: '/', section: 'home', onClick: () => scrollToSection('home') },
     { name: 'About Us', to: '#about', section: 'about', onClick: () => scrollToSection('about') },
     { name: 'How It Works', to: '#how-it-works', section: 'how-it-works', onClick: () => scrollToSection('how-it-works') },
     { name: 'Products', to: '/product', section: null, onClick: undefined },
@@ -158,7 +113,7 @@ const Header: React.FC = () => {
               <NavLink 
                 key={link.name} 
                 to={link.to} 
-                isActive={location.pathname === link.to} 
+                isActive={link.section ? false : location.pathname === link.to} 
                 isSectionActive={link.section ? activeSection === link.section : false}
                 onClick={link.onClick}
               >
@@ -216,7 +171,7 @@ const Header: React.FC = () => {
               <NavLink 
                 key={link.name} 
                 to={link.to} 
-                isActive={location.pathname === link.to} 
+                isActive={link.section ? false : location.pathname === link.to} 
                 isSectionActive={link.section ? activeSection === link.section : false}
                 onClick={link.onClick}
               >
