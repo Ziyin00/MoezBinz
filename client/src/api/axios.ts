@@ -2,11 +2,27 @@ import axios from 'axios';
 import type { AxiosInstance } from 'axios';
 import type { Store } from 'redux';
 
-// Use VITE_API_URL for Vite, fallback to REACT_APP_API_URL for CRA, else localhost
-const API_BASE =
-  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) ||
-  (typeof window !== 'undefined' && (window as any).VITE_API_URL) ||
-  'https://moezbinz.onrender.com/api';
+// Dynamic API URL configuration for deployment
+const getApiBaseUrl = () => {
+  // Check for environment variable first
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Check if we're in development
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    return 'http://localhost:3001/api';
+  }
+  
+  // Production fallback - update this to your actual deployment URL
+  return 'https://moezbinz.onrender.com/api';
+};
+
+const API_BASE = getApiBaseUrl();
+
+// Debug logging for deployment
+console.log('🌐 API Base URL:', API_BASE);
+console.log('🌐 Current hostname:', typeof window !== 'undefined' ? window.location.hostname : 'server-side');
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_BASE,
