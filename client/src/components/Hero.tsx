@@ -64,24 +64,26 @@ const Hero: React.FC = () => {
             className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0'}`}
             aria-hidden={index !== currentIndex}
           >
-            <div className="absolute inset-0 bg-black/30 z-10"></div>
+            <div className="absolute inset-0 bg-black/10 z-10"></div>
             <img src={slide.image} alt="" className="w-full h-full object-cover" />
             
-            <div 
+            {/* <div 
               className={`absolute inset-0 z-20 flex flex-col justify-center items-start text-white p-8 md:p-16 lg:p-24 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
             >
               <div className="max-w-4xl space-y-4 md:space-y-6">
                 <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
                     {slide.title}
                 </h1>
-                {/* <p className="text-lg md:text-xl font-semibold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded inline-block">
+                <p className="text-lg md:text-xl font-semibold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded inline-block">
                     {slide.subtitle}
-                </p> */}
+                </p>
                 <p className="text-base md:text-lg text-gray-200">
                     {slide.description}
                 </p>
               </div>
-            </div>
+            </div> */}
+
+
           </div>
         ))}
       </div>
