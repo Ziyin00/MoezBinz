@@ -132,7 +132,7 @@ const Header: React.FC = () => {
                 {isAdmin && (
                   <Link
                     to="/admin/dashboard"
-                    className="bg-red-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5"
+                    className="bg-red-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5"
                   >
                     Dashboard
                   </Link>
