@@ -81,7 +81,7 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Mongo connected');
     app.listen(PORT, () => console.log(`Server running on ${PORT}`));
