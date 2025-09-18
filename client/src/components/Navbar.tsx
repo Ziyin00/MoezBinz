@@ -148,6 +148,7 @@ const Header: React.FC = () => {
     { name: 'How It Works', to: '#how-it-works', section: 'how-it-works', onClick: () => scrollToSection('how-it-works') },
     { name: 'Products', to: '/product', section: null, onClick: undefined },
     { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
+    { name: "What's new", to: '/whats-new', section: null, onClick: undefined },
   ];
 
   const handleLogout = () => {

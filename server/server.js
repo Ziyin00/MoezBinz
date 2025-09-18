@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth-pg');
 const adminRoutes = require('./routes/admin-pg');
 const productRoutes = require('./routes/products-pg');
 const bidRoutes = require('./routes/bids-pg');
+const newsRoutes = require('./routes/news-pg');
 // const passwordResetRoutes = require('./routes/passwordReset');
 
 const app = express();
@@ -72,6 +73,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/bids', bidRoutes);
+app.use('/api/news', newsRoutes);
 // app.use('/api/password-reset', passwordResetRoutes);
 
 // Example protected route

@@ -6,10 +6,12 @@ import UsersTable from '../components/UsersTable';
 import ProductsTable from '../components/ProductsTable';
 import BidsTable from '../components/BidsTable';
 import CreateProductForm from '../components/CreateProductForm';
+import NewsTable from '../components/NewsTable';
+import CreateNewsForm from '../components/CreateNewsForm';
 import Header from '../components/Navbar';
 import { useAppSelector } from '../store/hooks';
 
-type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product';
+type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product' | 'news' | 'create-news';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('overview');
@@ -167,6 +169,10 @@ const AdminDashboard: React.FC = () => {
         return <BidsTable />;
       case 'create-product':
         return <CreateProductForm onSuccess={() => setActiveTab('products')} />;
+      case 'news':
+        return <NewsTable />;
+      case 'create-news':
+        return <CreateNewsForm onSuccess={() => setActiveTab('news')} />;
       default:
         return renderOverview();
     }

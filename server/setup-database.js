@@ -75,11 +75,32 @@ async function setupDatabase() {
     `);
     console.log('✅ Password reset tokens table created');
 
+    // Create news table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS news (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL,
+        excerpt TEXT,
+        image_url VARCHAR(500),
+        author_id INTEGER REFERENCES users(id),
+        status VARCHAR(20) DEFAULT 'published',
+        featured BOOLEAN DEFAULT false,
+        published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('✅ News table created');
+
     // Create indexes for better performance
     await pool.query('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_products_category ON products(category)');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_bids_product_id ON bids(product_id)');
     await pool.query('CREATE INDEX IF NOT EXISTS idx_bids_user_id ON bids(user_id)');
+    await pool.query('CREATE INDEX IF NOT EXISTS idx_news_status ON news(status)');
+    await pool.query('CREATE INDEX IF NOT EXISTS idx_news_featured ON news(featured)');
+    await pool.query('CREATE INDEX IF NOT EXISTS idx_news_published_at ON news(published_at)');
     console.log('✅ Database indexes created');
 
     // Create admin user if it doesn't exist
