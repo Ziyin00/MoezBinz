@@ -212,9 +212,9 @@ router.get('/bids', verifyAdminToken, async (req, res) => {
     const { page = 1, limit = 10, productId = '' } = req.query;
     
     let query = `
-      SELECT b.id, b.amount, b.bid_time, b.status,
+      SELECT b.id, b.amount, b.created_at as bid_time, b.status,
              u.id as user_id, u.username, u.email,
-             p.id as product_id, p.name as product_name
+             p.id as product_id, p.name as product_name, p.image_url, p.price as current_price
       FROM bids b
       JOIN users u ON b.user_id = u.id
       JOIN products p ON b.product_id = p.id
@@ -229,7 +229,7 @@ router.get('/bids', verifyAdminToken, async (req, res) => {
       params.push(productId);
     }
     
-    query += ' ORDER BY b.bid_time DESC';
+    query += ' ORDER BY b.created_at DESC';
     
     // Add pagination
     const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -262,6 +262,8 @@ router.get('/bids', verifyAdminToken, async (req, res) => {
       amount: parseFloat(bid.amount),
       bidTime: bid.bid_time,
       status: bid.status,
+      isAutoBid: false, // Default to false since we don't have this field yet
+      maxBidAmount: null, // Default to null since we don't have this field yet
       bidder: {
         _id: bid.user_id.toString(),
         name: bid.username,
@@ -269,18 +271,17 @@ router.get('/bids', verifyAdminToken, async (req, res) => {
       },
       product: {
         _id: bid.product_id.toString(),
-        name: bid.product_name
+        name: bid.product_name,
+        imageUrl: bid.image_url || '/uploads/placeholder.jpg',
+        currentPrice: parseFloat(bid.current_price)
       }
     }));
     
     res.json({
       bids,
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(total / parseInt(limit)),
-        totalItems: total,
-        itemsPerPage: parseInt(limit)
-      }
+      totalPages: Math.ceil(total / parseInt(limit)),
+      currentPage: parseInt(page),
+      total
     });
   } catch (error) {
     console.error('Get bids error:', error);
