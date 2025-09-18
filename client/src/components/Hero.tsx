@@ -65,7 +65,7 @@ const Hero: React.FC = () => {
             aria-hidden={index !== currentIndex}
           >
             <div className="absolute inset-0 bg-black/10 z-10"></div>
-            <img src={slide.image} alt="" className="w-full h-full object-cover" />
+            <img src={slide.image} alt="" className="md:w-full h-full object-cover" />
             
             {/* <div 
               className={`absolute inset-0 z-20 flex flex-col justify-center items-start text-white p-8 md:p-16 lg:p-24 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}

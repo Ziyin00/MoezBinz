@@ -13,6 +13,9 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLoggedIn }) => {
+  // Debug logging
+  console.log('ProductCard received product:', product);
+  
   const isAuctionEnded = new Date() > new Date(product.endDate);
   const timeLeft = new Date(product.endDate).getTime() - new Date().getTime();
   const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
@@ -54,8 +57,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLogged
         
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-2xl font-bold text-red-600">${product.currentPrice.toFixed(2)}</p>
-            <p className="text-sm text-gray-500">Start: ${product.startingPrice.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-red-600">${(product.currentPrice || 0).toFixed(2)}</p>
+            <p className="text-sm text-gray-500">Start: ${(product.startingPrice || 0).toFixed(2)}</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-500">Ends in</p>
@@ -117,6 +120,8 @@ const ProductsPage: React.FC = () => {
     try {
       setLoading(true);
       const response = await productService.getActiveProducts(1, 12);
+      console.log('Fetched products response:', response);
+      console.log('Products array:', response.products);
       setProducts(response.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -272,9 +277,9 @@ const ProductsPage: React.FC = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product, index) => (
                   <ProductCard 
-                    key={product._id} 
+                    key={product._id || `product-${index}`} 
                     product={product} 
                     onBidClick={handleBidClick}
                     isLoggedIn={!!user}

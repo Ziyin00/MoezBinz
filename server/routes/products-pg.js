@@ -22,14 +22,39 @@ router.get('/', async (req, res) => {
     
     const totalPages = Math.ceil(total / limit);
     
+    // Transform products to match frontend expectations
+    const transformedProducts = result.rows.map(product => {
+      const price = parseFloat(product.price);
+      return {
+        _id: product.id.toString(),
+        name: product.name,
+        description: product.description,
+        category: product.category,
+        startingPrice: Math.round(price * 0.8 * 100) / 100, // 20% lower than current price, rounded to 2 decimals
+        currentPrice: Math.round(price * 100) / 100, // Rounded to 2 decimals
+      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+      condition: 'excellent',
+      location: 'Toronto, ON',
+      shippingCost: 9.99,
+      tags: [product.category],
+      isFeatured: Math.random() > 0.7, // Random featured status
+      imageUrl: product.image_url,
+      status: product.status,
+      seller: {
+        _id: '1',
+        name: 'Moez Binz Store',
+        email: 'store@moezbinz.com'
+      },
+      createdAt: product.created_at,
+      updatedAt: product.updated_at
+    };
+    });
+    
     res.json({
-      products: result.rows,
-      pagination: {
-        currentPage: page,
-        totalPages,
-        totalItems: total,
-        itemsPerPage: limit
-      }
+      products: transformedProducts,
+      totalPages,
+      currentPage: page,
+      total
     });
   } catch (error) {
     console.error('Get products error:', error);
@@ -49,7 +74,35 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
     
-    res.json({ product: result.rows[0] });
+    const product = result.rows[0];
+    
+    // Transform product to match frontend expectations
+    const price = parseFloat(product.price);
+    const transformedProduct = {
+      _id: product.id.toString(),
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      startingPrice: Math.round(price * 0.8 * 100) / 100,
+      currentPrice: Math.round(price * 100) / 100,
+      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      condition: 'excellent',
+      location: 'Toronto, ON',
+      shippingCost: 9.99,
+      tags: [product.category],
+      isFeatured: Math.random() > 0.7,
+      imageUrl: product.image_url,
+      status: product.status,
+      seller: {
+        _id: '1',
+        name: 'Moez Binz Store',
+        email: 'store@moezbinz.com'
+      },
+      createdAt: product.created_at,
+      updatedAt: product.updated_at
+    };
+    
+    res.json({ product: transformedProduct });
   } catch (error) {
     console.error('Get product error:', error);
     res.status(500).json({ message: 'Server error' });
