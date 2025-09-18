@@ -14,6 +14,7 @@ import HomePage from "./pages/home";
 import Product from "./pages/products";
 import Visit from "./pages/visit";
 import AdminDashboard from "./pages/adminDashboard";
+import NotFound from "./pages/NotFound";
 
 import BackToTopButton from "./components/BackToTopButton";
 import Footer from "./components/Footer";
@@ -29,7 +30,8 @@ const persistor = persistStore(store);
 function App() {
   // Setup API interceptors after store is initialized
   React.useEffect(() => {
-    setupInterceptors(store);
+    const cleanup = setupInterceptors(store);
+    return cleanup; // Cleanup function to clear timers
   }, []);
 
   return (
@@ -58,6 +60,8 @@ function App() {
                   <AdminDashboard />
                 </ProtectedRoute>
               } />
+              {/* Catch-all route for 404 */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <Footer />
             <BackToTopButton />

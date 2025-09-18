@@ -31,11 +31,51 @@ export const api: AxiosInstance = axios.create({
 
 export function setupInterceptors(store: Store) {
   let isRefreshing = false;
-  let failedQueue: { resolve: (token: string) => void; reject: (err: any) => void }[] = [];
+  let failedQueue: { resolve: (token: string) => void; reject: (err: unknown) => void }[] = [];
+  let refreshTimer: number | null = null;
 
-  const processQueue = (error: any, token: string | null = null) => {
+  const processQueue = (error: unknown, token: string | null = null) => {
     failedQueue.forEach(p => (error ? p.reject(error) : p.resolve(token!)));
     failedQueue = [];
+  };
+
+  // Function to decode JWT and get expiration time
+  const getTokenExpiration = (token: string): number | null => {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000; // Convert to milliseconds
+    } catch {
+      return null;
+    }
+  };
+
+  // Function to schedule token refresh
+  const scheduleTokenRefresh = (token: string) => {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+    }
+
+    const expiration = getTokenExpiration(token);
+    if (!expiration) return;
+
+    // Refresh token 5 minutes before expiration
+    const refreshTime = expiration - Date.now() - (5 * 60 * 1000);
+    
+    if (refreshTime > 0) {
+      refreshTimer = setTimeout(async () => {
+        try {
+          console.log('⏰ Proactively refreshing token...');
+          const res = await axios.post(`${API_BASE}/auth/refresh`, {}, { withCredentials: true });
+          const newToken = res.data.accessToken;
+          store.dispatch({ type: 'auth/setCredentials', payload: { accessToken: newToken } });
+          scheduleTokenRefresh(newToken); // Schedule next refresh
+          console.log('✅ Token refreshed proactively');
+        } catch (err) {
+          console.error('❌ Proactive token refresh failed:', err);
+          store.dispatch({ type: 'auth/logout' });
+        }
+      }, refreshTime);
+    }
   };
 
   api.interceptors.request.use((config) => {
@@ -62,8 +102,13 @@ export function setupInterceptors(store: Store) {
       const state = store.getState() as { auth?: { accessToken?: string } };
       const token = state.auth?.accessToken;
       if (token && config.headers) {
-        (config.headers as any).Authorization = `Bearer ${token}`;
+        (config.headers as Record<string, string>).Authorization = `Bearer ${token}`;
         console.log('✅ Token attached to request:', config.url, token.substring(0, 20) + '...');
+        
+        // Schedule token refresh if not already scheduled
+        if (!refreshTimer) {
+          scheduleTokenRefresh(token);
+        }
       } else {
         console.log('❌ No token found in store for request to:', config.url);
         console.log('Store state:', state);
@@ -108,17 +153,23 @@ export function setupInterceptors(store: Store) {
         isRefreshing = true;
 
         try {
+          console.log('🔄 Attempting to refresh token...');
           // call refresh using plain axios to avoid calling interceptors again
           const res = await axios.post(`${API_BASE}/auth/refresh`, {}, { withCredentials: true });
           const newToken = res.data.accessToken;
+          console.log('✅ Token refreshed successfully:', newToken.substring(0, 20) + '...');
 
           // Dispatch plain action strings to avoid cyclic import of slice
           store.dispatch({ type: 'auth/setCredentials', payload: { accessToken: newToken } });
+
+          // Schedule next token refresh
+          scheduleTokenRefresh(newToken);
 
           processQueue(null, newToken);
           originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
           return api(originalRequest);
         } catch (err) {
+          console.error('❌ Token refresh failed:', err);
           processQueue(err, null);
           store.dispatch({ type: 'auth/logout' });
           return Promise.reject(err);
@@ -130,4 +181,12 @@ export function setupInterceptors(store: Store) {
       return Promise.reject(error);
     }
   );
+
+  // Return cleanup function
+  return () => {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+      refreshTimer = null;
+    }
+  };
 }

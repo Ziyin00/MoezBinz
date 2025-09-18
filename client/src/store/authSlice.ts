@@ -92,6 +92,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
+        // Token refresh will be scheduled automatically by axios interceptor
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
