@@ -49,7 +49,14 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
 
     try {
       setSaving(true);
-      await adminService.updateProduct(productId, editForm);
+      // Fix: Convert tags array to comma-separated string if present
+      const updateData = {
+        ...editForm,
+        tags: Array.isArray(editForm.tags)
+          ? editForm.tags.join(',')
+          : editForm.tags,
+      };
+      await adminService.updateProduct(productId, updateData);
       showSuccess('Product updated successfully!');
       setIsEditing(false);
       await fetchProduct(); // Refresh the product data
@@ -387,7 +394,7 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
               <input
                 type="text"
                 value={Array.isArray(editForm.tags) ? editForm.tags.join(', ') : ''}
-                onChange={(e) => handleInputChange('tags', e.target.value.split(',').map(tag => tag.trim()))}
+                onChange={(e) => handleInputChange('tags', e.target.value)}
                 placeholder="Enter tags separated by commas"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
