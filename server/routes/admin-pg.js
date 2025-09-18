@@ -582,8 +582,10 @@ router.put('/products/:id', verifyAdminToken, upload.single('image'), async (req
       return res.status(400).json({ message: 'No fields to update' });
     }
 
-    paramCount++;
+    // Add updated_at field without parameter
     updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
+    
+    // Add WHERE clause with product ID
     paramCount++;
     updateValues.push(id);
 
