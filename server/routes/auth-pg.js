@@ -31,8 +31,8 @@ router.post('/register', async (req, res) => {
     );
     
     const user = userResult.rows[0];
-    const accessToken = signAccessToken({ id: user.id, email: user.email });
-    const refreshToken = signRefreshToken({ id: user.id, email: user.email });
+    const accessToken = signAccessToken({ id: user.id, email: user.email, role: user.role });
+    const refreshToken = signRefreshToken({ id: user.id, email: user.email, role: user.role });
 
     // Set HttpOnly cookie for refresh token
     res.cookie(COOKIE_NAME, refreshToken, {
@@ -72,8 +72,8 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const accessToken = signAccessToken({ id: user.id, email: user.email });
-    const refreshToken = signRefreshToken({ id: user.id, email: user.email });
+    const accessToken = signAccessToken({ id: user.id, email: user.email, role: user.role });
+    const refreshToken = signRefreshToken({ id: user.id, email: user.email, role: user.role });
 
     res.cookie(COOKIE_NAME, refreshToken, {
       httpOnly: true,
@@ -102,9 +102,9 @@ router.post('/refresh', async (req, res) => {
       if (err) {
         return res.status(403).json({ message: 'Invalid refresh token' });
       }
-      const accessToken = signAccessToken({ id: payload.id, email: payload.email });
+      const accessToken = signAccessToken({ id: payload.id, email: payload.email, role: payload.role });
       // optionally rotate refresh token:
-      const newRefresh = signRefreshToken({ id: payload.id, email: payload.email });
+      const newRefresh = signRefreshToken({ id: payload.id, email: payload.email, role: payload.role });
       res.cookie(COOKIE_NAME, newRefresh, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',

@@ -6,11 +6,75 @@ const { verifyAdminToken } = require('../middleware/adminAuth');
 router.get('/users', verifyAdminToken, async (req, res) => {
   try {
     const pool = req.app.locals.pool;
-    const result = await pool.query('SELECT id, username, email, role, is_verified, created_at FROM users ORDER BY created_at DESC');
+    const { page = 1, limit = 10, search = '', role = '' } = req.query;
+    
+    let query = 'SELECT id, username, email, role, is_verified, created_at FROM users WHERE 1=1';
+    const params = [];
+    let paramCount = 0;
+    
+    if (search) {
+      paramCount++;
+      query += ` AND (username ILIKE $${paramCount} OR email ILIKE $${paramCount})`;
+      params.push(`%${search}%`);
+    }
+    
+    if (role) {
+      paramCount++;
+      query += ` AND role = $${paramCount}`;
+      params.push(role);
+    }
+    
+    query += ' ORDER BY created_at DESC';
+    
+    // Add pagination
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    paramCount++;
+    query += ` LIMIT $${paramCount}`;
+    params.push(parseInt(limit));
+    
+    paramCount++;
+    query += ` OFFSET $${paramCount}`;
+    params.push(offset);
+    
+    const result = await pool.query(query, params);
+    
+    // Get total count for pagination
+    let countQuery = 'SELECT COUNT(*) as total FROM users WHERE 1=1';
+    const countParams = [];
+    let countParamCount = 0;
+    
+    if (search) {
+      countParamCount++;
+      countQuery += ` AND (username ILIKE $${countParamCount} OR email ILIKE $${countParamCount})`;
+      countParams.push(`%${search}%`);
+    }
+    
+    if (role) {
+      countParamCount++;
+      countQuery += ` AND role = $${countParamCount}`;
+      countParams.push(role);
+    }
+    
+    const countResult = await pool.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].total);
+    
+    const users = result.rows.map(user => ({
+      _id: user.id.toString(),
+      name: user.username,
+      email: user.email,
+      role: user.role,
+      isVerified: user.is_verified,
+      createdAt: user.created_at
+    }));
     
     res.json({
-      users: result.rows,
-      count: result.rows.length
+      users,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / parseInt(limit)),
+        totalItems: total,
+        itemsPerPage: parseInt(limit)
+      }
     });
   } catch (error) {
     console.error('Get users error:', error);
@@ -25,22 +89,58 @@ router.get('/stats', verifyAdminToken, async (req, res) => {
     
     // Get user count
     const userCountResult = await pool.query('SELECT COUNT(*) as count FROM users');
-    const userCount = userCountResult.rows[0].count;
+    const totalUsers = parseInt(userCountResult.rows[0].count);
     
-    // Get product count
+    // Get product counts
     const productCountResult = await pool.query('SELECT COUNT(*) as count FROM products');
-    const productCount = productCountResult.rows[0].count;
+    const totalProducts = parseInt(productCountResult.rows[0].count);
+    
+    const activeProductsResult = await pool.query('SELECT COUNT(*) as count FROM products WHERE status = $1', ['active']);
+    const activeProducts = parseInt(activeProductsResult.rows[0].count);
+    
+    const soldProductsResult = await pool.query('SELECT COUNT(*) as count FROM products WHERE status = $1', ['sold']);
+    const soldProducts = parseInt(soldProductsResult.rows[0].count);
     
     // Get bid count
     const bidCountResult = await pool.query('SELECT COUNT(*) as count FROM bids');
-    const bidCount = bidCountResult.rows[0].count;
+    const totalBids = parseInt(bidCountResult.rows[0].count);
+    
+    // Get recent users (last 5)
+    const recentUsersResult = await pool.query(
+      'SELECT id, username as name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT 5'
+    );
+    const recentUsers = recentUsersResult.rows.map(user => ({
+      _id: user.id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.created_at
+    }));
+    
+    // Get top products (by current price, limit 5)
+    const topProductsResult = await pool.query(
+      'SELECT id, name, description, category, price, image_url as imageUrl, status, created_at FROM products ORDER BY price DESC LIMIT 5'
+    );
+    const topProducts = topProductsResult.rows.map(product => ({
+      _id: product.id.toString(),
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      currentPrice: parseFloat(product.price),
+      imageUrl: product.imageUrl,
+      status: product.status,
+      createdAt: product.created_at,
+      bidCount: 0 // We'll add this later when we have bids
+    }));
     
     res.json({
-      stats: {
-        totalUsers: parseInt(userCount),
-        totalProducts: parseInt(productCount),
-        totalBids: parseInt(bidCount)
-      }
+      totalUsers,
+      totalProducts,
+      totalBids,
+      activeProducts,
+      soldProducts,
+      recentUsers,
+      topProducts
     });
   } catch (error) {
     console.error('Get stats error:', error);
@@ -68,9 +168,239 @@ router.put('/users/:id/role', verifyAdminToken, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    res.json({ user: result.rows[0] });
+    const user = result.rows[0];
+    res.json({ 
+      user: {
+        _id: user.id.toString(),
+        name: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
   } catch (error) {
     console.error('Update user role error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete user (admin only)
+router.delete('/users/:id', verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = req.app.locals.pool;
+    
+    // Check if user exists
+    const userResult = await pool.query('SELECT id FROM users WHERE id = $1', [id]);
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Delete user
+    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+    
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get bids (admin only)
+router.get('/bids', verifyAdminToken, async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+    const { page = 1, limit = 10, productId = '' } = req.query;
+    
+    let query = `
+      SELECT b.id, b.amount, b.bid_time, b.status,
+             u.id as user_id, u.username, u.email,
+             p.id as product_id, p.name as product_name
+      FROM bids b
+      JOIN users u ON b.user_id = u.id
+      JOIN products p ON b.product_id = p.id
+      WHERE 1=1
+    `;
+    const params = [];
+    let paramCount = 0;
+    
+    if (productId) {
+      paramCount++;
+      query += ` AND b.product_id = $${paramCount}`;
+      params.push(productId);
+    }
+    
+    query += ' ORDER BY b.bid_time DESC';
+    
+    // Add pagination
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    paramCount++;
+    query += ` LIMIT $${paramCount}`;
+    params.push(parseInt(limit));
+    
+    paramCount++;
+    query += ` OFFSET $${paramCount}`;
+    params.push(offset);
+    
+    const result = await pool.query(query, params);
+    
+    // Get total count
+    let countQuery = 'SELECT COUNT(*) as total FROM bids b WHERE 1=1';
+    const countParams = [];
+    let countParamCount = 0;
+    
+    if (productId) {
+      countParamCount++;
+      countQuery += ` AND b.product_id = $${countParamCount}`;
+      countParams.push(productId);
+    }
+    
+    const countResult = await pool.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].total);
+    
+    const bids = result.rows.map(bid => ({
+      _id: bid.id.toString(),
+      amount: parseFloat(bid.amount),
+      bidTime: bid.bid_time,
+      status: bid.status,
+      bidder: {
+        _id: bid.user_id.toString(),
+        name: bid.username,
+        email: bid.email
+      },
+      product: {
+        _id: bid.product_id.toString(),
+        name: bid.product_name
+      }
+    }));
+    
+    res.json({
+      bids,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / parseInt(limit)),
+        totalItems: total,
+        itemsPerPage: parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Get bids error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get all products (admin view with more details)
+router.get('/products', verifyAdminToken, async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+    const { page = 1, limit = 10, category = '', status = '' } = req.query;
+    
+    let query = 'SELECT * FROM products WHERE 1=1';
+    const params = [];
+    let paramCount = 0;
+    
+    if (category) {
+      paramCount++;
+      query += ` AND category = $${paramCount}`;
+      params.push(category);
+    }
+    
+    if (status) {
+      paramCount++;
+      query += ` AND status = $${paramCount}`;
+      params.push(status);
+    }
+    
+    query += ' ORDER BY created_at DESC';
+    
+    // Add pagination
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    paramCount++;
+    query += ` LIMIT $${paramCount}`;
+    params.push(parseInt(limit));
+    
+    paramCount++;
+    query += ` OFFSET $${paramCount}`;
+    params.push(offset);
+    
+    const result = await pool.query(query, params);
+    
+    // Get total count
+    let countQuery = 'SELECT COUNT(*) as total FROM products WHERE 1=1';
+    const countParams = [];
+    let countParamCount = 0;
+    
+    if (category) {
+      countParamCount++;
+      countQuery += ` AND category = $${countParamCount}`;
+      countParams.push(category);
+    }
+    
+    if (status) {
+      countParamCount++;
+      countQuery += ` AND status = $${countParamCount}`;
+      countParams.push(status);
+    }
+    
+    const countResult = await pool.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].total);
+    
+    const products = result.rows.map(product => ({
+      _id: product.id.toString(),
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      startingPrice: parseFloat(product.price) * 0.8,
+      currentPrice: parseFloat(product.price),
+      imageUrl: product.image_url,
+      status: product.status,
+      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      condition: 'excellent',
+      location: 'Toronto, ON',
+      shippingCost: 9.99,
+      tags: [product.category],
+      isFeatured: Math.random() > 0.7,
+      seller: {
+        _id: '1',
+        name: 'Moez Binz Store',
+        email: 'store@moezbinz.com'
+      },
+      createdAt: product.created_at,
+      updatedAt: product.updated_at
+    }));
+    
+    res.json({
+      products,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / parseInt(limit)),
+        totalItems: total,
+        itemsPerPage: parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Get admin products error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete product (admin only)
+router.delete('/products/:id', verifyAdminToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = req.app.locals.pool;
+    
+    // Check if product exists
+    const productResult = await pool.query('SELECT id FROM products WHERE id = $1', [id]);
+    if (productResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    
+    // Delete product
+    await pool.query('DELETE FROM products WHERE id = $1', [id]);
+    
+    res.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error('Delete product error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

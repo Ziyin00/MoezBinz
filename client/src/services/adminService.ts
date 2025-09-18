@@ -106,7 +106,7 @@ export const adminService = {
     if (category) params.append('category', category);
     if (status) params.append('status', status);
     
-    const response = await api.get(`/products?${params}`);
+    const response = await api.get(`/admin/products?${params}`);
     return response.data;
   },
 
@@ -121,7 +121,7 @@ export const adminService = {
       }
     });
     
-    const response = await api.post('/products', formData, {
+    const response = await api.post('/admin/products', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -145,7 +145,7 @@ export const adminService = {
       }
     });
     
-    const response = await api.put(`/products/${productId}`, formData, {
+    const response = await api.put(`/admin/products/${productId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -154,7 +154,7 @@ export const adminService = {
   },
 
   deleteProduct: async (productId: string) => {
-    const response = await api.delete(`/products/${productId}`);
+    const response = await api.delete(`/admin/products/${productId}`);
     return response.data;
   },
 
