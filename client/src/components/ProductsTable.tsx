@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../services/adminService';
-import type { Product } from '../services/adminService';
+import type { Product, Bid } from '../services/adminService';
 import { useToast } from '../contexts/ToastContext';
 import ProductView from './ProductView';
 
@@ -12,6 +12,7 @@ const ProductsTable: React.FC = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [productBids, setProductBids] = useState<Record<string, Bid[]>>({});
   const { error: showError } = useToast();
 
   const fetchProducts = useCallback(async () => {
@@ -22,6 +23,9 @@ const ProductsTable: React.FC = () => {
       console.log('Products data received:', data);
       setProducts(data.products);
       setTotalPages(data.totalPages);
+      
+      // Fetch bids for all products
+      await fetchBidsForProducts(data.products);
     } catch (error) {
       console.error('Failed to fetch products:', error);
       console.error('Error details:', {
@@ -33,6 +37,23 @@ const ProductsTable: React.FC = () => {
       setLoading(false);
     }
   }, [currentPage, categoryFilter, statusFilter]);
+
+  const fetchBidsForProducts = async (products: Product[]) => {
+    const bidsData: Record<string, Bid[]> = {};
+    
+    // Fetch bids for each product
+    for (const product of products) {
+      try {
+        const bids = await adminService.getProductBids(product._id);
+        bidsData[product._id] = bids || [];
+      } catch (error) {
+        console.error(`Failed to fetch bids for product ${product._id}:`, error);
+        bidsData[product._id] = [];
+      }
+    }
+    
+    setProductBids(bidsData);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -60,6 +81,32 @@ const ProductsTable: React.FC = () => {
 
   const handleProductUpdated = () => {
     fetchProducts(); // Refresh the list when a product is updated
+  };
+
+  const formatBidsDisplay = (productId: string) => {
+    const bids = productBids[productId] || [];
+    
+    if (bids.length === 0) {
+      return <span className="text-gray-500 text-sm">No bids</span>;
+    }
+
+    return (
+      <div className="space-y-1">
+        {bids.map((bid) => (
+          <div key={bid._id} className="text-xs bg-gray-50 p-2 rounded border">
+            <div className="font-medium text-gray-900">
+              Name: {bid.bidder.name}
+            </div>
+            <div className="text-gray-600">
+              Email: {bid.bidder.email}
+            </div>
+            <div className="font-semibold text-green-600">
+              Amount: ${bid.amount}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const getStatusBadge = (status: string) => {
@@ -168,6 +215,9 @@ const ProductsTable: React.FC = () => {
                 <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                   End Date
                 </th>
+                <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
+                  Bids
+                </th>
                 <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
@@ -212,6 +262,9 @@ const ProductsTable: React.FC = () => {
                   </td>
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-500 hidden lg:table-cell">
                     {new Date(product.endDate).toLocaleDateString()}
+                  </td>
+                  <td className="px-3 lg:px-6 py-4 hidden md:table-cell">
+                    {formatBidsDisplay(product._id)}
                   </td>
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm font-medium">
                     <button

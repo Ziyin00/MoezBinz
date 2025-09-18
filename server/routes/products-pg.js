@@ -109,6 +109,57 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// GET /api/products/:id/bids - Get bids for a specific product
+router.get('/:id/bids', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = req.app.locals.pool;
+    
+    // First check if product exists
+    const productResult = await pool.query('SELECT id FROM products WHERE id = $1', [id]);
+    if (productResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    
+    // Get bids for the product with bidder information
+    const bidsResult = await pool.query(`
+      SELECT 
+        b.id,
+        b.amount,
+        b.status,
+        b.created_at as bid_time,
+        u.id as bidder_id,
+        u.username as bidder_name,
+        u.email as bidder_email
+      FROM bids b
+      JOIN users u ON b.user_id = u.id
+      WHERE b.product_id = $1
+      ORDER BY b.amount DESC, b.created_at DESC
+    `, [id]);
+    
+    // Transform bids to match frontend expectations
+    const transformedBids = bidsResult.rows.map(bid => ({
+      _id: bid.id.toString(),
+      product: { _id: id },
+      bidder: {
+        _id: bid.bidder_id.toString(),
+        name: bid.bidder_name,
+        email: bid.bidder_email
+      },
+      amount: parseFloat(bid.amount),
+      status: bid.status || 'active',
+      isAutoBid: false, // Not implemented in current schema
+      maxBidAmount: undefined, // Not implemented in current schema
+      bidTime: bid.bid_time
+    }));
+    
+    res.json(transformedBids);
+  } catch (error) {
+    console.error('Get product bids error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // POST /api/products - Create new product (admin only)
 router.post('/', async (req, res) => {
   try {
