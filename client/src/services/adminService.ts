@@ -175,4 +175,10 @@ export const adminService = {
     const response = await api.get(`/products/${productId}/bids`);
     return response.data;
   },
+
+  // Get single product
+  getProduct: async (productId: string) => {
+    const response = await api.get(`/products/${productId}`);
+    return response.data;
+  },
 };

@@ -32,22 +32,22 @@ router.get('/', async (req, res) => {
         category: product.category,
         startingPrice: Math.round(price * 0.8 * 100) / 100, // 20% lower than current price, rounded to 2 decimals
         currentPrice: Math.round(price * 100) / 100, // Rounded to 2 decimals
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-      condition: 'excellent',
-      location: 'Toronto, ON',
-      shippingCost: 9.99,
-      tags: [product.category],
-      isFeatured: Math.random() > 0.7, // Random featured status
-      imageUrl: product.image_url,
-      status: product.status,
-      seller: {
-        _id: '1',
-        name: 'Moez Binz Store',
-        email: 'Thebinzstore23@gmail.com'
-      },
-      createdAt: product.created_at,
-      updatedAt: product.updated_at
-    };
+        endDate: product.end_date ? new Date(product.end_date).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        condition: product.condition || 'excellent',
+        location: product.location || 'Toronto, ON',
+        shippingCost: parseFloat(product.shipping_cost) || 9.99,
+        tags: product.tags || [product.category],
+        isFeatured: product.is_featured || false,
+        imageUrl: product.image_url,
+        status: product.status,
+        seller: {
+          _id: '1',
+          name: 'Moez Binz Store',
+          email: 'Thebinzstore23@gmail.com'
+        },
+        createdAt: product.created_at,
+        updatedAt: product.updated_at
+      };
     });
     
     res.json({
@@ -85,12 +85,12 @@ router.get('/:id', async (req, res) => {
       category: product.category,
       startingPrice: Math.round(price * 0.8 * 100) / 100,
       currentPrice: Math.round(price * 100) / 100,
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      condition: 'excellent',
-      location: 'Toronto, ON',
-      shippingCost: 9.99,
-      tags: [product.category],
-      isFeatured: Math.random() > 0.7,
+      endDate: product.end_date ? new Date(product.end_date).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      condition: product.condition || 'excellent',
+      location: product.location || 'Toronto, ON',
+      shippingCost: parseFloat(product.shipping_cost) || 9.99,
+      tags: product.tags || [product.category],
+      isFeatured: product.is_featured || false,
       imageUrl: product.image_url,
       status: product.status,
       seller: {

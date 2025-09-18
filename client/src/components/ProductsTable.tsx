@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../services/adminService';
 import type { Product } from '../services/adminService';
 import { useToast } from '../contexts/ToastContext';
+import ProductView from './ProductView';
 
 const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -10,6 +11,7 @@ const ProductsTable: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const { error: showError } = useToast();
 
   const fetchProducts = useCallback(async () => {
@@ -48,6 +50,18 @@ const ProductsTable: React.FC = () => {
     }
   };
 
+  const handleViewProduct = (productId: string) => {
+    setSelectedProductId(productId);
+  };
+
+  const handleBackToList = () => {
+    setSelectedProductId(null);
+  };
+
+  const handleProductUpdated = () => {
+    fetchProducts(); // Refresh the list when a product is updated
+  };
+
   const getStatusBadge = (status: string) => {
     const badges = {
       active: 'bg-green-100 text-green-800',
@@ -80,6 +94,17 @@ const ProductsTable: React.FC = () => {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Show ProductView if a product is selected
+  if (selectedProductId) {
+    return (
+      <ProductView
+        productId={selectedProductId}
+        onBack={handleBackToList}
+        onProductUpdated={handleProductUpdated}
+      />
     );
   }
 
@@ -154,7 +179,7 @@ const ProductsTable: React.FC = () => {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <img
-                        src={product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl}`}
+                        src={product.imageUrl && product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl || '/placeholder.jpg'}`}
                         alt={product.name}
                         className="w-8 h-8 lg:w-12 lg:h-12 rounded-lg object-cover mr-2 lg:mr-4"
                       />
@@ -190,8 +215,8 @@ const ProductsTable: React.FC = () => {
                   </td>
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm font-medium">
                     <button
-                      onClick={() => window.open(`/products/${product._id}`, '_blank')}
-                      className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded transition-colors"
+                      onClick={() => handleViewProduct(product._id)}
+                      className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded transition-colors mr-2"
                     >
                       View
                     </button>

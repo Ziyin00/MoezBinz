@@ -35,6 +35,12 @@ async function setupDatabase() {
         image_url VARCHAR(500),
         category VARCHAR(100),
         status VARCHAR(20) DEFAULT 'active',
+        condition VARCHAR(50) DEFAULT 'excellent',
+        location VARCHAR(255) DEFAULT 'Toronto, ON',
+        shipping_cost DECIMAL(10,2) DEFAULT 9.99,
+        tags TEXT[],
+        is_featured BOOLEAN DEFAULT false,
+        end_date TIMESTAMP,
         created_by INTEGER REFERENCES users(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

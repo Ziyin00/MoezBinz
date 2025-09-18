@@ -379,12 +379,12 @@ router.get('/products', verifyAdminToken, async (req, res) => {
       currentPrice: parseFloat(product.price),
       imageUrl: product.image_url,
       status: product.status,
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      condition: 'excellent',
-      location: 'Toronto, ON',
-      shippingCost: 9.99,
-      tags: [product.category],
-      isFeatured: Math.random() > 0.7,
+      endDate: product.end_date ? new Date(product.end_date).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      condition: product.condition || 'excellent',
+      location: product.location || 'Toronto, ON',
+      shippingCost: parseFloat(product.shipping_cost) || 9.99,
+      tags: product.tags || [product.category],
+      isFeatured: product.is_featured || false,
       seller: {
         _id: '1',
         name: 'Moez Binz Store',
@@ -547,6 +547,36 @@ router.put('/products/:id', verifyAdminToken, upload.single('image'), async (req
       updateFields.push(`status = $${paramCount}`);
       updateValues.push(status);
     }
+    if (condition !== undefined) {
+      paramCount++;
+      updateFields.push(`condition = $${paramCount}`);
+      updateValues.push(condition);
+    }
+    if (location !== undefined) {
+      paramCount++;
+      updateFields.push(`location = $${paramCount}`);
+      updateValues.push(location);
+    }
+    if (shippingCost !== undefined) {
+      paramCount++;
+      updateFields.push(`shipping_cost = $${paramCount}`);
+      updateValues.push(parseFloat(shippingCost));
+    }
+    if (tags !== undefined) {
+      paramCount++;
+      updateFields.push(`tags = $${paramCount}`);
+      updateValues.push(Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim()));
+    }
+    if (isFeatured !== undefined) {
+      paramCount++;
+      updateFields.push(`is_featured = $${paramCount}`);
+      updateValues.push(isFeatured === 'true' || isFeatured === true);
+    }
+    if (endDate !== undefined) {
+      paramCount++;
+      updateFields.push(`end_date = $${paramCount}`);
+      updateValues.push(new Date(endDate));
+    }
 
     if (updateFields.length === 0) {
       return res.status(400).json({ message: 'No fields to update' });
@@ -571,12 +601,12 @@ router.put('/products/:id', verifyAdminToken, upload.single('image'), async (req
       currentPrice: parseFloat(product.price),
       imageUrl: product.image_url,
       status: product.status,
-      endDate: endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      condition: condition || 'excellent',
-      location: location || 'Toronto, ON',
-      shippingCost: parseFloat(shippingCost) || 9.99,
-      tags: tags ? tags.split(',').map(tag => tag.trim()) : [product.category],
-      isFeatured: isFeatured === 'true' || isFeatured === true,
+      endDate: product.end_date ? new Date(product.end_date).toISOString() : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      condition: product.condition || 'excellent',
+      location: product.location || 'Toronto, ON',
+      shippingCost: parseFloat(product.shipping_cost) || 9.99,
+      tags: product.tags || [product.category],
+      isFeatured: product.is_featured || false,
       createdBy: {
         _id: req.user.id.toString(),
         name: 'Admin User',

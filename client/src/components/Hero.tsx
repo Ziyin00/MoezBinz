@@ -111,7 +111,7 @@ const Hero: React.FC = () => {
             className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0'}`}
             aria-hidden={index !== currentIndex}
           >
-            <div className="absolute inset-0 bg-black/10 z-10"></div>
+            <div className="absolute inset-0 bg-black/30 z-10"></div>
             <img 
               src={slide.image} 
               alt={`Hero slide ${index + 1}`} 
