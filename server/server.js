@@ -8,7 +8,7 @@ const path = require('path');
 // PostgreSQL-compatible routes
 const authRoutes = require('./routes/auth-pg');
 const adminRoutes = require('./routes/admin-pg');
-// const productRoutes = require('./routes/products');
+const productRoutes = require('./routes/products-pg');
 // const bidRoutes = require('./routes/bids');
 // const passwordResetRoutes = require('./routes/passwordReset');
 
@@ -70,7 +70,7 @@ app.get('/api/health', (req, res) => {
 // PostgreSQL-compatible routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-// app.use('/api/products', productRoutes);
+app.use('/api/products', productRoutes);
 // app.use('/api/bids', bidRoutes);
 // app.use('/api/password-reset', passwordResetRoutes);
 
