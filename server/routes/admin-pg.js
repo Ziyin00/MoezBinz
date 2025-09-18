@@ -27,6 +27,29 @@ const upload = multer({
   }
 });
 
+// Configure multer for news uploads
+const newsStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/news/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'news-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const newsUpload = multer({ 
+  storage: newsStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
+
 // Get all users (admin only)
 router.get('/users', verifyAdminToken, async (req, res) => {
   try {
@@ -652,7 +675,7 @@ router.delete('/products/:id', verifyAdminToken, async (req, res) => {
 
 // News Management Routes
 // GET /api/admin/news - Get all news with pagination and filters
-router.get('/news', async (req, res) => {
+router.get('/news', verifyAdminToken, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -744,7 +767,7 @@ router.get('/news', async (req, res) => {
 });
 
 // GET /api/admin/news/:id - Get single news item
-router.get('/news/:id', async (req, res) => {
+router.get('/news/:id', verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const pool = req.app.locals.pool;
@@ -791,7 +814,7 @@ router.get('/news/:id', async (req, res) => {
 });
 
 // POST /api/admin/news - Create new news
-router.post('/news', upload.single('image'), async (req, res) => {
+router.post('/news', verifyAdminToken, newsUpload.single('image'), async (req, res) => {
   try {
     const { title, content, excerpt, status, featured } = req.body;
     const authorId = req.user.id; // From admin auth middleware
@@ -850,7 +873,7 @@ router.post('/news', upload.single('image'), async (req, res) => {
 });
 
 // PUT /api/admin/news/:id - Update news
-router.put('/news/:id', upload.single('image'), async (req, res) => {
+router.put('/news/:id', verifyAdminToken, newsUpload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const { title, content, excerpt, status, featured } = req.body;
@@ -946,7 +969,7 @@ router.put('/news/:id', upload.single('image'), async (req, res) => {
 });
 
 // DELETE /api/admin/news/:id - Delete news
-router.delete('/news/:id', async (req, res) => {
+router.delete('/news/:id', verifyAdminToken, async (req, res) => {
   try {
     const { id } = req.params;
     const pool = req.app.locals.pool;
