@@ -292,7 +292,6 @@ const WhatsNew: React.FC = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

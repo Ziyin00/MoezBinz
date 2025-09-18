@@ -1,5 +1,6 @@
 // FIX: Implemented a complete Footer component.
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { FacebookIcon, InstagramIcon, TikTokIcon } from './Icons';
 
@@ -10,9 +11,9 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and mission */}
           <div className="md:col-span-1">
-            <a href="#/" className="mb-4 inline-block">
+            <Link to="/" className="mb-4 inline-block">
               <Logo />
-            </a>
+            </Link>
             <p className="text-gray-600 text-sm">
               The ultimate treasure hunt for premium brand goods at throwaway prices.
             </p>
@@ -23,18 +24,19 @@ const Footer: React.FC = () => {
             <div>
               <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Quick Links</h3>
               <ul className="mt-4 space-y-2">
-                <li><a href="#/" className="text-sm text-gray-600 hover:text-red-600">Home</a></li>
-                <li><a href="#/about" className="text-sm text-gray-600 hover:text-red-600">About Us</a></li>
-                <li><a href="#/how-it-works" className="text-sm text-gray-600 hover:text-red-600">How It Works</a></li>
-                <li><a href="#/products" className="text-sm text-gray-600 hover:text-red-600">Products</a></li>
-                <li><a href="#/visit" className="text-sm text-gray-600 hover:text-red-600">Visit Us</a></li>
+                <li><Link to="/" className="text-sm text-gray-600 hover:text-red-600">Home</Link></li>
+                <li><Link to="/#about" className="text-sm text-gray-600 hover:text-red-600">About Us</Link></li>
+                <li><Link to="/#how-it-works" className="text-sm text-gray-600 hover:text-red-600">How It Works</Link></li>
+                <li><Link to="/product" className="text-sm text-gray-600 hover:text-red-600">Products</Link></li>
+                <li><Link to="/visit" className="text-sm text-gray-600 hover:text-red-600">Visit Us</Link></li>
+                <li><Link to="/whats-new" className="text-sm text-gray-600 hover:text-red-600">What's New</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">Account</h3>
               <ul className="mt-4 space-y-2">
-                <li><a href="#/login" className="text-sm text-gray-600 hover:text-red-600">Log In</a></li>
-                <li><a href="#/signup" className="text-sm text-gray-600 hover:text-red-600">Sign Up</a></li>
+                <li><Link to="/login" className="text-sm text-gray-600 hover:text-red-600">Log In</Link></li>
+                <li><Link to="/signup" className="text-sm text-gray-600 hover:text-red-600">Sign Up</Link></li>
                 <li><a href="#/faq" className="text-sm text-gray-600 hover:text-red-600">FAQ</a></li>
               </ul>
             </div>
