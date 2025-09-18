@@ -237,7 +237,21 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
             ) : !user ? (
               <div className="text-center py-8">
                 <UserIcon className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-600">Please log in to place a bid</p>
+                <p className="text-gray-600 mb-4">Please log in to place a bid</p>
+                <div className="space-y-2">
+                  <a 
+                    href="/login" 
+                    className="block w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
+                  >
+                    Log In
+                  </a>
+                  <a 
+                    href="/signup" 
+                    className="block w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    Sign Up
+                  </a>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleBidSubmit} className="space-y-4">

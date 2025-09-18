@@ -51,16 +51,8 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/password-updated" element={<PasswordUpdatedPage />} />
-              <Route path="/product" element={
-                <ProtectedRoute>
-                  <Product />
-                </ProtectedRoute>
-              } />
-              <Route path="/visit" element={
-                <ProtectedRoute>
-                  <Visit />
-                </ProtectedRoute>
-              } />
+              <Route path="/product" element={<Product />} />
+              <Route path="/visit" element={<Visit />} />
               <Route path="/admin/dashboard" element={
                 <ProtectedRoute>
                   <AdminDashboard />

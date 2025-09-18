@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { BidIcon, ChevronRightIcon } from './Icons';
 import { productService, type Product } from '../services/productService';
 import BidModal from './BidModal';
+import { useAppSelector } from '../store/hooks';
 
 // Remove static products - we'll fetch from API
 
 interface ProductCardProps {
   product: Product;
   onBidClick: (product: Product) => void;
+  isLoggedIn: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLoggedIn }) => {
   const isAuctionEnded = new Date() > new Date(product.endDate);
   const timeLeft = new Date(product.endDate).getTime() - new Date().getTime();
   const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
@@ -69,7 +71,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick }) => {
           className="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-red-700 transition-all duration-300 transform group-hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
         >
           <BidIcon className="w-5 h-5" />
-          {isAuctionEnded ? 'Auction Ended' : 'Place Bid'}
+          {isAuctionEnded ? 'Auction Ended' : isLoggedIn ? 'Place Bid' : 'Login to Bid'}
         </button>
       </div>
     </div>
@@ -85,6 +87,8 @@ const ProductsPage: React.FC = () => {
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState('sat');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  
+  const { user } = useAppSelector((state) => state.auth);
 
   const dailyPrices = [
     { day: 'sat', label: 'Sat', price: '$19.99', fullDay: 'Smashing Saturday' },
@@ -273,6 +277,7 @@ const ProductsPage: React.FC = () => {
                     key={product._id} 
                     product={product} 
                     onBidClick={handleBidClick}
+                    isLoggedIn={!!user}
                   />
                 ))}
               </div>

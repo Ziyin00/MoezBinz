@@ -1,17 +1,27 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const { Pool } = require('pg');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
 
-const authRoutes = require('./routes/auth');
-const productRoutes = require('./routes/products');
-const adminRoutes = require('./routes/admin');
-const bidRoutes = require('./routes/bids');
-const passwordResetRoutes = require('./routes/passwordReset');
+// PostgreSQL-compatible routes
+const authRoutes = require('./routes/auth-pg');
+const adminRoutes = require('./routes/admin-pg');
+// const productRoutes = require('./routes/products');
+// const bidRoutes = require('./routes/bids');
+// const passwordResetRoutes = require('./routes/passwordReset');
 
 const app = express();
+
+// PostgreSQL connection
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+// Make pool available to routes
+app.locals.pool = pool;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -57,16 +67,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// PostgreSQL-compatible routes
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/bids', bidRoutes);
-app.use('/api/password-reset', passwordResetRoutes);
+// app.use('/api/products', productRoutes);
+// app.use('/api/bids', bidRoutes);
+// app.use('/api/password-reset', passwordResetRoutes);
 
 // Example protected route
-const { verifyAccessToken } = require('./middleware/auth');
-app.get('/api/protected', verifyAccessToken, (req, res) => {
-  res.json({ message: 'Protected data', user: req.user });
+// const { verifyAccessToken } = require('./middleware/auth');
+// app.get('/api/protected', verifyAccessToken, (req, res) => {
+//   res.json({ message: 'Protected data', user: req.user });
+// });
+
+// Temporary test route
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'PostgreSQL server is running!', timestamp: new Date().toISOString() });
 });
 
 // Global error handler
@@ -80,10 +96,17 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
+// Test PostgreSQL connection
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('PostgreSQL connection error:', err);
+  } else {
+    console.log('✅ PostgreSQL connected successfully');
+  }
+});
+
 const PORT = process.env.PORT || 3001;
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Mongo connected');
-    app.listen(PORT, () => console.log(`Server running on ${PORT}`));
-  })
-  .catch(err => console.error(err));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📊 PostgreSQL database connected`);
+});

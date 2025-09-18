@@ -1,13 +1,48 @@
 import React from 'react';
 
 const deals = [
-  { day: 'Smart Sunday', price: '$15.00' },
-  { day: 'Smashing Saturday', price: '$19.99' },
-  { day: 'Freak-out Friday', price: '$1.99' },
-  { day: 'Thrifty Tuesday', price: '$8.99' },
-  { day: 'Wow Wednesday', price: '$6.99' },
-  { day: 'Treasure Thursday', price: '$4.99' },
-  { day: 'Mega Monday', price: '$11.99' },
+  { 
+    day: 'Smashing Saturday', 
+    price: '$19.99',
+    description: 'Fresh finds, big-ticket items',
+    icon: '🛒💥'
+  },
+  { 
+    day: 'Smart Sunday', 
+    price: '$15.00',
+    description: 'Grab it before it\'s gone',
+    icon: '🧠💰'
+  },
+  { 
+    day: 'Mega Monday', 
+    price: '$11.99',
+    description: 'Fresh stock madness',
+    icon: '📦✨'
+  },
+  { 
+    day: 'Thrifty Tuesday', 
+    price: '$8.99',
+    description: 'Bargain-hunting sweet spot',
+    icon: '🎯👜'
+  },
+  { 
+    day: 'Wow Wednesday', 
+    price: '$6.99',
+    description: 'Low prices, surprising finds',
+    icon: '😲🎁'
+  },
+  { 
+    day: 'Treasure Thursday', 
+    price: '$4.99',
+    description: 'New restock, crazy deals',
+    icon: '🌱📦'
+  },
+  { 
+    day: 'Freak-out Friday', 
+    price: '$1.99',
+    description: 'Everything goes prices',
+    icon: '🎉🔥'
+  },
 ];
 
 const DealHuntingDays: React.FC = () => {
@@ -21,16 +56,54 @@ const DealHuntingDays: React.FC = () => {
           <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
             Every item in our bins – big or small, high-value or basic – has the same flat price each day. We stock fresh bins every Saturday: $19.99 per item on stock day, down to a jaw-dropping $1.99 on Fridays. Inventory moves fast and great deals are waiting to be discovered.
           </p>
+          <p className="mt-2 text-sm text-gray-500 italic">
+            💡 Hover over each day to see what makes it special!
+          </p>
         </div>
 
         <div className="mt-12 flex flex-wrap justify-center gap-4 sm:gap-6">
           {deals.map((deal) => (
             <div
               key={deal.day}
-              className="bg-red-600 rounded-xl text-white p-6 w-40 h-40 flex flex-col justify-center items-center text-center shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out cursor-pointer"
+              className="relative w-40 h-40 cursor-pointer hover:scale-105 transition-transform duration-300"
+              style={{ perspective: '1000px' }}
             >
-              <p className="font-semibold">{deal.day}</p>
-              <p className="text-4xl font-bold mt-2">{deal.price}</p>
+              {/* Card Container with 3D Flip Effect */}
+              <div 
+                className="relative w-full h-full transition-transform duration-700 ease-in-out group"
+                style={{ 
+                  transformStyle: 'preserve-3d',
+                  transform: 'rotateY(0deg)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'rotateY(180deg)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'rotateY(0deg)';
+                }}
+              >
+                {/* Front Side - Price Card */}
+                <div 
+                  className="absolute inset-0 w-full h-full bg-red-600 rounded-xl text-white p-4 flex flex-col justify-center items-center text-center shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                  style={{ backfaceVisibility: 'hidden' }}
+                >
+                  <p className="font-bold text-sm leading-tight">{deal.day}</p>
+                  <p className="text-3xl font-bold mt-2 text-yellow-300">{deal.price}</p>
+                  <p className="text-xs mt-1 opacity-90">per item</p>
+                </div>
+                
+                {/* Back Side - Description Card */}
+                <div 
+                  className="absolute inset-0 w-full h-full bg-white rounded-xl text-gray-800 p-4 flex flex-col justify-center items-center text-center shadow-lg border-2 border-red-200 hover:shadow-2xl transition-shadow duration-300"
+                  style={{ 
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)'
+                  }}
+                >
+                  <div className="text-2xl mb-2">{deal.icon}</div>
+                  <p className="font-semibold text-sm leading-tight text-center">{deal.description}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
