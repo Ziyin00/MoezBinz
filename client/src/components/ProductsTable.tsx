@@ -152,7 +152,7 @@ const ProductsTable: React.FC = () => {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <img
-                        src={`https://moezbinz.onrender.com${product.imageUrl}`}
+                        src={product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl}`}
                         alt={product.name}
                         className="w-8 h-8 lg:w-12 lg:h-12 rounded-lg object-cover mr-2 lg:mr-4"
                       />

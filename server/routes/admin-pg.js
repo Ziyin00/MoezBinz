@@ -127,7 +127,7 @@ router.get('/stats', verifyAdminToken, async (req, res) => {
       description: product.description,
       category: product.category,
       currentPrice: parseFloat(product.price),
-      imageUrl: product.imageUrl,
+      imageUrl: product.imageurl || '/uploads/placeholder.jpg', // Fix the field name and add fallback
       status: product.status,
       createdAt: product.created_at,
       bidCount: 0 // We'll add this later when we have bids

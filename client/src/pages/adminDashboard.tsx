@@ -132,7 +132,7 @@ const AdminDashboard: React.FC = () => {
                 <div key={product._id} className="flex justify-between items-center">
                   <div className="flex items-center">
                     <img 
-                      src={product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl}`} 
+                      src={product.imageUrl && product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl || '/placeholder.jpg'}`} 
                       alt={product.name}
                       className="w-10 h-10 rounded object-cover mr-3"
                     />

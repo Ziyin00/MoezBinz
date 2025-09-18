@@ -108,7 +108,7 @@ const BidsTable: React.FC = () => {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <img
-                        src={`https://moezbinz.onrender.com${bid.product.imageUrl}`}
+                        src={bid.product.imageUrl.startsWith('http') ? bid.product.imageUrl : `/uploads${bid.product.imageUrl}`}
                         alt={bid.product.name}
                         className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg object-cover mr-2 lg:mr-3"
                       />
