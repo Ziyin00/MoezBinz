@@ -310,7 +310,6 @@ const HowItWorks: React.FC = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
