@@ -27,7 +27,7 @@ const VisitUsPage: React.FC = () => {
                             <div className="space-y-6 text-lg text-gray-700">
                                 <div>
                                     <h3 className="font-semibold text-gray-900">Address</h3>
-                                    <p>123 Treasure Hunt Lane<br/>Bargain City, ON A1B 2C3</p>
+                                    <p>5 - 1150 Sheppard Avenue West<br/>North York, ON M3K 2B5</p>
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-gray-900">Store Hours</h3>
@@ -41,25 +41,25 @@ const VisitUsPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <h3 className="font-semibold text-gray-900">Contact Us</h3>
-                                    <p>Email: <a href="mailto:contact@moezbinz.example.com" className="text-red-600 hover:underline">contact@moezbinz.example.com</a></p>
-                                    <p>Phone: (123) 456-7890</p>
+                                    <p>Email: <a href="mailto:Thebinzstore23@gmail.com" className="text-red-600 hover:underline">Thebinzstore23@gmail.com</a></p>
+                                    <p>Follow us: @Moezbinzstore</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Column: Map */}
                          <div className="bg-white p-4 rounded-2xl  shadow-lg border border-gray-100 opacity-0 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                        <div className=" h-[450px]  rounded-lg overflow-hidden">
+                        <div className="relative h-[450px] rounded-lg overflow-hidden">
                              <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.251412574241!2d-79.4883592237893!3d43.74601454645053!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3174243a75a5%3A0x869a88e1e78a221d!2s1100%20Sheppard%20Ave%20W%20%235%2C%20North%20York%2C%20ON%20M3K%202B5%2C%20Canada!5e0!3m2!1sen!2sus!4v1716491795325!5m2!1sen!2sus"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.251412574241!2d-79.4883592237893!3d43.74601454645053!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3174243a75a5%3A0x869a88e1e78a221d!2s1150%20Sheppard%20Ave%20W%2C%20North%20York%2C%20ON%20M3K%202B5%2C%20Canada!5e0!3m2!1sen!2sus!4v1716491795325!5m2!1sen!2sus"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
                                 allowFullScreen={true}
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
-                                className="w-full h-full filter grayscale(1) invert(0.9) hue-rotate(180deg)"
-                                title="Location of Moez Binz"
+                                className="w-full h-full"
+                                title="Location of Moez Binz - 5 - 1150 Sheppard Avenue West, North York, ON M3K 2B5"
                             ></iframe>
                         </div>
                     </div>

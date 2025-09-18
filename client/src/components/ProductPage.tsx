@@ -328,7 +328,7 @@ const ProductsPage: React.FC = () => {
                 <div className="space-y-4 text-gray-700">
                   <div>
                     <h3 className="font-semibold text-gray-900">Address</h3>
-                    <p>1100 Sheppard Ave W, Unit 5 & 6, North York</p>
+                    <p>5 - 1150 Sheppard Avenue West, North York, ON M3K 2B5</p>
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Hours</h3>

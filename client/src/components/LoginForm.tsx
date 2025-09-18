@@ -5,12 +5,14 @@ import useUIStore from '../store/zustandStore';
 import { EyeIcon, EyeOffIcon } from './Icons';
 import InputField from './InputField';
 import { clearError, loginUser } from '../store/authSlice';
+import { useToast } from '../contexts/ToastContext';
 
 
 const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const setGlobalLoading = useUIStore(state => state.setGlobalLoading);
   const { isLoading, error } = useAppSelector((s) => s.auth);
+  const { error: showError } = useToast();
   
 
   const [email, setEmail] = useState('');
@@ -27,7 +29,8 @@ const LoginForm: React.FC = () => {
       window.location.href = '/';
     } catch (err) {
       console.error('Login failed:', err);
-      alert('Login failed: ' + ((err as any)?.response?.data?.message || (err as any)?.message || 'Unknown error'));
+      const errorMessage = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || (err as Error)?.message || 'Unknown error';
+      showError('Login failed', errorMessage);
     } finally {
       setGlobalLoading(false);
     }

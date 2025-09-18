@@ -43,7 +43,7 @@ router.get('/', async (req, res) => {
       seller: {
         _id: '1',
         name: 'Moez Binz Store',
-        email: 'store@moezbinz.com'
+        email: 'Thebinzstore23@gmail.com'
       },
       createdAt: product.created_at,
       updatedAt: product.updated_at
@@ -96,7 +96,7 @@ router.get('/:id', async (req, res) => {
       seller: {
         _id: '1',
         name: 'Moez Binz Store',
-        email: 'store@moezbinz.com'
+        email: 'Thebinzstore23@gmail.com'
       },
       createdAt: product.created_at,
       updatedAt: product.updated_at

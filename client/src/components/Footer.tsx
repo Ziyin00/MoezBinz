@@ -1,7 +1,7 @@
 // FIX: Implemented a complete Footer component.
 import React from 'react';
 import Logo from './Logo';
-import { FacebookIcon, InstagramIcon, TwitterIcon } from './Icons';
+import { FacebookIcon, InstagramIcon, TikTokIcon } from './Icons';
 
 const Footer: React.FC = () => {
   return (
@@ -53,17 +53,17 @@ const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} Moez Binz. All rights reserved.
           </p>
           <div className="flex space-x-6 order-1 sm:order-2">
-            <a href="#" className="text-gray-400 hover:text-red-600">
+            <a href="https://www.facebook.com/Moezbinzstore" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-600">
               <span className="sr-only">Facebook</span>
               <FacebookIcon />
             </a>
-            <a href="#" className="text-gray-400 hover:text-red-600">
+            <a href="https://www.instagram.com/Moezbinzstore" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-600">
               <span className="sr-only">Instagram</span>
               <InstagramIcon />
             </a>
-            <a href="#" className="text-gray-400 hover:text-red-600">
-              <span className="sr-only">Twitter</span>
-              <TwitterIcon />
+            <a href="https://www.tiktok.com/@Moezbinzstore" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-600">
+              <span className="sr-only">TikTok</span>
+              <TikTokIcon />
             </a>
           </div>
         </div>

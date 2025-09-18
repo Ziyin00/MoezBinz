@@ -11,7 +11,7 @@ async function createAdmin() {
   try {
     console.log('🔧 Creating admin user...');
 
-    const adminEmail = 'admin@moezbinz.com';
+    const adminEmail = 'Thebinzstore23@gmail.com';
     const adminPassword = 'admin123';
     const adminName = 'Admin User';
 

@@ -10,7 +10,7 @@ const BargainHuntBanner: React.FC = () => {
               Join the bargain hunt of your lifetime
             </h2>
             <p className="mt-3 text-base sm:text-lg text-red-100">
-              Follow Moez Binz on Facebook, Instagram, and TikTok for live restock videos, customer finds, deal alerts, and more!
+              Follow @Moezbinzstore on Facebook, Instagram, and TikTok for live restock videos, customer finds, deal alerts, and more!
             </p>
           </div>
         </div>

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { adminService } from '../services/adminService';
 import type { CreateProductData } from '../services/adminService';
+import { useToast } from '../contexts/ToastContext';
 
 interface CreateProductFormProps {
   onSuccess: () => void;
 }
 
 const CreateProductForm: React.FC<CreateProductFormProps> = ({ onSuccess }) => {
+  const { error: showError, success: showSuccess, warning: showWarning } = useToast();
   const [formData, setFormData] = useState<Omit<CreateProductData, 'image'> & { image: File | null }>({
     name: '',
     description: '',
@@ -77,7 +79,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ onSuccess }) => {
     e.preventDefault();
     
     if (!formData.image) {
-      alert('Please select an image for the product');
+      showWarning('Image Required', 'Please select an image for the product');
       return;
     }
 
@@ -109,7 +111,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ onSuccess }) => {
       });
       setImagePreview(null);
       
-      alert('Product created successfully!');
+      showSuccess('Product Created!', 'Your product has been successfully created and is now live.');
       onSuccess();
     } catch (error) {
       console.error('Failed to create product:', error);
@@ -118,7 +120,8 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ onSuccess }) => {
         response: (error as any)?.response?.data,
         status: (error as any)?.response?.status
       });
-      alert('Failed to create product: ' + ((error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error'));
+      const errorMessage = (error as any)?.response?.data?.message || (error as any)?.message || 'Unknown error';
+      showError('Failed to create product', errorMessage);
     } finally {
       setLoading(false);
     }

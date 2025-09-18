@@ -77,7 +77,7 @@ async function setupDatabase() {
     console.log('✅ Database indexes created');
 
     // Create admin user if it doesn't exist
-    const adminEmail = 'admin@moezbinz.com';
+    const adminEmail = 'Thebinzstore23@gmail.com';
     const adminExists = await pool.query('SELECT id FROM users WHERE email = $1', [adminEmail]);
     
     if (adminExists.rows.length === 0) {
@@ -89,7 +89,7 @@ async function setupDatabase() {
         'INSERT INTO users (username, email, password, role, is_verified) VALUES ($1, $2, $3, $4, $5)',
         ['Admin User', adminEmail, hashedPassword, 'admin', true]
       );
-      console.log('✅ Admin user created (admin@moezbinz.com / admin123)');
+        console.log('✅ Admin user created (Thebinzstore23@gmail.com / admin123)');
     } else {
       console.log('✅ Admin user already exists');
     }

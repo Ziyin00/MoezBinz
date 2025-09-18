@@ -23,6 +23,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
 import { store } from "./store";
 import { setupInterceptors } from "./api/axios";
+import { ToastProvider } from "./contexts/ToastContext";
+import ToastContainer from "./components/ToastContainer";
 
 // create persistor once using store
 const persistor = persistStore(store);
@@ -44,29 +46,32 @@ function App() {
         }
         persistor={persistor}
       >
-        <BrowserRouter>
-          <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/password-updated" element={<PasswordUpdatedPage />} />
-              <Route path="/product" element={<Product />} />
-              <Route path="/visit" element={<Visit />} />
-              <Route path="/admin/dashboard" element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } />
-              {/* Catch-all route for 404 */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer />
-            <BackToTopButton />
-          </main>
-        </BrowserRouter>
+        <ToastProvider>
+          <BrowserRouter>
+            <main>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/password-updated" element={<PasswordUpdatedPage />} />
+                <Route path="/product" element={<Product />} />
+                <Route path="/visit" element={<Visit />} />
+                <Route path="/admin/dashboard" element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+                {/* Catch-all route for 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <Footer />
+              <BackToTopButton />
+            </main>
+            <ToastContainer />
+          </BrowserRouter>
+        </ToastProvider>
       </PersistGate>
     </Provider>
   );

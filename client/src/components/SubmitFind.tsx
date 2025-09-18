@@ -2,9 +2,9 @@ import React from 'react';
 import { TikTokIcon, FacebookIcon, InstagramIcon } from './Icons';
 
 const socialLinks = [
-  { Icon: TikTokIcon, label: 'TikTok', href: '#' },
-  { Icon: FacebookIcon, label: 'Facebook', href: '#' },
-  { Icon: InstagramIcon, label: 'Instagram', href: '#' },
+  { Icon: TikTokIcon, label: 'TikTok', href: 'https://www.tiktok.com/@Moezbinzstore' },
+  { Icon: FacebookIcon, label: 'Facebook', href: 'https://www.facebook.com/Moezbinzstore' },
+  { Icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/Moezbinzstore' },
 ];
 
 const SubmitFind: React.FC = () => {

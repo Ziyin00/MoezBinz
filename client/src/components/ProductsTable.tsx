@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../services/adminService';
 import type { Product } from '../services/adminService';
+import { useToast } from '../contexts/ToastContext';
 
 const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -9,12 +10,9 @@ const ProductsTable: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const { error: showError } = useToast();
 
-  useEffect(() => {
-    fetchProducts();
-  }, [currentPage, categoryFilter, statusFilter]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       console.log('Fetching products...');
@@ -25,14 +23,18 @@ const ProductsTable: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch products:', error);
       console.error('Error details:', {
-        message: (error as any)?.message,
-        response: (error as any)?.response?.data,
-        status: (error as any)?.response?.status
+        message: (error as Error)?.message,
+        response: (error as { response?: { data?: unknown; status?: number } })?.response?.data,
+        status: (error as { response?: { data?: unknown; status?: number } })?.response?.status
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, categoryFilter, statusFilter]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const handleDeleteProduct = async (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
@@ -41,7 +43,7 @@ const ProductsTable: React.FC = () => {
         fetchProducts(); // Refresh the list
       } catch (error) {
         console.error('Failed to delete product:', error);
-        alert('Failed to delete product');
+        showError('Failed to delete product', 'Please try again or contact support if the problem persists.');
       }
     }
   };

@@ -388,7 +388,7 @@ router.get('/products', verifyAdminToken, async (req, res) => {
       seller: {
         _id: '1',
         name: 'Moez Binz Store',
-        email: 'store@moezbinz.com'
+        email: 'Thebinzstore23@gmail.com'
       },
       createdAt: product.created_at,
       updatedAt: product.updated_at
@@ -465,7 +465,7 @@ router.post('/products', verifyAdminToken, upload.single('image'), async (req, r
       createdBy: {
         _id: req.user.id.toString(),
         name: 'Admin User',
-        email: 'admin@moezbinz.com'
+        email: 'Thebinzstore23@gmail.com'
       },
       createdAt: product.created_at,
       updatedAt: product.created_at
@@ -580,7 +580,7 @@ router.put('/products/:id', verifyAdminToken, upload.single('image'), async (req
       createdBy: {
         _id: req.user.id.toString(),
         name: 'Admin User',
-        email: 'admin@moezbinz.com'
+        email: 'Thebinzstore23@gmail.com'
       },
       createdAt: product.created_at,
       updatedAt: product.updated_at
