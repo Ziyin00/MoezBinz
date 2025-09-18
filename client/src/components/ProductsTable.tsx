@@ -87,24 +87,29 @@ const ProductsTable: React.FC = () => {
     const bids = productBids[productId] || [];
     
     if (bids.length === 0) {
-      return <span className="text-gray-500 text-sm">No bids</span>;
+      return <span className="text-gray-500 text-xs">No bids</span>;
     }
 
     return (
-      <div className="space-y-1">
-        {bids.map((bid) => (
-          <div key={bid._id} className="text-xs bg-gray-50 p-2 rounded border">
-            <div className="font-medium text-gray-900">
-              Name: {bid.bidder.name}
+      <div className="space-y-1 max-w-[200px]">
+        {bids.slice(0, 3).map((bid) => (
+          <div key={bid._id} className="text-xs bg-gray-50 p-1 rounded border">
+            <div className="font-medium text-gray-900 truncate">
+              {bid.bidder.name}
             </div>
-            <div className="text-gray-600">
-              Email: {bid.bidder.email}
+            <div className="text-gray-600 truncate">
+              {bid.bidder.email}
             </div>
             <div className="font-semibold text-green-600">
-              Amount: ${bid.amount}
+              ${bid.amount}
             </div>
           </div>
         ))}
+        {bids.length > 3 && (
+          <div className="text-xs text-gray-500 text-center">
+            +{bids.length - 3} more
+          </div>
+        )}
       </div>
     );
   };
@@ -156,8 +161,8 @@ const ProductsTable: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
+    <div className="space-y-6 max-w-full">
+      <div className="bg-white rounded-lg shadow p-6 overflow-hidden max-w-full">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Product Management</h2>
         
         {/* Filters */}
@@ -193,17 +198,22 @@ const ProductsTable: React.FC = () => {
         </div>
 
         {/* Products Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto min-w-[800px]">
+        <div className="w-full">
+          <div className="text-xs text-gray-500 mb-2 text-center">
+            <span className="hidden md:inline">← Scroll horizontally to see all columns →</span>
+            <span className="md:hidden">← Swipe to see all columns →</span>
+          </div>
+          <div className="w-full overflow-x-auto border border-gray-200 rounded-lg shadow-sm" style={{ maxWidth: '100%' }}>
+            <table className="w-full table-auto" style={{ minWidth: '1200px' }}>
             <thead>
               <tr className="bg-gray-50">
-                <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[200px]">
                   Product
                 </th>
                 <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                   Category
                 </th>
-                <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[100px]">
                   Price
                 </th>
                 <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
@@ -215,10 +225,10 @@ const ProductsTable: React.FC = () => {
                 <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
                   End Date
                 </th>
-                <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell w-[220px]">
                   Bids
                 </th>
-                <th className="px-3 lg:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[120px]">
                   Actions
                 </th>
               </tr>
@@ -226,16 +236,16 @@ const ProductsTable: React.FC = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {products.map((product) => (
                 <tr key={product._id} className="hover:bg-gray-50">
-                  <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 py-4 whitespace-nowrap w-[200px]">
                     <div className="flex items-center">
                       <img
                         src={product.imageUrl && product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl || '/placeholder.jpg'}`}
                         alt={product.name}
-                        className="w-8 h-8 lg:w-12 lg:h-12 rounded-lg object-cover mr-2 lg:mr-4"
+                        className="w-8 h-8 rounded-lg object-cover mr-2"
                       />
-                      <div>
-                        <div className="text-xs lg:text-sm font-medium text-gray-900">{product.name}</div>
-                        <div className="text-xs lg:text-sm text-gray-500 truncate max-w-xs hidden sm:block">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-medium text-gray-900 truncate">{product.name}</div>
+                        <div className="text-xs text-gray-500 truncate hidden sm:block">
                           {product.description}
                         </div>
                       </div>
@@ -244,10 +254,10 @@ const ProductsTable: React.FC = () => {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                     <span className="text-xs lg:text-sm text-gray-900 capitalize">{product.category}</span>
                   </td>
-                  <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
-                    <div className="text-xs lg:text-sm text-gray-900">
+                  <td className="px-2 py-4 whitespace-nowrap w-[100px]">
+                    <div className="text-xs text-gray-900">
                       <div className="font-medium">${product.currentPrice}</div>
-                      <div className="text-gray-500 hidden sm:block">Start: ${product.startingPrice}</div>
+                      <div className="text-gray-500 hidden sm:block">${product.startingPrice}</div>
                     </div>
                   </td>
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap hidden md:table-cell">
@@ -263,27 +273,30 @@ const ProductsTable: React.FC = () => {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm text-gray-500 hidden lg:table-cell">
                     {new Date(product.endDate).toLocaleDateString()}
                   </td>
-                  <td className="px-3 lg:px-6 py-4 hidden md:table-cell">
+                  <td className="px-2 py-4 hidden md:table-cell w-[220px]">
                     {formatBidsDisplay(product._id)}
                   </td>
-                  <td className="px-3 lg:px-6 py-4 whitespace-nowrap text-xs lg:text-sm font-medium">
-                    <button
-                      onClick={() => handleViewProduct(product._id)}
-                      className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded transition-colors mr-2"
-                    >
-                      View
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProduct(product._id)}
-                      className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded transition-colors"
-                    >
-                      Delete
-                    </button>
+                  <td className="px-2 py-4 whitespace-nowrap text-xs font-medium w-[120px]">
+                    <div className="flex flex-col space-y-1">
+                      <button
+                        onClick={() => handleViewProduct(product._id)}
+                        className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors text-xs"
+                      >
+                        View
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product._id)}
+                        className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-2 py-1 rounded transition-colors text-xs"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         </div>
 
         {/* Pagination */}

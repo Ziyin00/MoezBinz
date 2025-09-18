@@ -190,11 +190,13 @@ const AdminDashboard: React.FC = () => {
   return (
     <>
       <Header/>
-      <div className="min-h-screen bg-gray-50 flex">
+      <div className="min-h-screen bg-gray-50 flex overflow-hidden">
         <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
-        <div className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
-          {renderContent()}
+        <div className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8 overflow-hidden">
+          <div className="w-full max-w-full">
+            {renderContent()}
+          </div>
         </div>
       </div>
     </>
