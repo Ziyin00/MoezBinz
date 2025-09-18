@@ -144,8 +144,8 @@ const Header: React.FC = () => {
         scrollToSection('home');
       }
     }},
-    { name: 'About Us', to: '#about', section: 'about', onClick: () => scrollToSection('about') },
-    { name: 'How It Works', to: '#how-it-works', section: 'how-it-works', onClick: () => scrollToSection('how-it-works') },
+    { name: 'About Us', to: '/about', section: null, onClick: undefined },
+    { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
     { name: 'Products', to: '/product', section: null, onClick: undefined },
     { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
     { name: "What's new", to: '/whats-new', section: null, onClick: undefined },

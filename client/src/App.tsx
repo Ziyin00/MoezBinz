@@ -13,6 +13,8 @@ import ResetPasswordPage from "./pages/resetPassword";
 import HomePage from "./pages/home";
 import Product from "./pages/products";
 import Visit from "./pages/visit";
+import About from "./pages/about";
+import HowItWorks from "./pages/howItWorks";
 import WhatsNew from "./pages/whatsNew";
 import AdminDashboard from "./pages/adminDashboard";
 import NotFound from "./pages/NotFound";
@@ -59,6 +61,8 @@ function App() {
                 <Route path="/password-updated" element={<PasswordUpdatedPage />} />
                 <Route path="/product" element={<Product />} />
                 <Route path="/visit" element={<Visit />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/how-it-works" element={<HowItWorks />} />
                 <Route path="/whats-new" element={<WhatsNew />} />
                 <Route path="/admin/dashboard" element={
                   <ProtectedRoute>
