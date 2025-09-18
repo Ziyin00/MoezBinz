@@ -53,13 +53,17 @@ const Header: React.FC = () => {
             behavior: 'smooth',
             block: 'start'
           });
+          // Set active section immediately and after scrolling
           setActiveSection(sectionId);
+          setTimeout(() => {
+            setActiveSection(sectionId);
+          }, 500); // Longer delay to ensure scroll is complete
         }
       }, 100); // Small delay to ensure page is loaded
     }
   }, [location.pathname, location.hash]);
 
-  // Ultra-simple section detection that WILL work
+  // Improved section detection with proper About Us handling
   useEffect(() => {
     const handleScroll = () => {
       if (location.pathname !== '/') {
@@ -69,14 +73,32 @@ const Header: React.FC = () => {
 
       const scrollY = window.scrollY;
       
-      // Simple hardcoded logic - this WILL work
-      let newSection = '';
-      if (scrollY < 500) {
-        newSection = 'home';
-      } else if (scrollY >= 500 && scrollY < 1500) {
-        newSection = 'about';
+      // Get the actual positions of sections
+      const aboutSection = document.getElementById('about');
+      const howItWorksSection = document.getElementById('how-it-works');
+      
+      let newSection = 'home'; // default
+      
+      if (aboutSection && howItWorksSection) {
+        const aboutTop = aboutSection.offsetTop - 100; // 100px offset for better UX
+        const howItWorksTop = howItWorksSection.offsetTop - 100;
+        
+        if (scrollY >= howItWorksTop) {
+          newSection = 'how-it-works';
+        } else if (scrollY >= aboutTop) {
+          newSection = 'about';
+        } else {
+          newSection = 'home';
+        }
       } else {
-        newSection = 'how-it-works';
+        // Fallback to scroll-based detection if sections not found
+        if (scrollY < 500) {
+          newSection = 'home';
+        } else if (scrollY >= 500 && scrollY < 2000) {
+          newSection = 'about';
+        } else {
+          newSection = 'how-it-works';
+        }
       }
       
       setActiveSection(newSection);
@@ -106,6 +128,10 @@ const Header: React.FC = () => {
         behavior: 'smooth',
         block: 'start'
       });
+      // Ensure active section stays set after scrolling
+      setTimeout(() => {
+        setActiveSection(sectionId);
+      }, 500);
     }
     setIsMenuOpen(false);
   };
