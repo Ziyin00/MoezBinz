@@ -1,6 +1,31 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
 const { verifyAdminToken } = require('../middleware/adminAuth');
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/products/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
 
 // Get all users (admin only)
 router.get('/users', verifyAdminToken, async (req, res) => {
@@ -380,6 +405,193 @@ router.get('/products', verifyAdminToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Get admin products error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Create product (admin only)
+router.post('/products', verifyAdminToken, upload.single('image'), async (req, res) => {
+  try {
+    const pool = req.app.locals.pool;
+    const { 
+      name, 
+      description, 
+      category, 
+      startingPrice, 
+      endDate, 
+      condition, 
+      location, 
+      shippingCost, 
+      tags, 
+      isFeatured 
+    } = req.body;
+
+    // Validate required fields
+    if (!name || !description || !category || !startingPrice) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    // Handle image upload (if provided)
+    let imageUrl = '/uploads/placeholder.jpg';
+    if (req.file) {
+      imageUrl = `/uploads/products/${req.file.filename}`;
+    }
+
+    // Create product
+    const result = await pool.query(`
+      INSERT INTO products (name, description, price, image_url, category, status, created_by, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      RETURNING id, name, description, price, image_url, category, status, created_at
+    `, [name, description, parseFloat(startingPrice), imageUrl, category, 'active', req.user.id]);
+
+    const product = result.rows[0];
+
+    // Transform to match frontend expectations
+    const transformedProduct = {
+      _id: product.id.toString(),
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      startingPrice: parseFloat(product.price),
+      currentPrice: parseFloat(product.price),
+      imageUrl: product.image_url,
+      status: product.status,
+      endDate: endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // Default 7 days
+      condition: condition || 'excellent',
+      location: location || 'Toronto, ON',
+      shippingCost: parseFloat(shippingCost) || 9.99,
+      tags: tags ? tags.split(',').map(tag => tag.trim()) : [category],
+      isFeatured: isFeatured === 'true' || isFeatured === true,
+      createdBy: {
+        _id: req.user.id.toString(),
+        name: 'Admin User',
+        email: 'admin@moezbinz.com'
+      },
+      createdAt: product.created_at,
+      updatedAt: product.created_at
+    };
+
+    res.status(201).json({
+      message: 'Product created successfully',
+      product: transformedProduct
+    });
+  } catch (error) {
+    console.error('Create product error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update product (admin only)
+router.put('/products/:id', verifyAdminToken, upload.single('image'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = req.app.locals.pool;
+    const { 
+      name, 
+      description, 
+      category, 
+      startingPrice, 
+      endDate, 
+      condition, 
+      location, 
+      shippingCost, 
+      tags, 
+      isFeatured,
+      status
+    } = req.body;
+
+    // Check if product exists
+    const productResult = await pool.query('SELECT id FROM products WHERE id = $1', [id]);
+    if (productResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Handle image upload (if provided)
+    let imageUrl = null;
+    if (req.file) {
+      imageUrl = `/uploads/products/${req.file.filename}`;
+    }
+
+    // Build update query dynamically
+    const updateFields = [];
+    const updateValues = [];
+    let paramCount = 0;
+
+    if (name !== undefined) {
+      paramCount++;
+      updateFields.push(`name = $${paramCount}`);
+      updateValues.push(name);
+    }
+    if (description !== undefined) {
+      paramCount++;
+      updateFields.push(`description = $${paramCount}`);
+      updateValues.push(description);
+    }
+    if (category !== undefined) {
+      paramCount++;
+      updateFields.push(`category = $${paramCount}`);
+      updateValues.push(category);
+    }
+    if (startingPrice !== undefined) {
+      paramCount++;
+      updateFields.push(`price = $${paramCount}`);
+      updateValues.push(parseFloat(startingPrice));
+    }
+    if (imageUrl !== null) {
+      paramCount++;
+      updateFields.push(`image_url = $${paramCount}`);
+      updateValues.push(imageUrl);
+    }
+    if (status !== undefined) {
+      paramCount++;
+      updateFields.push(`status = $${paramCount}`);
+      updateValues.push(status);
+    }
+
+    if (updateFields.length === 0) {
+      return res.status(400).json({ message: 'No fields to update' });
+    }
+
+    paramCount++;
+    updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
+    paramCount++;
+    updateValues.push(id);
+
+    const updateQuery = `UPDATE products SET ${updateFields.join(', ')} WHERE id = $${paramCount} RETURNING *`;
+    const result = await pool.query(updateQuery, updateValues);
+    const product = result.rows[0];
+
+    // Transform to match frontend expectations
+    const transformedProduct = {
+      _id: product.id.toString(),
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      startingPrice: parseFloat(product.price),
+      currentPrice: parseFloat(product.price),
+      imageUrl: product.image_url,
+      status: product.status,
+      endDate: endDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      condition: condition || 'excellent',
+      location: location || 'Toronto, ON',
+      shippingCost: parseFloat(shippingCost) || 9.99,
+      tags: tags ? tags.split(',').map(tag => tag.trim()) : [product.category],
+      isFeatured: isFeatured === 'true' || isFeatured === true,
+      createdBy: {
+        _id: req.user.id.toString(),
+        name: 'Admin User',
+        email: 'admin@moezbinz.com'
+      },
+      createdAt: product.created_at,
+      updatedAt: product.updated_at
+    };
+
+    res.json({
+      message: 'Product updated successfully',
+      product: transformedProduct
+    });
+  } catch (error) {
+    console.error('Update product error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
