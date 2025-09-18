@@ -51,7 +51,7 @@ const VisitUsPage: React.FC = () => {
                          <div className="bg-white p-4 rounded-2xl  shadow-lg border border-gray-100 opacity-0 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
                         <div className="relative h-[450px] rounded-lg overflow-hidden">
                              <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2882.251412574241!2d-79.4883592237893!3d43.74601454645053!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3174243a75a5%3A0x869a88e1e78a221d!2s1150%20Sheppard%20Ave%20W%2C%20North%20York%2C%20ON%20M3K%202B5%2C%20Canada!5e0!3m2!1sen!2sus!4v1716491795325!5m2!1sen!2sus"
+                                src="https://maps.google.com/maps?width=100%25&amp;height=450&amp;hl=en&amp;q=1150%20Sheppard%20Avenue%20West,%20North%20York,%20ON%20M3K%202B5+(Moez%20Binz%20Store)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}

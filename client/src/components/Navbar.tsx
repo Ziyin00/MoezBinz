@@ -42,6 +42,23 @@ const Header: React.FC = () => {
   const isAuthenticated = !!user && !!accessToken;
   const isAdmin = user?.role === 'admin';
 
+  // Handle hash navigation when page loads
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      const sectionId = location.hash.substring(1); // Remove the #
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+          setActiveSection(sectionId);
+        }
+      }, 100); // Small delay to ensure page is loaded
+    }
+  }, [location.pathname, location.hash]);
+
   // Ultra-simple section detection that WILL work
   useEffect(() => {
     const handleScroll = () => {
@@ -73,6 +90,13 @@ const Header: React.FC = () => {
   }, [location.pathname]);
 
   const scrollToSection = (sectionId: string) => {
+    // If we're not on the home page, navigate to home first
+    if (location.pathname !== '/') {
+      // Navigate to home page with hash
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
     // Immediately set the active section when clicking
     setActiveSection(sectionId);
     
@@ -87,7 +111,13 @@ const Header: React.FC = () => {
   };
 
   const navLinks = [
-    { name: 'Home', to: '/', section: 'home', onClick: () => scrollToSection('home') },
+    { name: 'Home', to: '/', section: 'home', onClick: () => {
+      if (location.pathname !== '/') {
+        window.location.href = '/';
+      } else {
+        scrollToSection('home');
+      }
+    }},
     { name: 'About Us', to: '#about', section: 'about', onClick: () => scrollToSection('about') },
     { name: 'How It Works', to: '#how-it-works', section: 'how-it-works', onClick: () => scrollToSection('how-it-works') },
     { name: 'Products', to: '/product', section: null, onClick: undefined },
@@ -103,7 +133,11 @@ const Header: React.FC = () => {
     <header className="bg-white py-4 px-4 sm:px-6 lg:px-8 border-b border-gray-200 shadow-sm sticky top-0 z-50">
       <div className="container mx-auto">
         <nav className="flex justify-between items-center">
-          <Link to="/">
+          <Link to="/" onClick={() => {
+            if (location.pathname !== '/') {
+              window.location.href = '/';
+            }
+          }}>
             <Logo />
           </Link>
 
