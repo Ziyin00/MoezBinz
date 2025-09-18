@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../services/adminService';
 import type { Product } from '../services/adminService';
 import { useToast } from '../contexts/ToastContext';
@@ -17,11 +17,7 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
   const [saving, setSaving] = useState(false);
   const { success: showSuccess, error: showError } = useToast();
 
-  useEffect(() => {
-    fetchProduct();
-  }, [productId]);
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const response = await adminService.getProduct(productId);
@@ -33,7 +29,11 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId, showError]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -49,12 +49,19 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
 
     try {
       setSaving(true);
-      // Fix: Convert tags array to comma-separated string if present
+      // Convert Product data to CreateProductData format
       const updateData = {
-        ...editForm,
-        tags: Array.isArray(editForm.tags)
-          ? editForm.tags.join(',')
-          : editForm.tags,
+        name: editForm.name,
+        description: editForm.description,
+        category: editForm.category,
+        startingPrice: editForm.startingPrice,
+        endDate: editForm.endDate,
+        condition: editForm.condition,
+        location: editForm.location,
+        shippingCost: editForm.shippingCost,
+        tags: Array.isArray(editForm.tags) ? editForm.tags.join(',') : (editForm.tags || ''),
+        isFeatured: editForm.isFeatured,
+        // Note: image field is not included as it's optional for updates
       };
       await adminService.updateProduct(productId, updateData);
       showSuccess('Product updated successfully!');
@@ -69,7 +76,7 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
     }
   };
 
-  const handleInputChange = (field: keyof Product, value: string | number | boolean) => {
+  const handleInputChange = (field: keyof Product, value: string | number | boolean | string[]) => {
     setEditForm(prev => ({
       ...prev,
       [field]: value
