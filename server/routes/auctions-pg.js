@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { verifyAdminToken } = require('../middleware/adminAuth');
+const { sendAuctionWonEmail } = require('../services/auctionEmailService');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -364,6 +365,27 @@ router.post('/:id/approve-winner', requireAdmin, async (req, res) => {
       INSERT INTO auction_notifications (user_id, auction_id, type, title, message)
       VALUES ($1, $2, 'auction_won', 'You Won the Auction!', $3)
     `, [winner_id, id, `Congratulations! You won the auction for "${result.rows[0].title}". Please proceed to payment.`]);
+    
+    // Get winner's email for sending notification
+    const winnerResult = await pool.query('SELECT email, username FROM users WHERE id = $1', [winner_id]);
+    if (winnerResult.rows.length > 0) {
+      const winner = winnerResult.rows[0];
+      console.log('📧 Sending auction won email to:', winner.email);
+      
+      try {
+        const emailResult = await sendAuctionWonEmail(
+          winner.email,
+          winner.username,
+          result.rows[0].title,
+          parseFloat(winning_bid),
+          id
+        );
+        console.log('📧 Auction won email result:', emailResult);
+      } catch (emailError) {
+        console.error('❌ Error sending auction won email:', emailError);
+        // Don't fail the whole operation if email fails
+      }
+    }
     
     res.json({ message: 'Auction winner approved successfully', auction: result.rows[0] });
   } catch (error) {

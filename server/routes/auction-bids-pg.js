@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { verifyAccessToken } = require('../middleware/auth');
 const { verifyAdminToken } = require('../middleware/adminAuth');
+const { sendOutbidEmail } = require('../services/auctionEmailService');
 
 // Use the existing authentication middleware
 const requireAuth = verifyAccessToken;
@@ -86,6 +87,29 @@ router.post('/', requireAuth, async (req, res) => {
           INSERT INTO auction_notifications (user_id, auction_id, type, title, message)
           VALUES ($1, $2, 'outbid', 'You Were Outbid', 'Someone placed a higher bid on the auction you were watching.')
         `, [currentHighestBid.rows[0].user_id, auction_id]);
+        
+        // Send outbid email notification
+        try {
+          const outbidUserResult = await pool.query('SELECT email, username FROM users WHERE id = $1', [currentHighestBid.rows[0].user_id]);
+          const auctionResult = await pool.query('SELECT title FROM auctions WHERE id = $1', [auction_id]);
+          
+          if (outbidUserResult.rows.length > 0 && auctionResult.rows.length > 0) {
+            const outbidUser = outbidUserResult.rows[0];
+            const auction = auctionResult.rows[0];
+            
+            console.log('📧 Sending outbid email to:', outbidUser.email);
+            const emailResult = await sendOutbidEmail(
+              outbidUser.email,
+              outbidUser.username,
+              auction.title,
+              parseFloat(bid_amount)
+            );
+            console.log('📧 Outbid email result:', emailResult);
+          }
+        } catch (emailError) {
+          console.error('❌ Error sending outbid email:', emailError);
+          // Don't fail the bid if email fails
+        }
       }
       
       await pool.query('COMMIT');
