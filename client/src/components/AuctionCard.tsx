@@ -164,7 +164,7 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeR
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : !isAuthenticated
               ? 'bg-red-500 text-white hover:bg-red-600'
-              : 'bg-purple-600 text-white hover:bg-purple-700'
+              : 'bg-red-600 text-white hover:bg-red-700'
           }`}
         >
           {timeRemaining.expired || auction.status === 'ended' 
