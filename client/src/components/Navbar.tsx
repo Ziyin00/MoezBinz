@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import Logo from './Logo';
-import { MenuIcon, XIcon } from './Icons';
+import { MenuIcon, XIcon, ChevronDownIcon } from './Icons';
 
 const NavLink = ({ to, children, isActive = false, onClick, isSectionActive = false }: { to: string; children: React.ReactNode; isActive?: boolean; onClick?: () => void; isSectionActive?: boolean }) => {
   const handleClick = (e: React.MouseEvent) => {
@@ -29,6 +29,51 @@ const NavLink = ({ to, children, isActive = false, onClick, isSectionActive = fa
         } group-hover:scale-x-100`}
       ></span>
     </Link>
+  );
+};
+
+const DropdownMenu = ({ title, items, isActive = false }: { title: string; items: Array<{ name: string; to: string; onClick?: () => void }>; isActive?: boolean }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative group">
+      <button
+        className={`flex items-center gap-1 text-sm font-bold uppercase tracking-wider relative pb-1 transition-all duration-300 ${
+          isActive 
+            ? 'text-red-600 bg-red-50 px-3 py-1 rounded-md' 
+            : 'text-gray-900 hover:text-red-600 hover:bg-red-50 hover:py-1 hover:rounded-md'
+        }`}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+      >
+        {title}
+        <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+        <span 
+          className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ease-out transform origin-left ${
+            isActive ? 'scale-x-100' : 'scale-x-0'
+          } group-hover:scale-x-100`}
+        ></span>
+      </button>
+      
+      {isOpen && (
+        <div 
+          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
+          onMouseEnter={() => setIsOpen(true)}
+          onMouseLeave={() => setIsOpen(false)}
+        >
+          {items.map((item, index) => (
+            <Link
+              key={index}
+              to={item.to}
+              onClick={item.onClick}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+            >
+              {item.name}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -136,7 +181,8 @@ const Header: React.FC = () => {
     setIsMenuOpen(false);
   };
 
-  const navLinks = [
+  // Main navigation links
+  const mainNavLinks = [
     { name: 'Home', to: '/', section: 'home', onClick: () => {
       if (location.pathname !== '/') {
         window.location.href = '/';
@@ -146,11 +192,19 @@ const Header: React.FC = () => {
     }},
     { name: 'About Us', to: '/about', section: null, onClick: undefined },
     { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
-    { name: 'Products', to: '/product', section: null, onClick: undefined },
-    { name: 'Auction', to: '/auction', section: null, onClick: undefined },
-    ...(isAuthenticated ? [{ name: 'My Bids', to: '/my-bids', section: null, onClick: undefined }] : []),
-    { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
-    { name: "What's new", to: '/whats-new', section: null, onClick: undefined },
+  ];
+
+  // Shop dropdown items
+  const shopItems = [
+    { name: 'Products', to: '/product', onClick: undefined },
+    { name: 'Auction', to: '/auction', onClick: undefined },
+    ...(isAuthenticated ? [{ name: 'My Bids', to: '/my-bids', onClick: undefined }] : []),
+  ];
+
+  // More dropdown items
+  const moreItems = [
+    { name: 'Visit Us', to: '/visit', onClick: undefined },
+    { name: "What's New", to: '/whats-new', onClick: undefined },
   ];
 
   const handleLogout = () => {
@@ -171,8 +225,9 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+            {/* Main Navigation Links */}
+            {mainNavLinks.map((link) => (
               <NavLink 
                 key={link.name} 
                 to={link.to} 
@@ -183,6 +238,45 @@ const Header: React.FC = () => {
                 {link.name}
               </NavLink>
             ))}
+            
+            {/* Shop Dropdown */}
+            <DropdownMenu 
+              title="Shop" 
+              items={shopItems}
+              isActive={shopItems.some(item => location.pathname === item.to)}
+            />
+            
+            {/* More Dropdown */}
+            <DropdownMenu 
+              title="More" 
+              items={moreItems}
+              isActive={moreItems.some(item => location.pathname === item.to)}
+            />
+          </div>
+
+          {/* Tablet Navigation (simplified) */}
+          <div className="hidden md:flex lg:hidden items-center gap-4">
+            {mainNavLinks.map((link) => (
+              <NavLink 
+                key={link.name} 
+                to={link.to} 
+                isActive={link.section ? false : location.pathname === link.to} 
+                isSectionActive={link.section ? activeSection === link.section : false}
+                onClick={link.onClick}
+              >
+                {link.name}
+              </NavLink>
+            ))}
+            <DropdownMenu 
+              title="Shop" 
+              items={shopItems}
+              isActive={shopItems.some(item => location.pathname === item.to)}
+            />
+            <DropdownMenu 
+              title="More" 
+              items={moreItems}
+              isActive={moreItems.some(item => location.pathname === item.to)}
+            />
           </div>
 
           {/* Desktop Auth Section */}
@@ -218,7 +312,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-900 p-2" aria-label="Toggle menu">
               {isMenuOpen ? <XIcon /> : <MenuIcon />}
             </button>
@@ -228,9 +322,10 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4 border-t border-gray-200">
+        <div className="lg:hidden mt-4 border-t border-gray-200">
           <div className="flex flex-col items-center gap-6 py-6 animate-fade-in-up">
-            {navLinks.map((link) => (
+            {/* Main Navigation Links */}
+            {mainNavLinks.map((link) => (
               <NavLink 
                 key={link.name} 
                 to={link.to} 
@@ -241,6 +336,38 @@ const Header: React.FC = () => {
                 {link.name}
               </NavLink>
             ))}
+            
+            {/* Shop Section */}
+            <div className="w-full max-w-xs">
+              <div className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 px-4">Shop</div>
+              {shopItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.to}
+                  onClick={item.onClick}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+            
+            {/* More Section */}
+            <div className="w-full max-w-xs">
+              <div className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 px-4">More</div>
+              {moreItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.to}
+                  onClick={item.onClick}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+            
+            {/* Auth Section */}
             {isAuthenticated ? (
               <div className="w-full max-w-xs text-center space-y-3">
                 <div className="text-sm text-gray-700 mb-4">

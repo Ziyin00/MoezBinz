@@ -122,21 +122,30 @@ const Hero: React.FC = () => {
               onLoad={index === 0 ? handleImageLoad : undefined}
             />
             
-            {/* <div 
-              className={`absolute inset-0 z-20 flex flex-col justify-center items-start text-white p-8 md:p-16 lg:p-24 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+            {/* Professional Banner Overlay - Below Hero Text */}
+            <div 
+              className={`absolute bottom-0 left-0 right-0 z-20 flex justify-center items-end p-4 md:p-6 lg:p-8 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
             >
-              <div className="max-w-4xl space-y-4 md:space-y-6">
-                <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
-                    {slide.title}
-                </h1>
-                <p className="text-lg md:text-xl font-semibold text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded inline-block">
-                    {slide.subtitle}
-                </p>
-                <p className="text-base md:text-lg text-gray-200">
-                    {slide.description}
-                </p>
+              <div className="max-w-5xl mx-auto text-center">
+                <div className="bg-black/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
+                  <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-white mb-2">
+                    Premium Brand Goods at{' '}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
+                      Throwaway Prices
+                    </span>
+                    {' '}– New Deals Every Day!
+                  </h2>
+                  <p className="text-sm md:text-base text-gray-200 leading-relaxed">
+                    Discover deeply discounted Amazon returns and overstock items in every category: 
+                    <span className="font-semibold text-yellow-400"> home goods</span>, 
+                    <span className="font-semibold text-yellow-400"> electronics</span>, 
+                    <span className="font-semibold text-yellow-400"> fashion</span>, 
+                    <span className="font-semibold text-yellow-400"> arts & crafts</span>, 
+                    and more. Every visit is a treasure hunt with daily-changing prices!
+                  </p>
+                </div>
               </div>
-            </div> */}
+            </div>
 
 
           </div>

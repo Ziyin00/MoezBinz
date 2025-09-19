@@ -61,11 +61,11 @@ const DealHuntingDays: React.FC = () => {
           </p>
         </div>
 
-        <div className="mt-12 flex flex-wrap justify-center gap-4 sm:gap-6">
+        <div className="mt-14 flex flex-wrap justify-center gap-5 sm:gap-6 lg:gap-7">
           {deals.map((deal) => (
             <div
               key={deal.day}
-              className="relative w-40 h-40 cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="relative w-48 h-48 sm:w-52 sm:h-52 lg:w-56 lg:h-56 cursor-pointer hover:scale-105 transition-transform duration-300"
               style={{ perspective: '1000px' }}
             >
               {/* Card Container with 3D Flip Effect */}
@@ -84,24 +84,24 @@ const DealHuntingDays: React.FC = () => {
               >
                 {/* Front Side - Price Card */}
                 <div 
-                  className="absolute inset-0 w-full h-full bg-red-600 rounded-xl text-white p-4 flex flex-col justify-center items-center text-center shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                  className="absolute inset-0 w-full h-full bg-red-600 rounded-xl text-white p-5 sm:p-6 lg:p-7 flex flex-col justify-center items-center text-center shadow-lg hover:shadow-xl transition-shadow duration-300"
                   style={{ backfaceVisibility: 'hidden' }}
                 >
-                  <p className="font-bold text-sm leading-tight">{deal.day}</p>
-                  <p className="text-3xl font-bold mt-2 text-yellow-300">{deal.price}</p>
-                  <p className="text-xs mt-1 opacity-90">per item</p>
+                  <p className="font-bold text-base sm:text-lg lg:text-xl leading-tight">{deal.day}</p>
+                  <p className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 sm:mt-3 text-yellow-300">{deal.price}</p>
+                  <p className="text-xs sm:text-sm lg:text-base mt-1 opacity-90">per item</p>
                 </div>
                 
                 {/* Back Side - Description Card */}
                 <div 
-                  className="absolute inset-0 w-full h-full bg-white rounded-xl text-gray-800 p-4 flex flex-col justify-center items-center text-center shadow-lg border-2 border-red-200 hover:shadow-2xl transition-shadow duration-300"
+                  className="absolute inset-0 w-full h-full bg-white rounded-xl text-gray-800 p-5 sm:p-6 lg:p-7 flex flex-col justify-center items-center text-center shadow-lg border-2 border-red-200 hover:shadow-xl transition-shadow duration-300"
                   style={{ 
                     backfaceVisibility: 'hidden',
                     transform: 'rotateY(180deg)'
                   }}
                 >
-                  <div className="text-2xl mb-2">{deal.icon}</div>
-                  <p className="font-semibold text-sm leading-tight text-center">{deal.description}</p>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl mb-2 sm:mb-3">{deal.icon}</div>
+                  <p className="font-semibold text-sm sm:text-base lg:text-lg leading-tight text-center">{deal.description}</p>
                 </div>
               </div>
             </div>

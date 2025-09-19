@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { PlayIcon, XMarkIcon } from './Icons';
+import {  XMarkIcon } from './Icons';
 
 const TreasuredFinds: React.FC = () => {
   const [showVideo, setShowVideo] = useState(false);
 
-  const openVideo = () => {
-    setShowVideo(true);
-  };
+  
 
   const closeVideo = () => {
     setShowVideo(false);
@@ -14,77 +12,135 @@ const TreasuredFinds: React.FC = () => {
 
   return (
     <>
-      <section className="bg-gray-50 py-16 sm:py-24">
+      <section className="bg-gray-50 py-20 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 lg:gap-16 items-start">
+          <div className="grid lg:grid-cols-2 lg:gap-20 items-center">
             
             {/* Left Column: Images & Video */}
-            <div className="mb-12 lg:mb-0">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+            <div className="mb-16 lg:mb-0">
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight mb-6">
                 Some of Our Most Treasured Finds
               </h2>
-              <p className="mt-4 text-lg text-gray-600">
+              <p className="text-xl text-gray-600 leading-relaxed mb-10">
                 Check out a few of the treasures waiting in our bins – new surprises arrive every Saturday.
               </p>
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                <div className="col-span-2 sm:col-span-1">
-                   <div className="group overflow-hidden rounded-2xl shadow-lg">
-                      <img 
-                        src="https://images.unsplash.com/photo-1543987094-a32f80a43924?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                        alt="Open for shop" 
-                        className="aspect-[3/4] w-full object-cover transition-transform duration-300 group-hover:scale-105" 
-                      />
+              <div className="grid grid-cols-2 gap-6 h-[500px]">
+                {/* Main Featured Image */}
+                <div className="col-span-2 sm:col-span-1 h-full">
+                   <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br  h-full">
+                      <div className="relative overflow-hidden rounded-2xl h-full">
+                        <img 
+                          src="deal-1.jpg" 
+                          alt="Open for shop" 
+                          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-1" 
+                        />
+                        {/* Overlay with gradient and content */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="absolute bottom-4 left-4 right-4 text-white">
+                            <h4 className="text-lg font-bold mb-1">Store Opening</h4>
+                            <p className="text-sm opacity-90">Fresh finds every Saturday</p>
+                          </div>
+                        </div>
+                        {/* Floating badge */}
+                        <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
+                          NEW!
+                        </div>
+                       
+                      </div>
                    </div>
                 </div>
-                <div className="col-span-2 sm:col-span-1 space-y-4">
-                  {/* Video Thumbnail */}
-                  <div className="group relative overflow-hidden rounded-2xl shadow-lg cursor-pointer" onClick={openVideo}>
-                    <img 
-                      src="https://images.unsplash.com/photo-1593062334882-297f642a8b9a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                      alt="Store tour video" 
-                      className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105" 
-                    />
-                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-red-600 rounded-full p-4 text-white transition-transform duration-300 group-hover:scale-110 shadow-lg">
-                        <PlayIcon className="h-8 w-8" />
+                
+                {/* Secondary Images */}
+                <div className="col-span-2 sm:col-span-1 h-full flex flex-col gap-6">
+                  {/* First secondary image */}
+                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br  flex-1">
+                    <div className="relative overflow-hidden rounded-2xl h-full">
+                      <img 
+                        src="deal-2.jpg" 
+                        alt="Woman with shopping bags" 
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:-rotate-1" 
+                      />
+                      {/* Overlay with gradient and content */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute bottom-4 left-4 right-4 text-white">
+                          <h4 className="text-lg font-bold mb-1">Happy Customers</h4>
+                          <p className="text-sm opacity-90">Amazing deals found</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-white font-semibold text-sm mb-1">Store Tour</h3>
-                      <p className="text-white/80 text-xs">See what's inside our bins!</p>
+                      {/* Floating badge */}
+                      <div className="absolute top-4 right-4 bg-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold shadow-lg transform -rotate-12 group-hover:rotate-0 transition-transform duration-300">
+                        SALE!
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="group overflow-hidden rounded-2xl shadow-lg">
-                    <img 
-                      src="https://images.unsplash.com/photo-1576185248593-55113114a0fe?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                      alt="Woman with shopping bags" 
-                      className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105" 
-                    />
+                  {/* Second secondary image */}
+                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br  flex-1">
+                    <div className="relative overflow-hidden rounded-2xl h-full">
+                      <img 
+                        src="deal-3.jpg" 
+                        alt="Woman with shopping bags" 
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-1" 
+                      />
+                      {/* Overlay with gradient and content */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute bottom-4 left-4 right-4 text-white">
+                          <h4 className="text-lg font-bold mb-1">Treasure Hunt</h4>
+                          <p className="text-sm opacity-90">Find your perfect deal</p>
+                        </div>
+                      </div>
+                      {/* Floating badge */}
+                      <div className="absolute top-4 right-4 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
+                        HOT!
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
           {/* Right Column: Info Boxes */}
-          <div className="space-y-8">
-            <div className="bg-gray-100 p-8 rounded-2xl border border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-900">Why Shop at Moez Binz?</h3>
-              <ul className="mt-4 space-y-2 text-gray-600 list-disc list-inside">
-                <li>Flat, falling prices each day – $1.99 to $19.99</li>
-                <li>New pallets restocked every Saturday</li>
-                <li>All sizes, one fixed price per day</li>
-                <li>Big-name brands for a fraction of retail</li>
-                <li>Family-friendly, thrill-of-the-find shopping</li>
+          <div className="space-y-10">
+            <div className="bg-white p-10 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-3xl font-bold text-gray-900 mb-6">Why Shop at Moez Binz?</h3>
+              <ul className="space-y-4 text-lg text-gray-600">
+                <li className="flex items-start gap-3">
+                  <span className="text-red-600 font-bold text-xl">•</span>
+                  <span>Flat, falling prices each day – $1.99 to $19.99</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-600 font-bold text-xl">•</span>
+                  <span>New pallets restocked every Saturday</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-600 font-bold text-xl">•</span>
+                  <span>All sizes, one fixed price per day</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-600 font-bold text-xl">•</span>
+                  <span>Big-name brands for a fraction of retail</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-red-600 font-bold text-xl">•</span>
+                  <span>Family-friendly, thrill-of-the-find shopping</span>
+                </li>
               </ul>
             </div>
-            <div className="bg-yellow-300 p-8 rounded-2xl">
-              <h3 className="text-2xl font-bold text-gray-900">Pro Tips for Bargain Hunters</h3>
-              <ul className="mt-4 space-y-2 text-gray-800 list-disc list-inside">
-                <li>Go early on Saturday for top brands</li>
-                <li>Come midweek for steady price drops</li>
-                <li>Fridays = lowest prices and final reductions</li>
+            <div className="bg-gradient-to-br from-yellow-300 to-yellow-400 p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-3xl font-bold text-white mb-6">Pro Tips for Bargain Hunters</h3>
+              <ul className="space-y-4 text-lg text-white">
+                <li className="flex items-start gap-3">
+                  <span className="text-white font-bold text-xl">•</span>
+                  <span>Go early on Saturday for top brands</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-white font-bold text-xl">•</span>
+                  <span>Come midweek for steady price drops</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-white font-bold text-xl">•</span>
+                  <span>Fridays = lowest prices and final reductions</span>
+                </li>
               </ul>
             </div>
           </div>
