@@ -3,16 +3,23 @@ import React from 'react';
 const VisitUsPage: React.FC = () => {
     return (
         <main className="bg-white">
-            <section className="relative h-[40vh] md:h-[50vh] bg-gray-900">
-                <img 
-                    src="https://images.unsplash.com/photo-1563461661138-167853909778?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Interior of a store"
-                    className="w-full h-full object-cover opacity-50"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight text-center">
+            <section className="relative h-[50vh] bg-red-600" style={{background: 'linear-gradient(135deg, #dc2626, #991b1b, #374151)'}}>
+                <div className="absolute inset-0 bg-black opacity-30"></div>
+                <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
+                    <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
                         Visit Our Store
                     </h1>
+                    <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+                        Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
+                    </p>
+                    <div className="mt-6 flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-400">
+                        <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                            <span className="text-sm font-medium">📍 1150 Sheppard Avenue West</span>
+                        </div>
+                        <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                            <span className="text-sm font-medium">🕒 Open 7 Days a Week</span>
+                        </div>
+                    </div>
                 </div>
             </section>
             

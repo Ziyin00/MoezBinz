@@ -2,13 +2,22 @@ import React from 'react';
 
 const VisitUsPage: React.FC = () => {
     return (
-        <main className="bg-gray-50 py-16 sm:py-24">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16 opacity-0 animate-fade-in-up">
-                    <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">
+        <main className="bg-white">
+            {/* Hero Section */}
+            <section className="relative h-[50vh] bg-red-600" style={{background: 'linear-gradient(135deg, #dc2626, #991b1b, #374151)'}}>
+                <div className="absolute inset-0 bg-black opacity-30"></div>
+                <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
+                    <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
                         Plan Your Visit to Moez Binz
                     </h1>
+                    <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+                        Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
+                    </p>
                 </div>
+            </section>
+
+            <div className="bg-gray-50 py-16 sm:py-24">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                     {/* Location & Hours Card */}
@@ -51,6 +60,7 @@ const VisitUsPage: React.FC = () => {
                             ></iframe>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </main>

@@ -126,15 +126,26 @@ const WhatsNew: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          {/* Page Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">What's New</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+      <div className="min-h-screen bg-white">
+        {/* Hero Section */}
+        <section className="relative h-[50vh] bg-black">
+          <img 
+            src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            alt="News and updates"
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+          <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
+              What's New
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
               Stay updated with the latest news, announcements, and updates from Moez Binz
             </p>
           </div>
+        </section>
+
+        <div className="bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 py-8">
 
           {/* Featured News Section */}
           {featuredNews.length > 0 && (
@@ -302,6 +313,7 @@ const WhatsNew: React.FC = () => {
                 )}
               </>
             )}
+          </div>
           </div>
         </div>
       </div>

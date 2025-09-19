@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BidIcon, ChevronRightIcon } from './Icons';
+import { BidIcon } from './Icons';
 import { productService, type Product } from '../services/productService';
 import BidModal from './BidModal';
 import { useAppSelector } from '../store/hooks';
@@ -189,32 +189,22 @@ const ProductsPage: React.FC = () => {
   return (
     <>
       <main className="bg-gray-50 min-h-screen">
-        {/* Breadcrumb */}
-        <div className="bg-gray-800 py-3">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <nav className="text-white text-sm">
-              <span className="text-gray-300">Home</span>
-              <ChevronRightIcon className="w-4 h-4 inline mx-2 text-gray-400" />
-              <span className="text-gray-300">Products</span>
-              <ChevronRightIcon className="w-4 h-4 inline mx-2 text-gray-400" />
-              <span className="text-white font-medium">All Categories</span>
-            </nav>
-          </div>
-        </div>
-
         {/* Hero Section */}
-        <div className="bg-gray-800 py-16">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl sm:text-6xl font-bold text-white tracking-tight mb-4">
-                All Categories
-              </h1>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                From electronics and home goods to fashion and toys — discover premium items for less in our treasure bins.
-              </p>
-            </div>
+        <section className="relative h-[50vh] bg-black">
+          <img 
+            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            alt="Shopping and products"
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+          <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
+              All Categories
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+              From electronics and home goods to fashion and toys — discover premium items for less in our treasure bins.
+            </p>
           </div>
-        </div>
+        </section>
 
         {/* Bin Prices Section */}
         <div className="bg-gray-100 py-12">
