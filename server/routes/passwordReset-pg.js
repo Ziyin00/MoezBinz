@@ -8,6 +8,7 @@ const { sendPasswordResetEmail } = require('../services/emailService');
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
+    console.log('🔐 Forgot password request received for:', email);
 
     if (!email) {
       return res.status(400).json({ message: 'Email is required' });
@@ -39,7 +40,9 @@ router.post('/forgot-password', async (req, res) => {
     );
 
     // Send email
+    console.log('📧 Attempting to send password reset email to:', user.email);
     const emailResult = await sendPasswordResetEmail(user.email, resetToken, user.username);
+    console.log('📧 Email sending result:', emailResult);
     
     if (!emailResult.success) {
       // If email fails, delete the token
