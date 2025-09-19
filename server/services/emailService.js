@@ -22,7 +22,12 @@ const createTransporter = () => {
         },
         tls: {
           rejectUnauthorized: false
-        }
+        },
+        pool: true,
+        maxConnections: 1,
+        maxMessages: 3,
+        rateDelta: 20000,
+        rateLimit: 5
       });
     }
     
@@ -98,124 +103,68 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
     const resetUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/reset-password?token=${resetToken}`;
     
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: {
+        name: 'MoezBinz Support',
+        address: process.env.EMAIL_USER
+      },
       to: email,
-      subject: '🔐 Password Reset - MoezBinz Treasure Hunt',
+      subject: 'Password Reset Request',
+      headers: {
+        'X-Mailer': 'MoezBinz-System',
+        'X-Priority': '3',
+        'X-MSMail-Priority': 'Normal',
+        'Importance': 'Normal',
+        'Return-Path': process.env.EMAIL_USER,
+        'Message-ID': `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@moezbinz.com>`,
+        'Date': new Date().toUTCString()
+      },
+      replyTo: process.env.EMAIL_USER,
+      text: `Password Reset Request
+
+Hello ${userName},
+
+We received a request to reset your password for your MoezBinz account.
+
+To reset your password, please click the link below:
+${resetUrl}
+
+This link will expire in 15 minutes for security reasons.
+
+If you did not request this password reset, please ignore this email. Your password will remain unchanged.
+
+Best regards,
+The MoezBinz Team`,
       html: `
         <!DOCTYPE html>
-        <html lang="en">
+        <html>
         <head>
           <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Password Reset - MoezBinz</title>
+          <title>Password Reset Request</title>
         </head>
-        <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background-color: #f8f9fa; padding: 30px; border-radius: 8px;">
+            <h2 style="color: #dc2626; margin-bottom: 20px;">Password Reset Request</h2>
             
-            <!-- Header with Gradient -->
-            <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 40px 30px; text-align: center; position: relative; overflow: hidden;">
-              <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-              <div style="position: absolute; bottom: -30px; left: -30px; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-              
-              <div style="position: relative; z-index: 2;">
-                <h1 style="margin: 0; font-size: 32px; font-weight: 700; color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                  🏴‍☠️ MoezBinz
-                </h1>
-                <p style="margin: 8px 0 0 0; font-size: 16px; color: rgba(255,255,255,0.9); font-weight: 300;">
-                  Your Treasure Hunt Adventure Awaits
-                </p>
-              </div>
+            <p>Hello ${userName},</p>
+            
+            <p>We received a request to reset your password for your MoezBinz account.</p>
+            
+            <p>To reset your password, please click the link below:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="background-color: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Reset Password</a>
             </div>
             
-            <!-- Main Content -->
-            <div style="padding: 40px 30px;">
-              <div style="text-align: center; margin-bottom: 30px;">
-                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; border: 3px solid #fecaca;">
-                  <span style="font-size: 32px;">🔐</span>
-                </div>
-                <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
-                  Password Reset Request
-                </h2>
-                <p style="color: #6b7280; margin: 0; font-size: 16px;">
-                  Hello <strong style="color: #dc2626;">${userName}</strong>! 👋
-                </p>
-              </div>
-              
-              <div style="background: linear-gradient(135deg, #fef7f7 0%, #fef2f2 100%); border-left: 4px solid #dc2626; padding: 20px; border-radius: 8px; margin: 30px 0;">
-                <p style="color: #374151; margin: 0; line-height: 1.6; font-size: 16px;">
-                  We received a request to reset your password for your MoezBinz account. 
-                  Don't worry, it happens to the best treasure hunters! 🗺️
-                </p>
-              </div>
-              
-              <!-- CTA Button -->
-              <div style="text-align: center; margin: 40px 0;">
-                <a href="${resetUrl}" 
-                   style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
-                          color: white; 
-                          padding: 16px 40px; 
-                          text-decoration: none; 
-                          border-radius: 50px; 
-                          font-weight: 600; 
-                          font-size: 16px;
-                          display: inline-block;
-                          box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-                          transition: all 0.3s ease;
-                          border: none;
-                          cursor: pointer;">
-                  🚀 Reset My Password
-                </a>
-              </div>
-              
-              <!-- Alternative Link -->
-              <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 30px 0;">
-                <p style="color: #6b7280; margin: 0 0 10px 0; font-size: 14px; font-weight: 500;">
-                  🔗 Can't click the button? Copy and paste this link:
-                </p>
-                <p style="color: #dc2626; word-break: break-all; font-size: 14px; margin: 0; padding: 10px; background-color: white; border-radius: 4px; border: 1px solid #e5e7eb;">
-                  ${resetUrl}
-                </p>
-              </div>
-              
-              <!-- Security Notice -->
-              <div style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); 
-                          border: 1px solid #fecaca; 
-                          padding: 20px; 
-                          border-radius: 12px; 
-                          margin: 30px 0;
-                          position: relative;">
-                <div style="position: absolute; top: -8px; left: 20px; background: #dc2626; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                  ⚠️ SECURITY NOTICE
-                </div>
-                <ul style="color: #dc2626; margin: 15px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6;">
-                  <li><strong>⏰ Expires in 15 minutes</strong> - Act fast, treasure hunter!</li>
-                  <li><strong>🔒 Secure link</strong> - Only works once for your account</li>
-                  <li><strong>❓ Didn't request this?</strong> - Simply ignore this email</li>
-                  <li><strong>🛡️ Your password stays safe</strong> - Until you click the link</li>
-                </ul>
-              </div>
-              
-              <!-- Footer -->
-              <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
-                <p style="color: #6b7280; margin: 0 0 10px 0; font-size: 14px; line-height: 1.6;">
-                  Happy treasure hunting! 🏴‍☠️<br>
-                  <strong style="color: #dc2626;">The MoezBinz Team</strong>
-                </p>
-                <div style="margin-top: 20px;">
-                  <a href="${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}" 
-                     style="color: #dc2626; text-decoration: none; font-size: 14px; font-weight: 500;">
-                    🌟 Visit MoezBinz
-                  </a>
-                </div>
-              </div>
-            </div>
+            <p>This link will expire in 15 minutes for security reasons.</p>
             
-            <!-- Bottom Gradient -->
-            <div style="background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); padding: 20px; text-align: center;">
-              <p style="color: #9ca3af; margin: 0; font-size: 12px;">
-                This email was sent to ${email} • MoezBinz Treasure Hunt Platform
-              </p>
-            </div>
+            <p>If you did not request this password reset, please ignore this email. Your password will remain unchanged.</p>
+            
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            
+            <p style="font-size: 14px; color: #666;">
+              Best regards,<br>
+              The MoezBinz Team
+            </p>
           </div>
         </body>
         </html>
@@ -260,9 +209,20 @@ const sendWelcomeEmail = async (email, userName) => {
     }
     
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: {
+        name: 'MoezBinz Treasure Hunt',
+        address: process.env.EMAIL_USER
+      },
       to: email,
-      subject: '🎉 Welcome to MoezBinz - Your Treasure Hunt Begins!',
+      subject: 'Welcome to MoezBinz - Your Treasure Hunt Begins!',
+      headers: {
+        'X-Mailer': 'MoezBinz-System',
+        'X-Priority': '3',
+        'X-MSMail-Priority': 'Normal',
+        'Importance': 'Normal',
+        'Return-Path': process.env.EMAIL_USER
+      },
+      replyTo: process.env.EMAIL_USER,
       html: `
         <!DOCTYPE html>
         <html lang="en">
