@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { verifyAccessToken } = require('../middleware/auth');
+const { verifyAdminToken } = require('../middleware/adminAuth');
 
-// Middleware to check if user is authenticated
-const requireAuth = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'Authentication required' });
-  }
-  next();
-};
+// Use the existing authentication middleware
+const requireAuth = verifyAccessToken;
 
 // POST /api/auction-bids - Place a bid
 router.post('/', requireAuth, async (req, res) => {
@@ -110,16 +107,11 @@ router.post('/', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/auction-bids/user/:userId - Get user's bids
-router.get('/user/:userId', requireAuth, async (req, res) => {
+// GET /api/auction-bids/user/:userId - Get user's bids (admin only)
+router.get('/user/:userId', verifyAdminToken, async (req, res) => {
   try {
     const pool = req.app.locals.pool;
     const { userId } = req.params;
-    
-    // Check if user is requesting their own bids or is admin
-    if (parseInt(userId) !== req.user.id && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Access denied' });
-    }
     
     const result = await pool.query(`
       SELECT ab.*, a.title as auction_title, a.image_url, a.end_time, a.status as auction_status

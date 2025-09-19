@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { verifyAdminToken } = require('../middleware/adminAuth');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -35,13 +36,8 @@ const upload = multer({
   }
 });
 
-// Middleware to check if user is admin
-const requireAdmin = (req, res, next) => {
-  if (!req.user || req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Admin access required' });
-  }
-  next();
-};
+// Use the existing admin authentication middleware
+const requireAdmin = verifyAdminToken;
 
 // GET /api/auctions - Get all auctions (public)
 router.get('/', async (req, res) => {
