@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { CubeIcon, UsersIcon, ChartBarIcon, EyeIcon, PlusIcon, Bars3Icon, XMarkIcon, NewspaperIcon, GavelIcon } from './Icons';
+import { CubeIcon, UsersIcon, ChartBarIcon, EyeIcon, Bars3Icon, XMarkIcon, NewspaperIcon, GavelIcon } from './Icons';
 
-type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product' | 'news' | 'create-news' | 'auctions';
+type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'news' | 'auctions';
 
 interface DashboardSidebarProps {
   activeTab: ActiveTab;
@@ -94,22 +94,10 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ activeTab, setActiv
               onClick={() => handleTabClick('bids')}
             />
             <SidebarLink
-              icon={<PlusIcon />}
-              label="Create Product"
-              isActive={activeTab === 'create-product'}
-              onClick={() => handleTabClick('create-product')}
-            />
-            <SidebarLink
               icon={<NewspaperIcon />}
               label="Manage News"
               isActive={activeTab === 'news'}
               onClick={() => handleTabClick('news')}
-            />
-            <SidebarLink
-              icon={<PlusIcon />}
-              label="Create News"
-              isActive={activeTab === 'create-news'}
-              onClick={() => handleTabClick('create-news')}
             />
             <SidebarLink
               icon={<GavelIcon />}

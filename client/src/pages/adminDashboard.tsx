@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../services/adminService';
 import type { DashboardStats } from '../services/adminService';
 import DashboardSidebar from '../components/DashboardSidebar';
 import UsersTable from '../components/UsersTable';
 import ProductsTable from '../components/ProductsTable';
 import BidsTable from '../components/BidsTable';
-import CreateProductForm from '../components/CreateProductForm';
 import NewsTable from '../components/NewsTable';
-import CreateNewsForm from '../components/CreateNewsForm';
 import AuctionsTable from '../components/AuctionsTable';
 import { getProductImageUrl } from '../utils/imageUtils';
 import Header from '../components/Navbar';
 import { useAppSelector } from '../store/hooks';
 
-type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product' | 'news' | 'create-news' | 'auctions';
+type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'news' | 'auctions';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('overview');
@@ -21,14 +19,7 @@ const AdminDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { user, accessToken } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    console.log('AdminDashboard mounted. Auth state:', { user, accessToken: accessToken ? 'present' : 'missing' });
-    if (accessToken) {
-      fetchDashboardStats();
-    }
-  }, [accessToken]);
-
-  const fetchDashboardStats = async () => {
+  const fetchDashboardStats = useCallback(async () => {
     if (!accessToken) {
       console.error('No access token available for dashboard API calls');
       setLoading(false);
@@ -44,14 +35,21 @@ const AdminDashboard: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch dashboard stats:', error);
       console.error('Error details:', {
-        message: (error as any)?.message,
-        response: (error as any)?.response?.data,
-        status: (error as any)?.response?.status
+        message: (error as Error)?.message,
+        response: (error as { response?: { data?: unknown; status?: number } })?.response?.data,
+        status: (error as { response?: { data?: unknown; status?: number } })?.response?.status
       });
     } finally {
       setLoading(false);
     }
-  };
+  }, [accessToken]);
+
+  useEffect(() => {
+    console.log('AdminDashboard mounted. Auth state:', { user, accessToken: accessToken ? 'present' : 'missing' });
+    if (accessToken) {
+      fetchDashboardStats();
+    }
+  }, [accessToken, user, fetchDashboardStats]);
 
   const renderOverview = () => (
     <div className="space-y-4">
@@ -183,12 +181,8 @@ const AdminDashboard: React.FC = () => {
         return <ProductsTable />;
       case 'bids':
         return <BidsTable />;
-      case 'create-product':
-        return <CreateProductForm onSuccess={() => setActiveTab('products')} />;
       case 'news':
         return <NewsTable />;
-      case 'create-news':
-        return <CreateNewsForm onSuccess={() => setActiveTab('news')} />;
       case 'auctions':
         return <AuctionsTable />;
       default:
