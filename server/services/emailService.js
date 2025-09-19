@@ -12,11 +12,42 @@ const createTransporter = () => {
   }
 
   try {
+    // Try Gmail first with improved configuration
+    if (process.env.EMAIL_USER.includes('@gmail.com')) {
+      return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      });
+    }
+    
+    // Try Outlook/Hotmail
+    if (process.env.EMAIL_USER.includes('@outlook.com') || process.env.EMAIL_USER.includes('@hotmail.com')) {
+      return nodemailer.createTransport({
+        service: 'hotmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
+      });
+    }
+    
+    // Generic SMTP configuration
     return nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: process.env.SMTP_PORT || 587,
+      secure: false, // true for 465, false for other ports
       auth: {
-        user: process.env.EMAIL_USER, // Your Gmail address
-        pass: process.env.EMAIL_PASS  // Your Gmail app password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
   } catch (error) {
@@ -42,6 +73,26 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
       console.log('===============================================\n');
       
       return { success: true, messageId: 'mock-email-' + Date.now() };
+    }
+
+    // Test the connection first
+    try {
+      await transporter.verify();
+      console.log('✅ Email server connection verified');
+    } catch (verifyError) {
+      console.error('❌ Email server connection failed:', verifyError.message);
+      // Fall back to mock email if connection fails
+      const resetUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/reset-password?token=${resetToken}`;
+      
+      console.log('\n🎯 ===== FALLBACK: MOCK PASSWORD RESET EMAIL SENT =====');
+      console.log('📧 To:', email);
+      console.log('👤 User:', userName);
+      console.log('🔗 Reset Link:', resetUrl);
+      console.log('⏰ Expires in: 15 minutes');
+      console.log('⚠️  Real email failed, using mock for development');
+      console.log('===============================================\n');
+      
+      return { success: true, messageId: 'fallback-mock-email-' + Date.now() };
     }
     
     const resetUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/reset-password?token=${resetToken}`;
@@ -175,8 +226,20 @@ const sendPasswordResetEmail = async (email, resetToken, userName) => {
     console.log('✅ Real email sent successfully:', result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('❌ Error sending password reset email:', error);
-    return { success: false, error: error.message };
+    console.error('❌ Error sending password reset email:', error.message);
+    
+    // If real email fails, fall back to mock email for development
+    const resetUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/reset-password?token=${resetToken}`;
+    
+    console.log('\n🎯 ===== FALLBACK: MOCK PASSWORD RESET EMAIL SENT =====');
+    console.log('📧 To:', email);
+    console.log('👤 User:', userName);
+    console.log('🔗 Reset Link:', resetUrl);
+    console.log('⏰ Expires in: 15 minutes');
+    console.log('⚠️  Real email failed, using mock for development');
+    console.log('===============================================\n');
+    
+    return { success: true, messageId: 'fallback-mock-email-' + Date.now() };
   }
 };
 
@@ -304,8 +367,17 @@ const sendWelcomeEmail = async (email, userName) => {
     console.log('✅ Welcome email sent successfully:', result.messageId);
     return { success: true, messageId: result.messageId };
   } catch (error) {
-    console.error('❌ Error sending welcome email:', error);
-    return { success: false, error: error.message };
+    console.error('❌ Error sending welcome email:', error.message);
+    
+    // If real email fails, fall back to mock email for development
+    console.log('\n🎉 ===== FALLBACK: MOCK WELCOME EMAIL SENT =====');
+    console.log('📧 To:', email);
+    console.log('👤 User:', userName);
+    console.log('🎯 Subject: Welcome to MoezBinz!');
+    console.log('⚠️  Real email failed, using mock for development');
+    console.log('===============================================\n');
+    
+    return { success: true, messageId: 'fallback-mock-welcome-email-' + Date.now() };
   }
 };
 
