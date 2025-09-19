@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { getAuctionImageUrl } from '../utils/imageUtils';
+import { getProductImageUrl } from '../utils/imageUtils';
 
 interface Auction {
-  _id: string;
+  id: number;
   title: string;
   description: string;
-  imageUrl: string;
-  startingPrice: number;
-  currentPrice: number;
-  bidIncrement: number;
-  endTime: string;
-  status: 'active' | 'ending' | 'ended';
+  image_url: string | null;
+  starting_price: number;
+  current_price: number;
+  bid_increment: number;
+  end_time: string;
+  status: 'active' | 'completed' | 'cancelled';
   category: string;
-  condition: string;
-  bidCount: number;
-  isFeatured: boolean;
+  bid_count: number;
+  highest_bid: number | null;
 }
 
 interface BidModalProps {
@@ -30,33 +29,28 @@ interface BidModalProps {
 }
 
 const AuctionBidModal: React.FC<BidModalProps> = ({ auction, onClose, onSubmit, getTimeRemaining }) => {
-  const [bidAmount, setBidAmount] = useState(auction.currentPrice + auction.bidIncrement);
-  const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining(auction.endTime));
+  const [bidAmount, setBidAmount] = useState(auction.current_price + auction.bid_increment);
+  const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining(auction.end_time));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Update countdown every second
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeRemaining(getTimeRemaining(auction.endTime));
+      setTimeRemaining(getTimeRemaining(auction.end_time));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [auction.endTime, getTimeRemaining]);
+  }, [auction.end_time, getTimeRemaining]);
 
   const handleBidAmountChange = (amount: number) => {
-    if (amount >= auction.currentPrice + auction.bidIncrement) {
-      setBidAmount(amount);
-    }
+    // Allow user to type any value, validation happens on submit
+    setBidAmount(amount);
   };
 
-  const handleQuickBid = (increment: number) => {
-    const newAmount = auction.currentPrice + increment;
-    setBidAmount(newAmount);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (bidAmount < auction.currentPrice + auction.bidIncrement) {
+    if (bidAmount < auction.current_price + auction.bid_increment) {
       return;
     }
 
@@ -91,19 +85,19 @@ const AuctionBidModal: React.FC<BidModalProps> = ({ auction, onClose, onSubmit, 
           {/* Auction Info */}
           <div className="flex gap-4 mb-6">
             <img
-              src={getAuctionImageUrl(auction.imageUrl)}
+              src={auction.image_url ? getProductImageUrl(auction.image_url) : getProductImageUrl('/placeholder.jpg')}
               alt={auction.title}
               className="w-24 h-24 object-cover rounded-lg"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = getAuctionImageUrl('/placeholder.jpg');
+                target.src = getProductImageUrl('/placeholder.jpg');
               }}
             />
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">{auction.title}</h3>
               <div className="flex items-center gap-4 text-sm text-gray-600">
-                <span>Current Bid: <span className="font-semibold text-purple-600">${auction.currentPrice}</span></span>
-                <span>Bid Increment: <span className="font-semibold">${auction.bidIncrement}</span></span>
+                <span>Current Bid: <span className="font-semibold text-purple-600">${auction.current_price}</span></span>
+                <span>Bid Increment: <span className="font-semibold">${auction.bid_increment}</span></span>
               </div>
             </div>
           </div>
@@ -136,17 +130,33 @@ const AuctionBidModal: React.FC<BidModalProps> = ({ auction, onClose, onSubmit, 
                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
                 <input
                   type="number"
-                  value={bidAmount}
-                  onChange={(e) => handleBidAmountChange(Number(e.target.value))}
-                  min={auction.currentPrice + auction.bidIncrement}
-                  step={auction.bidIncrement}
-                  className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="Enter bid amount"
+                  value={bidAmount || ''}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '' || !isNaN(Number(value))) {
+                      handleBidAmountChange(Number(value) || 0);
+                    }
+                  }}
+                  min={auction.current_price + auction.bid_increment}
+                  step={auction.bid_increment}
+                  className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    bidAmount < auction.current_price + auction.bid_increment && bidAmount > 0
+                      ? 'border-red-300 bg-red-50'
+                      : 'border-gray-300'
+                  }`}
+                  placeholder={`${auction.current_price + auction.bid_increment}`}
                 />
               </div>
-              <p className="text-sm text-gray-500 mt-1">
-                Minimum bid: ${auction.currentPrice + auction.bidIncrement}
-              </p>
+              <div className="mt-1">
+                <p className="text-sm text-gray-500">
+                  Minimum bid: <span className="font-semibold">${auction.current_price + auction.bid_increment}</span>
+                </p>
+                {bidAmount < auction.current_price + auction.bid_increment && bidAmount > 0 && (
+                  <p className="text-sm text-red-600 mt-1">
+                    Bid must be at least ${auction.current_price + auction.bid_increment}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Quick Bid Buttons */}
@@ -156,13 +166,17 @@ const AuctionBidModal: React.FC<BidModalProps> = ({ auction, onClose, onSubmit, 
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {[1, 2, 5, 10].map((multiplier) => {
-                  const amount = auction.currentPrice + (auction.bidIncrement * multiplier);
+                  const amount = auction.current_price + (auction.bid_increment * multiplier);
                   return (
                     <button
                       key={multiplier}
                       type="button"
-                      onClick={() => handleQuickBid(auction.bidIncrement * multiplier)}
-                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                      onClick={() => setBidAmount(amount)}
+                      className={`px-4 py-2 border rounded-lg transition-colors text-sm ${
+                        bidAmount === amount
+                          ? 'border-purple-500 bg-purple-50 text-purple-700'
+                          : 'border-gray-300 hover:bg-gray-50'
+                      }`}
                     >
                       ${amount}
                     </button>
@@ -181,7 +195,7 @@ const AuctionBidModal: React.FC<BidModalProps> = ({ auction, onClose, onSubmit, 
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Current Highest:</span>
-                  <span>${auction.currentPrice}</span>
+                  <span>${auction.current_price}</span>
                 </div>
                 <div className="flex justify-between border-t border-gray-200 pt-1">
                   <span className="text-gray-600">You'll Pay:</span>
@@ -216,7 +230,7 @@ const AuctionBidModal: React.FC<BidModalProps> = ({ auction, onClose, onSubmit, 
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting || timeRemaining.expired || bidAmount < auction.currentPrice + auction.bidIncrement}
+                disabled={isSubmitting || timeRemaining.expired || bidAmount < auction.current_price + auction.bid_increment}
                 className="flex-1 py-3 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? 'Placing Bid...' : 'Place Bid'}

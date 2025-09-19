@@ -362,8 +362,8 @@ router.post('/:id/approve-winner', requireAdmin, async (req, res) => {
     // Create notification for winner
     await pool.query(`
       INSERT INTO auction_notifications (user_id, auction_id, type, title, message)
-      VALUES ($1, $2, 'auction_won', 'You Won the Auction!', 'Congratulations! You won the auction for $3. Please proceed to payment.')
-    `, [winner_id, id, result.rows[0].title]);
+      VALUES ($1, $2, 'auction_won', 'You Won the Auction!', $3)
+    `, [winner_id, id, `Congratulations! You won the auction for "${result.rows[0].title}". Please proceed to payment.`]);
     
     res.json({ message: 'Auction winner approved successfully', auction: result.rows[0] });
   } catch (error) {

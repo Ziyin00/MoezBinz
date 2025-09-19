@@ -1,20 +1,19 @@
 import React from 'react';
-import { getAuctionImageUrl } from '../utils/imageUtils';
+import { getProductImageUrl } from '../utils/imageUtils';
 
 interface Auction {
-  _id: string;
+  id: number;
   title: string;
   description: string;
-  imageUrl: string;
-  startingPrice: number;
-  currentPrice: number;
-  bidIncrement: number;
-  endTime: string;
-  status: 'active' | 'ending' | 'ended';
+  image_url: string | null;
+  starting_price: number;
+  current_price: number;
+  bid_increment: number;
+  end_time: string;
+  status: 'active' | 'completed' | 'cancelled';
   category: string;
-  condition: string;
-  bidCount: number;
-  isFeatured: boolean;
+  bid_count: number;
+  highest_bid: number | null;
 }
 
 interface AuctionCardProps {
@@ -30,56 +29,35 @@ interface AuctionCardProps {
 }
 
 const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeRemaining, isAuthenticated = true }) => {
-  const timeRemaining = getTimeRemaining(auction.endTime);
+  const timeRemaining = getTimeRemaining(auction.end_time);
   
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
         return 'bg-green-100 text-green-800';
-      case 'ending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'ended':
+      case 'completed':
+        return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getConditionColor = (condition: string) => {
-    switch (condition.toLowerCase()) {
-      case 'excellent':
-        return 'bg-green-100 text-green-800';
-      case 'good':
-        return 'bg-blue-100 text-blue-800';
-      case 'fair':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'mixed':
-        return 'bg-purple-100 text-purple-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Image */}
       <div className="relative h-48 bg-gray-200">
         <img
-          src={getAuctionImageUrl(auction.imageUrl)}
+          src={auction.image_url ? getProductImageUrl(auction.image_url) : getProductImageUrl('/placeholder.jpg')}
           alt={auction.title}
           className="w-full h-full object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = getAuctionImageUrl('/placeholder.jpg');
+            target.src = getProductImageUrl('/placeholder.jpg');
           }}
         />
-        {auction.isFeatured && (
-          <div className="absolute top-4 left-4">
-            <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-              Featured
-            </span>
-          </div>
-        )}
         <div className="absolute top-4 right-4">
           <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(auction.status)}`}>
             {auction.status.charAt(0).toUpperCase() + auction.status.slice(1)}
@@ -96,10 +74,6 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeR
           </h3>
           <div className="flex items-center gap-2 mb-2">
             <span className="text-sm text-gray-500">{auction.category}</span>
-            <span className="text-gray-300">•</span>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConditionColor(auction.condition)}`}>
-              {auction.condition}
-            </span>
           </div>
         </div>
 
@@ -113,16 +87,16 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeR
           <div className="flex items-center justify-between mb-2">
             <div>
               <span className="text-sm text-gray-500">Starting Price:</span>
-              <span className="text-lg font-semibold text-gray-900 ml-2">${auction.startingPrice}</span>
+              <span className="text-lg font-semibold text-gray-900 ml-2">${auction.starting_price}</span>
             </div>
             <div className="text-right">
               <span className="text-sm text-gray-500">Current Bid:</span>
-              <span className="text-xl font-bold text-purple-600 ml-2">${auction.currentPrice}</span>
+              <span className="text-xl font-bold text-purple-600 ml-2">${auction.current_price}</span>
             </div>
           </div>
           <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>Bid Increment: ${auction.bidIncrement}</span>
-            <span>{auction.bidCount} bids</span>
+            <span>Bid Increment: ${auction.bid_increment}</span>
+            <span>{auction.bid_count} bids</span>
           </div>
         </div>
 
@@ -158,16 +132,16 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeR
         {/* Bid Button */}
         <button
           onClick={onBidClick}
-          disabled={timeRemaining.expired || auction.status === 'ended'}
+          disabled={timeRemaining.expired || auction.status === 'completed' || auction.status === 'cancelled'}
           className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-200 ${
-            timeRemaining.expired || auction.status === 'ended'
+            timeRemaining.expired || auction.status === 'completed' || auction.status === 'cancelled'
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : !isAuthenticated
               ? 'bg-red-500 text-white hover:bg-red-600'
               : 'bg-red-600 text-white hover:bg-red-700'
           }`}
         >
-          {timeRemaining.expired || auction.status === 'ended' 
+          {timeRemaining.expired || auction.status === 'completed' || auction.status === 'cancelled'
             ? 'Auction Ended' 
             : !isAuthenticated 
             ? 'Login to Bid' 

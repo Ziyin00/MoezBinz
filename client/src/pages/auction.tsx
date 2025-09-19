@@ -5,21 +5,21 @@ import AuctionCard from '../components/AuctionCard';
 import AuctionBidModal from '../components/AuctionBidModal';
 import { useToast } from '../contexts/ToastContext';
 import { useAppSelector } from '../store/hooks';
+import { auctionService } from '../services/auctionService';
 
 interface Auction {
-  _id: string;
+  id: number;
   title: string;
   description: string;
-  imageUrl: string;
-  startingPrice: number;
-  currentPrice: number;
-  bidIncrement: number;
-  endTime: string;
-  status: 'active' | 'ending' | 'ended';
+  image_url: string | null;
+  starting_price: number;
+  current_price: number;
+  bid_increment: number;
+  end_time: string;
+  status: 'active' | 'completed' | 'cancelled';
   category: string;
-  condition: string;
-  bidCount: number;
-  isFeatured: boolean;
+  bid_count: number;
+  highest_bid: number | null;
 }
 
 const Auction: React.FC = () => {
@@ -32,76 +32,23 @@ const Auction: React.FC = () => {
   const { user, accessToken } = useAppSelector((state) => state.auth);
   const isAuthenticated = !!user && !!accessToken;
 
-  // Mock data for now - will be replaced with API calls
+  // Fetch real auctions from API
   useEffect(() => {
-    const mockAuctions: Auction[] = [
-      {
-        _id: '1',
-        title: 'Flat-screen TV - 55" Smart TV',
-        description: 'High-quality 55-inch smart TV with 4K resolution. Perfect condition, includes remote and power cable.',
-        imageUrl: '/uploads/products/tv-auction.jpg',
-        startingPrice: 30,
-        currentPrice: 85,
-        bidIncrement: 5,
-        endTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours from now
-        status: 'active',
-        category: 'Electronics',
-        condition: 'Excellent',
-        bidCount: 12,
-        isFeatured: true
-      },
-      {
-        _id: '2',
-        title: 'Bulk Pallet: Kitchen & Home Items',
-        description: 'Mixed lot of kitchen appliances, cookware, and home decor items. Perfect for resellers or home setup.',
-        imageUrl: '/uploads/products/kitchen-pallet.jpg',
-        startingPrice: 50,
-        currentPrice: 120,
-        bidIncrement: 10,
-        endTime: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(), // 4 hours from now
-        status: 'active',
-        category: 'Home & Kitchen',
-        condition: 'Mixed',
-        bidCount: 8,
-        isFeatured: true
-      },
-      {
-        _id: '3',
-        title: 'Designer Fashion Assortment',
-        description: 'Collection of designer clothing, shoes, and accessories. Various sizes and brands included.',
-        imageUrl: '/uploads/products/fashion-lot.jpg',
-        startingPrice: 20,
-        currentPrice: 45,
-        bidIncrement: 3,
-        endTime: new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString(), // 1 hour from now
-        status: 'ending',
-        category: 'Fashion',
-        condition: 'Good',
-        bidCount: 15,
-        isFeatured: true
-      },
-      {
-        _id: '4',
-        title: 'Mystery Tech Box',
-        description: 'Sealed box containing various tech items. Could include phones, tablets, accessories, and more!',
-        imageUrl: '/uploads/products/mystery-tech.jpg',
-        startingPrice: 15,
-        currentPrice: 28,
-        bidIncrement: 2,
-        endTime: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(), // 6 hours from now
-        status: 'active',
-        category: 'Electronics',
-        condition: 'Unknown',
-        bidCount: 22,
-        isFeatured: true
+    const fetchAuctions = async () => {
+      try {
+        setLoading(true);
+        const response = await auctionService.getAuctions({ status: 'active' });
+        setAuctions(response.auctions);
+      } catch (err) {
+        console.error('Error fetching auctions:', err);
+        error('Failed to load auctions', 'Please try again later.');
+      } finally {
+        setLoading(false);
       }
-    ];
+    };
 
-    setTimeout(() => {
-      setAuctions(mockAuctions);
-      setLoading(false);
-    }, 1000);
-  }, []);
+    fetchAuctions();
+  }, [error]);
 
   const handleBidClick = (auction: Auction) => {
     // Check if user is authenticated before allowing bidding
@@ -119,20 +66,21 @@ const Auction: React.FC = () => {
     if (!selectedAuction) return;
 
     try {
-      // Mock bid submission - will be replaced with API call
-      console.log(`Bidding $${bidAmount} on auction ${selectedAuction._id}`);
+      // Submit bid via API
+      await auctionService.placeBid(selectedAuction.id, bidAmount);
       
       // Update local state
       setAuctions(prev => prev.map(auction => 
-        auction._id === selectedAuction._id 
-          ? { ...auction, currentPrice: bidAmount, bidCount: auction.bidCount + 1 }
+        auction.id === selectedAuction.id 
+          ? { ...auction, current_price: bidAmount, bid_count: auction.bid_count + 1 }
           : auction
       ));
 
       success('Bid placed successfully!', 'You will be notified if you are outbid.');
       setShowBidModal(false);
       setSelectedAuction(null);
-    } catch {
+    } catch (err) {
+      console.error('Error placing bid:', err);
       error('Failed to place bid', 'Please try again or contact support.');
     }
   };
@@ -300,7 +248,7 @@ const Auction: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
                 {auctions.map((auction) => (
                   <AuctionCard
-                    key={auction._id}
+                    key={auction.id}
                     auction={auction}
                     onBidClick={() => handleBidClick(auction)}
                     getTimeRemaining={getTimeRemaining}
