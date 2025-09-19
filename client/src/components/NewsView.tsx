@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { newsService } from '../services/newsService';
 import type { News, CreateNewsData } from '../services/newsService';
 import { useToast } from '../contexts/ToastContext';
+import { getNewsImageUrl } from '../utils/imageUtils';
 
 interface NewsViewProps {
   newsId: string;
@@ -196,9 +197,13 @@ const NewsView: React.FC<NewsViewProps> = ({ newsId, onBack, onNewsUpdated }) =>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-4">
                     <img
-                      src={imagePreview || (news.imageUrl.startsWith('http') ? news.imageUrl : `/uploads${news.imageUrl}`)}
+                      src={imagePreview || getNewsImageUrl(news.imageUrl)}
                       alt={news.title}
                       className="w-32 h-32 object-cover rounded-lg border"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = getNewsImageUrl('/placeholder.jpg');
+                      }}
                     />
                     <div>
                       <input
@@ -213,9 +218,13 @@ const NewsView: React.FC<NewsViewProps> = ({ newsId, onBack, onNewsUpdated }) =>
                 </div>
               ) : (
                 <img
-                  src={news.imageUrl.startsWith('http') ? news.imageUrl : `/uploads${news.imageUrl}`}
+                  src={getNewsImageUrl(news.imageUrl)}
                   alt={news.title}
                   className="w-full max-w-md h-64 object-cover rounded-lg border"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = getNewsImageUrl('/placeholder.jpg');
+                  }}
                 />
               )}
             </div>

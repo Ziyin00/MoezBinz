@@ -3,6 +3,7 @@ import { BidIcon, ChevronRightIcon } from './Icons';
 import { productService, type Product } from '../services/productService';
 import BidModal from './BidModal';
 import { useAppSelector } from '../store/hooks';
+import { getProductImageUrl } from '../utils/imageUtils';
 
 // Remove static products - we'll fetch from API
 
@@ -24,9 +25,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLogged
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-100">
       <div className="relative overflow-hidden">
         <img 
-          src={`https://moezbinz.onrender.com${product.imageUrl}`} 
+          src={getProductImageUrl(product.imageUrl)} 
           alt={product.name} 
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = getProductImageUrl('/placeholder.jpg');
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         

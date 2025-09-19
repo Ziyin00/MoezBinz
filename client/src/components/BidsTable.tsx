@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../services/adminService';
 import type { Bid } from '../services/adminService';
+import { getProductImageUrl } from '../utils/imageUtils';
 
 const BidsTable: React.FC = () => {
   const [bids, setBids] = useState<Bid[]>([]);
@@ -108,9 +109,13 @@ const BidsTable: React.FC = () => {
                   <td className="px-3 lg:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <img
-                        src={bid.product.imageUrl.startsWith('http') ? bid.product.imageUrl : `/uploads${bid.product.imageUrl}`}
+                        src={getProductImageUrl(bid.product.imageUrl)}
                         alt={bid.product.name}
                         className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg object-cover mr-2 lg:mr-3"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = getProductImageUrl('/placeholder.jpg');
+                        }}
                       />
                       <div>
                         <div className="text-xs lg:text-sm font-medium text-gray-900">{bid.product.name}</div>

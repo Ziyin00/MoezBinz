@@ -8,6 +8,7 @@ import BidsTable from '../components/BidsTable';
 import CreateProductForm from '../components/CreateProductForm';
 import NewsTable from '../components/NewsTable';
 import CreateNewsForm from '../components/CreateNewsForm';
+import { getProductImageUrl } from '../utils/imageUtils';
 import Header from '../components/Navbar';
 import { useAppSelector } from '../store/hooks';
 
@@ -134,9 +135,13 @@ const AdminDashboard: React.FC = () => {
                 <div key={product._id} className="flex justify-between items-center">
                   <div className="flex items-center">
                     <img 
-                      src={product.imageUrl && product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl || '/placeholder.jpg'}`} 
+                      src={getProductImageUrl(product.imageUrl)} 
                       alt={product.name}
                       className="w-10 h-10 rounded object-cover mr-3"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = getProductImageUrl('/placeholder.jpg');
+                      }}
                     />
                     <span className="text-gray-800">{product.name}</span>
                   </div>

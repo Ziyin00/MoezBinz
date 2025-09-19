@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { newsService } from '../services/newsService';
 import type { News } from '../services/newsService';
 import { useToast } from '../contexts/ToastContext';
+import { getNewsImageUrl } from '../utils/imageUtils';
 import NewsView from './NewsView';
 
 const NewsTable: React.FC = () => {
@@ -170,9 +171,13 @@ const NewsTable: React.FC = () => {
                     <div className="flex items-center">
                       {newsItem.imageUrl && (
                         <img
-                          src={newsItem.imageUrl.startsWith('http') ? newsItem.imageUrl : `/uploads${newsItem.imageUrl}`}
+                          src={getNewsImageUrl(newsItem.imageUrl)}
                           alt={newsItem.title}
                           className="w-12 h-12 rounded-lg object-cover mr-3"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = getNewsImageUrl('/placeholder.jpg');
+                          }}
                         />
                       )}
                       <div className="min-w-0 flex-1">

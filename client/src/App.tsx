@@ -15,6 +15,7 @@ import Product from "./pages/products";
 import Visit from "./pages/visit";
 import About from "./pages/about";
 import HowItWorks from "./pages/howItWorks";
+import Auction from "./pages/auction";
 import WhatsNew from "./pages/whatsNew";
 import AdminDashboard from "./pages/adminDashboard";
 import NotFound from "./pages/NotFound";
@@ -63,6 +64,7 @@ function App() {
                 <Route path="/visit" element={<Visit />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/how-it-works" element={<HowItWorks />} />
+                <Route path="/auction" element={<Auction />} />
                 <Route path="/whats-new" element={<WhatsNew />} />
                 <Route path="/admin/dashboard" element={
                   <ProtectedRoute>

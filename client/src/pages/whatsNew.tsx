@@ -3,6 +3,7 @@ import { newsService, type News } from '../services/newsService';
 import { useToast } from '../contexts/ToastContext';
 import Header from '../components/Navbar';
 import Footer from '../components/Footer';
+import { getNewsImageUrl } from '../utils/imageUtils';
 
 const WhatsNew: React.FC = () => {
   const [news, setNews] = useState<News[]>([]);
@@ -79,9 +80,13 @@ const WhatsNew: React.FC = () => {
               {selectedNews.imageUrl && (
                 <div className="aspect-video w-full">
                   <img
-                    src={selectedNews.imageUrl.startsWith('http') ? selectedNews.imageUrl : `/uploads${selectedNews.imageUrl}`}
+                    src={getNewsImageUrl(selectedNews.imageUrl)}
                     alt={selectedNews.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = getNewsImageUrl('/placeholder.jpg');
+                    }}
                   />
                 </div>
               )}
@@ -145,9 +150,13 @@ const WhatsNew: React.FC = () => {
                     {newsItem.imageUrl && (
                       <div className="aspect-video">
                         <img
-                          src={newsItem.imageUrl.startsWith('http') ? newsItem.imageUrl : `/uploads${newsItem.imageUrl}`}
+                          src={getNewsImageUrl(newsItem.imageUrl)}
                           alt={newsItem.title}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = getNewsImageUrl('/placeholder.jpg');
+                          }}
                         />
                       </div>
                     )}
@@ -211,9 +220,13 @@ const WhatsNew: React.FC = () => {
                       {newsItem.imageUrl && (
                         <div className="aspect-video">
                           <img
-                            src={newsItem.imageUrl.startsWith('http') ? newsItem.imageUrl : `/uploads${newsItem.imageUrl}`}
+                            src={getNewsImageUrl(newsItem.imageUrl)}
                             alt={newsItem.title}
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = getNewsImageUrl('/placeholder.jpg');
+                            }}
                           />
                         </div>
                       )}

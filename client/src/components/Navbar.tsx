@@ -147,6 +147,7 @@ const Header: React.FC = () => {
     { name: 'About Us', to: '/about', section: null, onClick: undefined },
     { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
     { name: 'Products', to: '/product', section: null, onClick: undefined },
+    { name: 'Auction', to: '/auction', section: null, onClick: undefined },
     { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
     { name: "What's new", to: '/whats-new', section: null, onClick: undefined },
   ];

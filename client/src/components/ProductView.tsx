@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../services/adminService';
 import type { Product } from '../services/adminService';
 import { useToast } from '../contexts/ToastContext';
+import { getProductImageUrl } from '../utils/imageUtils';
 
 interface ProductViewProps {
   productId: string;
@@ -185,9 +186,13 @@ const ProductView: React.FC<ProductViewProps> = ({ productId, onBack, onProductU
           <h2 className="text-lg font-semibold mb-4">Product Image</h2>
           <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
             <img
-              src={product.imageUrl && product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl || '/placeholder.jpg'}`}
+              src={getProductImageUrl(product.imageUrl)}
               alt={product.name}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = getProductImageUrl('/placeholder.jpg');
+              }}
             />
           </div>
         </div>

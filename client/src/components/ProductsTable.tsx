@@ -3,6 +3,7 @@ import { adminService } from '../services/adminService';
 import type { Product, Bid } from '../services/adminService';
 import { useToast } from '../contexts/ToastContext';
 import ProductView from './ProductView';
+import { getProductImageUrl } from '../utils/imageUtils';
 
 const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -239,9 +240,13 @@ const ProductsTable: React.FC = () => {
                   <td className="px-2 py-4 whitespace-nowrap w-[200px]">
                     <div className="flex items-center">
                       <img
-                        src={product.imageUrl && product.imageUrl.startsWith('http') ? product.imageUrl : `/uploads${product.imageUrl || '/placeholder.jpg'}`}
+                        src={getProductImageUrl(product.imageUrl)}
                         alt={product.name}
                         className="w-8 h-8 rounded-lg object-cover mr-2"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = getProductImageUrl('/placeholder.jpg');
+                        }}
                       />
                       <div className="min-w-0 flex-1">
                         <div className="text-xs font-medium text-gray-900 truncate">{product.name}</div>
