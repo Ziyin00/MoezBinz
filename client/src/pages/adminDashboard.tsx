@@ -8,11 +8,12 @@ import BidsTable from '../components/BidsTable';
 import CreateProductForm from '../components/CreateProductForm';
 import NewsTable from '../components/NewsTable';
 import CreateNewsForm from '../components/CreateNewsForm';
+import AuctionsTable from '../components/AuctionsTable';
 import { getProductImageUrl } from '../utils/imageUtils';
 import Header from '../components/Navbar';
 import { useAppSelector } from '../store/hooks';
 
-type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product' | 'news' | 'create-news';
+type ActiveTab = 'overview' | 'users' | 'products' | 'bids' | 'create-product' | 'news' | 'create-news' | 'auctions';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('overview');
@@ -66,7 +67,7 @@ const AdminDashboard: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6">
           <div className="bg-white p-4 lg:p-6 rounded-lg shadow border-l-4 border-blue-500">
             <h3 className="text-sm lg:text-lg font-semibold text-gray-700">Total Users</h3>
             <p className="text-2xl lg:text-3xl font-bold text-blue-600">{stats?.totalUsers || 0}</p>
@@ -85,6 +86,16 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white p-4 lg:p-6 rounded-lg shadow border-l-4 border-purple-500">
             <h3 className="text-sm lg:text-lg font-semibold text-gray-700">Total Bids</h3>
             <p className="text-2xl lg:text-3xl font-bold text-purple-600">{stats?.totalBids || 0}</p>
+          </div>
+          
+          <div className="bg-white p-4 lg:p-6 rounded-lg shadow border-l-4 border-orange-500">
+            <h3 className="text-sm lg:text-lg font-semibold text-gray-700">Active Auctions</h3>
+            <p className="text-2xl lg:text-3xl font-bold text-orange-600">{stats?.activeAuctions || 0}</p>
+          </div>
+          
+          <div className="bg-white p-4 lg:p-6 rounded-lg shadow border-l-4 border-indigo-500">
+            <h3 className="text-sm lg:text-lg font-semibold text-gray-700">Total Auctions</h3>
+            <p className="text-2xl lg:text-3xl font-bold text-indigo-600">{stats?.totalAuctions || 0}</p>
           </div>
         </div>
       )}
@@ -178,6 +189,8 @@ const AdminDashboard: React.FC = () => {
         return <NewsTable />;
       case 'create-news':
         return <CreateNewsForm onSuccess={() => setActiveTab('news')} />;
+      case 'auctions':
+        return <AuctionsTable />;
       default:
         return renderOverview();
     }

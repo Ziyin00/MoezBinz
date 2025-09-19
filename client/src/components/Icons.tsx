@@ -222,3 +222,15 @@ export const XCircleIcon: React.FC<{ className?: string }> = ({ className }) => 
     <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
+
+export const GavelIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg {...iconProps} strokeWidth={2} className={className || "h-5 w-5"}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75V18a3 3 0 01-6 0v-2.25m6 0V9a3 3 0 00-6 0v6.75m6 0h3m-3 0h-6m6 0V9a3 3 0 00-6 0v6.75m6 0V9a3 3 0 00-6 0v6.75m6 0h3m-3 0h-6" />
+  </svg>
+);
+
+export const CheckIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg {...iconProps} strokeWidth={2} className={className || "h-5 w-5"}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+  </svg>
+);

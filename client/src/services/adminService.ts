@@ -46,6 +46,9 @@ export interface DashboardStats {
   totalBids: number;
   activeProducts: number;
   soldProducts: number;
+  totalAuctions: number;
+  activeAuctions: number;
+  completedAuctions: number;
   recentUsers: User[];
   topProducts: Product[];
 }
