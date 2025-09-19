@@ -153,6 +153,16 @@ router.get('/stats', verifyAdminToken, async (req, res) => {
     const bidCountResult = await pool.query('SELECT COUNT(*) as count FROM bids');
     const totalBids = parseInt(bidCountResult.rows[0].count);
     
+    // Get auction counts
+    const auctionCountResult = await pool.query('SELECT COUNT(*) as count FROM auctions');
+    const totalAuctions = parseInt(auctionCountResult.rows[0].count);
+    
+    const activeAuctionsResult = await pool.query('SELECT COUNT(*) as count FROM auctions WHERE status = $1', ['active']);
+    const activeAuctions = parseInt(activeAuctionsResult.rows[0].count);
+    
+    const completedAuctionsResult = await pool.query('SELECT COUNT(*) as count FROM auctions WHERE status = $1', ['completed']);
+    const completedAuctions = parseInt(completedAuctionsResult.rows[0].count);
+    
     // Get recent users (last 5)
     const recentUsersResult = await pool.query(
       'SELECT id, username as name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT 5'
@@ -187,6 +197,9 @@ router.get('/stats', verifyAdminToken, async (req, res) => {
       totalBids,
       activeProducts,
       soldProducts,
+      totalAuctions,
+      activeAuctions,
+      completedAuctions,
       recentUsers,
       topProducts
     });
