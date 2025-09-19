@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const MyBids: React.FC = () => {
   const [bids, setBids] = useState<AuctionBid[]>([]);
   const [loading, setLoading] = useState(true);
-  const { error } = useToast();
+  const { error: showError } = useToast();
   const { user, accessToken } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -27,9 +27,9 @@ const MyBids: React.FC = () => {
       setLoading(true);
       const response = await auctionService.getMyBids();
       setBids(response);
-    } catch (error) {
-      console.error('Error fetching bids:', error);
-      error('Failed to load your bids', 'Please try again later.');
+    } catch (err) {
+      console.error('Error fetching bids:', err);
+      showError('Failed to load your bids', 'Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -127,7 +127,7 @@ const MyBids: React.FC = () => {
                       {/* Auction Image */}
                       <div className="flex-shrink-0">
                         <img
-                          src={bid.auction_image_url ? getProductImageUrl(bid.auction_image_url) : getProductImageUrl('/placeholder.jpg')}
+                          src={bid.image_url ? getProductImageUrl(bid.image_url) : getProductImageUrl('/placeholder.jpg')}
                           alt={bid.auction_title}
                           className="w-20 h-20 object-cover rounded-lg"
                           onError={(e) => {
@@ -173,7 +173,7 @@ const MyBids: React.FC = () => {
                             </span>
                             {bid.auction_status === 'active' && (
                               <span className="text-gray-600">
-                                Ends: {new Date(bid.auction_end_time).toLocaleDateString()}
+                                Ends: {new Date(bid.end_time).toLocaleDateString()}
                               </span>
                             )}
                           </div>

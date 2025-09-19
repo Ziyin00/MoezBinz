@@ -52,27 +52,6 @@ const AuctionsTable: React.FC = () => {
     }
   };
 
-  const handleStatusChange = async (auction: Auction, newStatus: string) => {
-    try {
-      await auctionService.updateAuction(auction.id, { status: newStatus });
-      setAuctions(auctions.map(a => 
-        a.id === auction.id ? { ...a, status: newStatus as any } : a
-      ));
-    } catch (error) {
-      console.error('Error updating auction status:', error);
-      setError('Failed to update auction status');
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
 
   const getStatusBadge = (status: string) => {
     const statusClasses = {

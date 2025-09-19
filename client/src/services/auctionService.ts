@@ -37,6 +37,13 @@ export interface AuctionBid {
   created_at: string;
   username: string;
   email: string;
+  // Additional fields from JOIN with auctions table
+  auction_title: string;
+  image_url: string | null;
+  end_time: string;
+  auction_status: string;
+  current_price: number;
+  winner_id: number | null;
 }
 
 export interface CreateAuctionData {
