@@ -6,32 +6,32 @@ const videos = [
     id: 1,
     title: "Saturday Restock - New Arrivals",
     thumbnail: 'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    duration: '2:30',
+    videoUrl: 'story-1.MP4',
+    duration: '0:20',
     description: 'See what new treasures arrived this Saturday!'
   },
   {
     id: 2,
     title: "Customer Finds & Success Stories",
     thumbnail: 'https://images.unsplash.com/photo-1589128793011-b3b47285b6b1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    duration: '1:45',
+    videoUrl: "story-2.MP4",
+    duration: '0:18',
     description: 'Amazing finds from our customers this week!'
   },
   {
     id: 3,
     title: "Behind the Scenes - How We Stock",
     thumbnail: 'https://images.unsplash.com/photo-1594132337992-996459dfa207?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    duration: '3:15',
+    videoUrl: "story-3.MP4",
+    duration: '0:16',
     description: 'Take a look at how we prepare our bins!'
   },
   {
     id: 4,
     title: "Friday Steals - Best Deals",
     thumbnail: 'https://images.unsplash.com/photo-1549468057-5b7fa1a41d7a?q=80&w=1943&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    duration: '2:00',
+    videoUrl: "story-4.MP4",
+    duration: '0:31',
     description: 'Don\'t miss these incredible Friday deals!'
   },
 ];
@@ -67,11 +67,14 @@ const LatestPosts: React.FC = () => {
                 onClick={() => openVideo(video)}
                 className="group block relative aspect-[9/16] overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
               >
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
+                <video
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
-                />
+                  muted
+                  loop
+                  playsInline
+                >
+                  <source src={video.videoUrl} type="video/mp4" />
+                </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 
                 {/* Video Info */}
@@ -116,7 +119,6 @@ const LatestPosts: React.FC = () => {
                 controls
                 autoPlay
                 className="w-full h-auto max-h-[70vh]"
-                poster={selectedVideo.thumbnail}
               >
                 <source src={selectedVideo.videoUrl} type="video/mp4" />
                 Your browser does not support the video tag.
