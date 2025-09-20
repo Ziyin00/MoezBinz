@@ -67,7 +67,7 @@ const sendAuctionWonEmail = async (email, userName, auctionTitle, winningBid, au
       console.log('👤 User:', userName);
       console.log('🏆 Auction:', auctionTitle);
       console.log('💰 Winning Bid: $' + winningBid);
-      console.log('🔗 Payment Link: ' + (process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/') + '/auction-payment/' + auctionId);
+      console.log('📞 Contact: (416) 555-0123 or info@moezbinz.com');
       console.log('===============================================\n');
       
       return { success: true, messageId: 'mock-auction-won-email-' + Date.now() };
@@ -81,8 +81,6 @@ const sendAuctionWonEmail = async (email, userName, auctionTitle, winningBid, au
       console.error('❌ Email server connection failed:', verifyError.message);
       return { success: true, messageId: 'fallback-mock-auction-won-email-' + Date.now() };
     }
-    
-    const paymentUrl = `${process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/'}/auction-payment/${auctionId}`;
     
     const mailOptions = {
       from: {
@@ -107,16 +105,15 @@ Hello ${userName},
 
 Congratulations! You won the auction for "${auctionTitle}" with a winning bid of $${winningBid}.
 
-To complete your purchase, please click the link below to proceed to payment:
-${paymentUrl}
+We're excited to help you complete your purchase! Please contact us to discuss the next steps and arrange for payment and collection.
 
-Important Information:
-- Payment must be completed within 24 hours
-- Items must be collected within 7 days of payment
-- Bring a valid ID and this email confirmation when collecting
-- Store hours: Monday-Saturday 9AM-6PM
+Contact Information:
+- Phone: (416) 555-0123
+- Email: info@moezbinz.com
+- Store Address: 1150 Sheppard Avenue West, North York
+- Store Hours: Monday-Saturday 9AM-6PM
 
-If you have any questions, please contact us.
+We look forward to hearing from you soon!
 
 Best regards,
 The MoezBinz Team`,
@@ -169,35 +166,41 @@ The MoezBinz Team`,
                   </div>
                 </div>
                 
-                <!-- CTA Button -->
-                <div style="text-align: center; margin: 40px 0;">
-                  <a href="${paymentUrl}" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); transition: all 0.3s ease; border: none; cursor: pointer; letter-spacing: 0.3px;">
-                    💳 Proceed to Payment
-                  </a>
-                </div>
-                
-                <!-- Important Information -->
-                <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 20px; border-radius: 12px; margin: 30px 0;">
-                  <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                    <div style="width: 24px; height: 24px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </div>
-                    <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #f59e0b;">Important Information</h3>
+                <!-- Contact Information -->
+                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 4px solid #0ea5e9; padding: 24px; border-radius: 12px; margin: 30px 0;">
+                  <div style="text-align: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 20px; font-weight: 600; color: #0369a1;">Next Steps</h3>
+                    <p style="margin: 0; font-size: 16px; color: #0369a1;">Contact us to discuss payment and collection details</p>
                   </div>
-                  <ul style="margin: 0; padding-left: 20px; color: #f59e0b; font-size: 14px; line-height: 1.6;">
-                    <li><strong>Payment deadline:</strong> 24 hours from now</li>
-                    <li><strong>Collection deadline:</strong> 7 days after payment</li>
-                    <li><strong>Bring ID and this email</strong> when collecting</li>
-                    <li><strong>Store hours:</strong> Monday-Saturday 9AM-6PM</li>
-                  </ul>
-                </div>
-                
-                <!-- Alternative Link -->
-                <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 30px 0;">
-                  <p style="margin: 0 0 10px 0; font-size: 14px; color: #6b7280; font-weight: 500;">Can't click the button? Copy and paste this link:</p>
-                  <p style="margin: 0; padding: 12px; background: white; border-radius: 6px; border: 1px solid #e5e7eb; font-size: 14px; color: #10b981; word-break: break-all; font-family: 'Courier New', monospace;">${paymentUrl}</p>
+                  
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                    <div style="text-align: center;">
+                      <div style="width: 50px; height: 50px; background: #0ea5e9; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <p style="margin: 0; font-size: 14px; color: #0369a1; font-weight: 600;">Phone</p>
+                      <p style="margin: 5px 0 0 0; font-size: 16px; color: #0369a1;">(416) 555-0123</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                      <div style="width: 50px; height: 50px; background: #0ea5e9; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                          <polyline points="22,6 12,13 2,6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </div>
+                      <p style="margin: 0; font-size: 14px; color: #0369a1; font-weight: 600;">Email</p>
+                      <p style="margin: 5px 0 0 0; font-size: 16px; color: #0369a1;">info@moezbinz.com</p>
+                    </div>
+                  </div>
+                  
+                  <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(14, 165, 233, 0.2);">
+                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #0369a1; font-weight: 600;">Store Address</p>
+                    <p style="margin: 0 0 5px 0; font-size: 16px; color: #0369a1;">1150 Sheppard Avenue West, North York</p>
+                    <p style="margin: 0; font-size: 14px; color: #0369a1;">Monday-Saturday 9AM-6PM</p>
+                  </div>
                 </div>
                 
                 <!-- Footer -->
@@ -240,7 +243,7 @@ The MoezBinz Team`,
     console.log('👤 User:', userName);
     console.log('🏆 Auction:', auctionTitle);
     console.log('💰 Winning Bid: $' + winningBid);
-    console.log('🔗 Payment Link: ' + (process.env.FRONTEND_URL || 'https://moez-binz-sepia.vercel.app/') + '/auction-payment/' + auctionId);
+    console.log('📞 Contact: (416) 555-0123 or info@moezbinz.com');
     console.log('===============================================\n');
     
     return { success: true, messageId: 'fallback-mock-auction-won-email-' + Date.now() };
