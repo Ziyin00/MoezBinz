@@ -155,52 +155,52 @@ const Header: React.FC = () => {
   }, [location.pathname, location.hash]);
 
   // Improved section detection with proper About Us handling
-  useEffect(() => {
-    const handleScroll = () => {
-      if (location.pathname !== '/') {
-        setActiveSection('');
-        return;
-      }
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (location.pathname !== '/') {
+  //       setActiveSection('');
+  //       return;
+  //     }
 
-      const scrollY = window.scrollY;
+  //     const scrollY = window.scrollY;
       
-      // Get the actual positions of sections
-      const aboutSection = document.getElementById('about');
-      const howItWorksSection = document.getElementById('how-it-works');
+  //     // Get the actual positions of sections
+  //     const aboutSection = document.getElementById('about');
+  //     const howItWorksSection = document.getElementById('how-it-works');
       
-      let newSection = 'home'; // default
+  //     let newSection = 'home'; // default
       
-      if (aboutSection && howItWorksSection) {
-        const aboutTop = aboutSection.offsetTop - 100; // 100px offset for better UX
-        const howItWorksTop = howItWorksSection.offsetTop - 100;
+  //     if (aboutSection && howItWorksSection) {
+  //       const aboutTop = aboutSection.offsetTop - 100; // 100px offset for better UX
+  //       const howItWorksTop = howItWorksSection.offsetTop - 100;
         
-        if (scrollY >= howItWorksTop) {
-          newSection = 'how-it-works';
-        } else if (scrollY >= aboutTop) {
-          newSection = 'about';
-        } else {
-          newSection = 'home';
-        }
-      } else {
-        // Fallback to scroll-based detection if sections not found
-        if (scrollY < 500) {
-          newSection = 'home';
-        } else if (scrollY >= 500 && scrollY < 2000) {
-          newSection = 'about';
-        } else {
-          newSection = 'how-it-works';
-        }
-      }
+  //       if (scrollY >= howItWorksTop) {
+  //         newSection = 'how-it-works';
+  //       } else if (scrollY >= aboutTop) {
+  //         newSection = 'about';
+  //       } else {
+  //         newSection = 'home';
+  //       }
+  //     } else {
+  //       // Fallback to scroll-based detection if sections not found
+  //       if (scrollY < 500) {
+  //         newSection = 'home';
+  //       } else if (scrollY >= 500 && scrollY < 2000) {
+  //         newSection = 'about';
+  //       } else {
+  //         newSection = 'how-it-works';
+  //       }
+  //     }
       
-      setActiveSection(newSection);
-    };
+  //     setActiveSection(newSection);
+  //   };
 
-    // Initial check
-    handleScroll();
+  //   // Initial check
+  //   handleScroll();
     
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, [location.pathname]);
 
 
   // Main navigation links
@@ -247,7 +247,7 @@ const Header: React.FC = () => {
               <NavLink 
                 key={link.name} 
                 to={link.to} 
-                isActive={link.section ? false : location.pathname === link.to} 
+                isActive={link.name === 'Home' ? location.pathname === '/' : (link.section ? false : location.pathname === link.to)} 
                 isSectionActive={link.section ? activeSection === link.section : false}
                 onClick={link.onClick}
               >
@@ -276,7 +276,7 @@ const Header: React.FC = () => {
               <NavLink 
                 key={link.name} 
                 to={link.to} 
-                isActive={link.section ? false : location.pathname === link.to} 
+                isActive={link.name === 'Home' ? location.pathname === '/' : (link.section ? false : location.pathname === link.to)} 
                 isSectionActive={link.section ? activeSection === link.section : false}
                 onClick={link.onClick}
               >
@@ -301,7 +301,7 @@ const Header: React.FC = () => {
               <NavLink 
                 key={link.name} 
                 to={link.to} 
-                isActive={link.section ? false : location.pathname === link.to} 
+                isActive={link.name === 'Home' ? location.pathname === '/' : (link.section ? false : location.pathname === link.to)} 
                 isSectionActive={link.section ? activeSection === link.section : false}
                 onClick={link.onClick}
               >
@@ -370,7 +370,7 @@ const Header: React.FC = () => {
               <NavLink 
                 key={link.name} 
                 to={link.to} 
-                isActive={link.section ? false : location.pathname === link.to} 
+                isActive={link.name === 'Home' ? location.pathname === '/' : (link.section ? false : location.pathname === link.to)} 
                 isSectionActive={link.section ? activeSection === link.section : false}
                 onClick={link.onClick}
               >
