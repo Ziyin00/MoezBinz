@@ -34,6 +34,42 @@ const NavLink = ({ to, children, isActive = false, onClick, isSectionActive = fa
 
 const DropdownMenu = ({ title, items, isActive = false }: { title: string; items: Array<{ name: string; to: string; onClick?: () => void }>; isActive?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [closeTimeout, setCloseTimeout] = useState<number | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimeout) {
+        clearTimeout(closeTimeout);
+      }
+    };
+  }, [closeTimeout]);
+
+  const handleMouseEnter = () => {
+    // Clear any pending close timeout
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
+    }
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Set a delay before closing the dropdown
+    const timeout = setTimeout(() => {
+      setIsOpen(false);
+    }, 300); // 300ms delay
+    setCloseTimeout(timeout);
+  };
+
+  const handleItemClick = () => {
+    // Close immediately when an item is clicked
+    setIsOpen(false);
+    if (closeTimeout) {
+      clearTimeout(closeTimeout);
+      setCloseTimeout(null);
+    }
+  };
 
   return (
     <div className="relative group">
@@ -43,11 +79,11 @@ const DropdownMenu = ({ title, items, isActive = false }: { title: string; items
             ? 'text-red-600 bg-red-50 px-3 py-1 rounded-md' 
             : 'text-gray-900 hover:text-red-600 hover:bg-red-50 hover:py-1 hover:rounded-md'
         }`}
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {title}
-        <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+        <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
         <span 
           className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ease-out transform origin-left ${
             isActive ? 'scale-x-100' : 'scale-x-0'
@@ -57,16 +93,26 @@ const DropdownMenu = ({ title, items, isActive = false }: { title: string; items
       
       {isOpen && (
         <div 
-          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50"
-          onMouseEnter={() => setIsOpen(true)}
-          onMouseLeave={() => setIsOpen(false)}
+          className="absolute top-full mt-1 w-44 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 animate-fade-in-up
+                     md:right-0 md:left-auto md:w-40
+                     lg:left-0 lg:right-auto lg:w-44
+                     xl:w-48
+                     min-w-[160px]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
+          {/* Small arrow pointing up */}
+          <div className="absolute -top-1 w-2 h-2 bg-white border-l border-t border-gray-200 transform rotate-45
+                          left-4 md:left-auto md:right-4 lg:left-4 lg:right-auto"></div>
           {items.map((item, index) => (
             <Link
               key={index}
               to={item.to}
-              onClick={item.onClick}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+              onClick={() => {
+                handleItemClick();
+                if (item.onClick) item.onClick();
+              }}
+              className="block px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 hover:pl-6"
             >
               {item.name}
             </Link>
@@ -156,30 +202,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
-  // const scrollToSection = (sectionId: string) => {
-  //   // If we're not on the home page, navigate to home first
-  //   if (location.pathname !== '/') {
-  //     // Navigate to home page with hash
-  //     window.location.href = `/#${sectionId}`;
-  //     return;
-  //   }
-    
-  //   // Immediately set the active section when clicking
-  //   setActiveSection(sectionId);
-    
-  //   const element = document.getElementById(sectionId);
-  //   if (element) {
-  //     element.scrollIntoView({ 
-  //       behavior: 'smooth',
-  //       block: 'start'
-  //     });
-  //     // Ensure active section stays set after scrolling
-  //     setTimeout(() => {
-  //       setActiveSection(sectionId);
-  //     }, 500);
-  //   }
-  //   setIsMenuOpen(false);
-  // };
 
   // Main navigation links
   const mainNavLinks = [
@@ -219,7 +241,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+          <div className="hidden xl:flex items-center gap-6 xl:gap-8">
             {/* Main Navigation Links */}
             {mainNavLinks.map((link) => (
               <NavLink 
@@ -248,9 +270,34 @@ const Header: React.FC = () => {
             />
           </div>
 
-          {/* Tablet Navigation (simplified) */}
-          <div className="hidden md:flex lg:hidden items-center gap-4">
-            {mainNavLinks.map((link) => (
+          {/* Medium Screen Navigation (1024px - 1279px) */}
+          <div className="hidden lg:flex xl:hidden items-center gap-2">
+            {mainNavLinks.slice(0, 2).map((link) => (
+              <NavLink 
+                key={link.name} 
+                to={link.to} 
+                isActive={link.section ? false : location.pathname === link.to} 
+                isSectionActive={link.section ? activeSection === link.section : false}
+                onClick={link.onClick}
+              >
+                {link.name}
+              </NavLink>
+            ))}
+            <DropdownMenu 
+              title="Shop" 
+              items={shopItems}
+              isActive={shopItems.some(item => location.pathname === item.to)}
+            />
+            <DropdownMenu 
+              title="More" 
+              items={moreItems}
+              isActive={moreItems.some(item => location.pathname === item.to)}
+            />
+          </div>
+
+          {/* Small Desktop Navigation (768px - 1023px) */}
+          <div className="hidden md:flex lg:hidden items-center gap-2">
+            {mainNavLinks.slice(0, 1).map((link) => (
               <NavLink 
                 key={link.name} 
                 to={link.to} 
@@ -274,23 +321,23 @@ const Header: React.FC = () => {
           </div>
 
           {/* Desktop Auth Section */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2 lg:gap-4">
             {isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-700">
+              <div className="flex items-center gap-2 lg:gap-4">
+                <span className="text-xs lg:text-sm text-gray-700 hidden lg:block">
                   Welcome, {user?.name}!
                 </span>
                 {isAdmin && (
                   <Link
                     to="/admin/dashboard"
-                    className="bg-red-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5"
+                    className="bg-red-600 text-white font-bold py-2 px-3 lg:py-2.5 lg:px-6 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5 text-xs lg:text-sm"
                   >
                     Dashboard
                   </Link>
                 )}
                 <button
                   onClick={handleLogout}
-                  className="bg-gray-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all transform hover:-translate-y-0.5"
+                  className="bg-gray-600 text-white font-bold py-2 px-3 lg:py-2.5 lg:px-6 rounded-lg shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all transform hover:-translate-y-0.5 text-xs lg:text-sm"
                 >
                   Logout
                 </button>
@@ -298,7 +345,7 @@ const Header: React.FC = () => {
             ) : (
               <Link
                 to="/login"
-                className="bg-red-600 text-white font-bold py-2.5 px-8 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:-translate-y-0.5"
+                className="bg-red-600 text-white font-bold py-2 px-4 lg:py-2.5 lg:px-8 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:-translate-y-0.5 text-xs lg:text-sm"
               >
                 Login
               </Link>
