@@ -153,7 +153,7 @@ router.post('/', verifyAccessToken, async (req, res) => {
       });
     }
 
-    // Create new bid
+    // Create new bid (product price remains unchanged - only admin can modify product prices)
     const bidResult = await pool.query(`
       INSERT INTO bids (product_id, user_id, amount, status, created_at, updated_at)
       VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
@@ -162,13 +162,9 @@ router.post('/', verifyAccessToken, async (req, res) => {
 
     const bid = bidResult.rows[0];
 
-    // Update product current price
-    await pool.query('UPDATE products SET price = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', 
-      [amount, productId]);
-
-    // Get user and product info for response
+    // Get user and product info for response (without updating product price)
     const userResult = await pool.query('SELECT id, username, email FROM users WHERE id = $1', [bidderId]);
-    const updatedProductResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productId]);
+    const productResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productId]);
 
     const responseBid = {
       _id: bid.id.toString(),
@@ -181,10 +177,10 @@ router.post('/', verifyAccessToken, async (req, res) => {
         email: userResult.rows[0].email
       },
       product: {
-        _id: updatedProductResult.rows[0].id.toString(),
-        name: updatedProductResult.rows[0].name,
-        imageUrl: updatedProductResult.rows[0].image_url,
-        currentPrice: parseFloat(updatedProductResult.rows[0].price)
+        _id: productResult.rows[0].id.toString(),
+        name: productResult.rows[0].name,
+        imageUrl: productResult.rows[0].image_url,
+        currentPrice: parseFloat(productResult.rows[0].price)
       }
     };
 
@@ -247,16 +243,9 @@ router.put('/:bidId', verifyAccessToken, async (req, res) => {
     const updatedBidResult = await pool.query(updateQuery, updateValues);
     const updatedBid = updatedBidResult.rows[0];
 
-    // Update product current price if this is the highest bid
-    if (amount !== undefined) {
-      const productResult = await pool.query('SELECT price FROM products WHERE id = $1', [bid.product_id]);
-      const currentPrice = parseFloat(productResult.rows[0].price);
-      
-      if (amount > currentPrice) {
-        await pool.query('UPDATE products SET price = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2', 
-          [amount, bid.product_id]);
-      }
-    }
+    // Note: Product price is not updated when bids are placed or updated
+    // Only admin can change product prices through the admin panel
+    // Bids are stored separately and don't affect the product's current price
 
     // Get user and product info for response
     const userResult = await pool.query('SELECT id, username, email FROM users WHERE id = $1', [bid.user_id]);
