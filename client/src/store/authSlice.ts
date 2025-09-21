@@ -12,6 +12,7 @@ interface User {
 interface AuthState {
   user: User | null;
   accessToken: string | null;
+  refreshToken: string | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -19,6 +20,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   accessToken: null,
+  refreshToken: null,
   isLoading: false,
   error: null,
 };
@@ -57,9 +59,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<Partial<{ user: User; accessToken: string }>>) => {
+    setCredentials: (state, action: PayloadAction<Partial<{ user: User; accessToken: string; refreshToken: string }>>) => {
       if (action.payload.user) state.user = action.payload.user;
       if (action.payload.accessToken) state.accessToken = action.payload.accessToken;
+      if (action.payload.refreshToken) state.refreshToken = action.payload.refreshToken;
       state.error = null;
     },
     clearError: (state) => {
@@ -68,6 +71,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
+      state.refreshToken = null;
       state.error = null;
       state.isLoading = false;
     },
@@ -80,6 +84,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -92,6 +97,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
         // Token refresh will be scheduled automatically by axios interceptor
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -102,9 +108,11 @@ const authSlice = createSlice({
       // refresh
       .addCase(refreshAccessToken.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
       })
       .addCase(refreshAccessToken.rejected, (state) => {
         state.accessToken = null;
+        state.refreshToken = null;
         state.user = null;
       })
 
@@ -112,6 +120,7 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.accessToken = null;
+        state.refreshToken = null;
         state.error = null;
       });
   },

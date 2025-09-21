@@ -44,7 +44,8 @@ router.post('/register', async (req, res) => {
 
     res.json({
       user: { id: user.id, name: user.username, email: user.email, role: user.role },
-      accessToken
+      accessToken,
+      refreshToken
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -84,7 +85,8 @@ router.post('/login', async (req, res) => {
 
     res.json({
       user: { id: user.id, name: user.username, email: user.email, role: user.role },
-      accessToken
+      accessToken,
+      refreshToken
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -111,7 +113,7 @@ router.post('/refresh', async (req, res) => {
         sameSite: 'lax',
         maxAge: 1000 * 60 * 60 * 24 * 7,
       });
-      res.json({ accessToken });
+      res.json({ accessToken, refreshToken: newRefresh });
     });
   } catch (err) {
     console.error('Refresh error:', err);

@@ -64,17 +64,44 @@ export function setupInterceptors(store: Store) {
     if (refreshTime > 0) {
       refreshTimer = setTimeout(async () => {
         try {
-          // console.log('⏰ Proactively refreshing token...');
+          console.log('⏰ Proactively refreshing token...');
           const res = await axios.post(`${API_BASE}/auth/refresh`, {}, { withCredentials: true });
           const newToken = res.data.accessToken;
-          store.dispatch({ type: 'auth/setCredentials', payload: { accessToken: newToken } });
+          store.dispatch({ 
+            type: 'auth/setCredentials', 
+            payload: { 
+              accessToken: newToken,
+              refreshToken: res.data.refreshToken 
+            } 
+          });
           scheduleTokenRefresh(newToken); // Schedule next refresh
-          // console.log('✅ Token refreshed proactively');
+          console.log('✅ Token refreshed proactively');
         } catch (err) {
-          // console.error('❌ Proactive token refresh failed:', err);
+          console.error('❌ Proactive token refresh failed:', err);
           store.dispatch({ type: 'auth/logout' });
         }
       }, refreshTime);
+    } else {
+      // Token is already expired or about to expire, try to refresh immediately
+      console.log('⚠️ Token is about to expire, refreshing immediately...');
+      setTimeout(async () => {
+        try {
+          const res = await axios.post(`${API_BASE}/auth/refresh`, {}, { withCredentials: true });
+          const newToken = res.data.accessToken;
+          store.dispatch({ 
+            type: 'auth/setCredentials', 
+            payload: { 
+              accessToken: newToken,
+              refreshToken: res.data.refreshToken 
+            } 
+          });
+          scheduleTokenRefresh(newToken);
+          console.log('✅ Token refreshed immediately');
+        } catch (err) {
+          console.error('❌ Immediate token refresh failed:', err);
+          store.dispatch({ type: 'auth/logout' });
+        }
+      }, 1000);
     }
   };
 
@@ -153,14 +180,20 @@ export function setupInterceptors(store: Store) {
         isRefreshing = true;
 
         try {
-          // console.log('🔄 Attempting to refresh token...');
+          console.log('🔄 Attempting to refresh token...');
           // call refresh using plain axios to avoid calling interceptors again
           const res = await axios.post(`${API_BASE}/auth/refresh`, {}, { withCredentials: true });
           const newToken = res.data.accessToken;
-          // console.log('✅ Token refreshed successfully:', newToken.substring(0, 20) + '...');
+          console.log('✅ Token refreshed successfully:', newToken.substring(0, 20) + '...');
 
           // Dispatch plain action strings to avoid cyclic import of slice
-          store.dispatch({ type: 'auth/setCredentials', payload: { accessToken: newToken } });
+          store.dispatch({ 
+            type: 'auth/setCredentials', 
+            payload: { 
+              accessToken: newToken,
+              refreshToken: res.data.refreshToken 
+            } 
+          });
 
           // Schedule next token refresh
           scheduleTokenRefresh(newToken);
@@ -169,7 +202,7 @@ export function setupInterceptors(store: Store) {
           originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
           return api(originalRequest);
         } catch (err) {
-          // console.error('❌ Token refresh failed:', err);
+          console.error('❌ Token refresh failed:', err);
           processQueue(err, null);
           store.dispatch({ type: 'auth/logout' });
           return Promise.reject(err);
