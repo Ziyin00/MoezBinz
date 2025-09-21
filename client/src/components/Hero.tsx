@@ -90,7 +90,7 @@ const Hero: React.FC = () => {
   return (
     <section 
       id="home" 
-      className="relative w-full h-[60vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] xl:h-[85vh] overflow-hidden" 
+      className="relative w-full h-[45vh] sm:h-[6=50vh] md:h-[50vh] lg:h-[55vh] xl:h-[60vh] overflow-hidden" 
       aria-roledescription="carousel" 
       aria-label="Promotional content"
       onTouchStart={handleTouchStart}
@@ -122,30 +122,7 @@ const Hero: React.FC = () => {
               onLoad={index === 0 ? handleImageLoad : undefined}
             />
             
-            {/* Professional Banner Overlay - Below Hero Text */}
-            <div 
-              className={`absolute bottom-0 left-0 right-0 z-20 flex justify-center items-end p-4 md:p-6 lg:p-8 transition-opacity duration-1000 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <div className="max-w-5xl mx-auto text-center">
-                <div className="bg-black/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                  <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-white mb-2">
-                    Premium Brand Goods at{' '}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
-                      Throwaway Prices
-                    </span>
-                    {' '}– New Deals Every Day!
-                  </h2>
-                  <p className="text-sm md:text-base text-gray-200 leading-relaxed">
-                    Discover deeply discounted Amazon returns and overstock items in every category: 
-                    <span className="font-semibold text-yellow-400"> home goods</span>, 
-                    <span className="font-semibold text-yellow-400"> electronics</span>, 
-                    <span className="font-semibold text-yellow-400"> fashion</span>, 
-                    <span className="font-semibold text-yellow-400"> arts & crafts</span>, 
-                    and more. Every visit is a treasure hunt with daily-changing prices!
-                  </p>
-                </div>
-              </div>
-            </div>
+          
 
 
           </div>

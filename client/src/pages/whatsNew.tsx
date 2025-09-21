@@ -12,6 +12,7 @@ const WhatsNew: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedNews, setSelectedNews] = useState<News | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { error: showError } = useToast();
 
   useEffect(() => {
@@ -78,15 +79,21 @@ const WhatsNew: React.FC = () => {
             {/* News Article */}
             <article className="bg-white rounded-lg shadow-lg overflow-hidden">
               {selectedNews.imageUrl && (
-                <div className="aspect-video w-full">
+                <div className="aspect-video w-full relative bg-gray-100">
                   <img
                     src={getNewsImageUrl(selectedNews.imageUrl)}
                     alt={selectedNews.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-opacity duration-300 cursor-pointer"
+                    onClick={() => setSelectedImage(getNewsImageUrl(selectedNews.imageUrl))}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = getNewsImageUrl('/placeholder.jpg');
                     }}
+                    onLoad={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.opacity = '1';
+                    }}
+                    style={{ opacity: 0 }}
                   />
                 </div>
               )}
@@ -159,15 +166,24 @@ const WhatsNew: React.FC = () => {
                     className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                   >
                     {newsItem.imageUrl && (
-                      <div className="aspect-video">
+                      <div className="aspect-video relative bg-gray-100">
                         <img
                           src={getNewsImageUrl(newsItem.imageUrl)}
                           alt={newsItem.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-opacity duration-300 cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImage(getNewsImageUrl(newsItem.imageUrl));
+                          }}
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = getNewsImageUrl('/placeholder.jpg');
                           }}
+                          onLoad={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.opacity = '1';
+                          }}
+                          style={{ opacity: 0 }}
                         />
                       </div>
                     )}
@@ -229,15 +245,24 @@ const WhatsNew: React.FC = () => {
                       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                     >
                       {newsItem.imageUrl && (
-                        <div className="aspect-video">
+                        <div className="aspect-video relative bg-gray-100">
                           <img
                             src={getNewsImageUrl(newsItem.imageUrl)}
                             alt={newsItem.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-opacity duration-300 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedImage(getNewsImageUrl(newsItem.imageUrl));
+                            }}
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = getNewsImageUrl('/placeholder.jpg');
                             }}
+                            onLoad={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.opacity = '1';
+                            }}
+                            style={{ opacity: 0 }}
                           />
                         </div>
                       )}
@@ -317,6 +342,31 @@ const WhatsNew: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[9999] p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-9xl max-h-[95vh] overflow-hidden flex flex-col">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white hover:text-gray-200 transition-all duration-200 rounded-full p-2 shadow-lg"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <img
+              src={selectedImage}
+              alt="News"
+              className="w-full h-full object-cover"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };

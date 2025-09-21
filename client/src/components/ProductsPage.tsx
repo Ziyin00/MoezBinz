@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Placeholder for product data
 const productCategories = [
@@ -11,6 +11,8 @@ const productCategories = [
 ];
 
 const ProductsPage: React.FC = () => {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
     return (
         <main className="bg-white py-16 sm:py-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +28,12 @@ const ProductsPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {productCategories.map((category) => (
                         <div key={category.name} className="group relative overflow-hidden rounded-2xl shadow-lg border border-gray-100 transform hover:-translate-y-2 transition-transform duration-300">
-                            <img src={category.image} alt={category.name} className="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                            <img 
+                                src={category.image} 
+                                alt={category.name} 
+                                className="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-105 cursor-pointer" 
+                                onClick={() => setSelectedImage(category.image)}
+                            />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10"></div>
                             <div className="absolute bottom-0 left-0 p-6">
                                 <h2 className="text-2xl font-bold text-white">{category.name}</h2>
@@ -43,6 +50,31 @@ const ProductsPage: React.FC = () => {
                     </p>
                 </div>
             </div>
+
+            {/* Image Modal */}
+            {selectedImage && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <div className="relative max-w-4xl max-h-full">
+                        <button
+                            onClick={() => setSelectedImage(null)}
+                            className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+                        >
+                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <img
+                            src={selectedImage}
+                            alt="Category"
+                            className="max-w-full max-h-full object-contain rounded-lg"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
+                </div>
+            )}
         </main>
     );
 };

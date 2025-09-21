@@ -7,86 +7,21 @@ const About: React.FC = () => {
       <Header />
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-800 text-white py-20 overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}></div>
-          </div>
+        <div className="relative h-[50vh] bg-black">
+          <img 
+            src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            alt="A diverse group of people shopping"
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-black opacity-30"></div>
           
-          {/* Floating Elements */}
-          <div className="absolute top-10 left-10 w-20 h-20 bg-white bg-opacity-10 rounded-full animate-pulse"></div>
-          <div className="absolute top-32 right-20 w-16 h-16 bg-white bg-opacity-5 rounded-full animate-bounce"></div>
-          <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white bg-opacity-15 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-32 right-1/3 w-8 h-8 bg-white bg-opacity-20 rounded-full animate-bounce"></div>
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-5xl mx-auto text-center">
-              {/* Badge */}
-              <div className="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-medium mb-8 backdrop-blur-sm">
-                <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-                Trusted by 10,000+ Customers
-              </div>
-              
-              {/* Main Heading */}
-              <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-                <span className="block text-white">About</span>
-                <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                  Moez Binz
-                </span>
-              </h1>
-              
-              {/* Subtitle */}
-              <p className="text-xl md:text-2xl text-red-100 leading-relaxed mb-8 max-w-3xl mx-auto">
-                The ultimate treasure hunt for premium brand goods at throwaway prices
-              </p>
-              
-              {/* Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">10K+</div>
-                  <div className="text-red-200 text-sm uppercase tracking-wide">Happy Customers</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">50K+</div>
-                  <div className="text-red-200 text-sm uppercase tracking-wide">Products Sold</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">99%</div>
-                  <div className="text-red-200 text-sm uppercase tracking-wide">Satisfaction Rate</div>
-                </div>
-              </div>
-              
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-                <a
-                  href="/product"
-                  className="inline-flex items-center px-8 py-4 bg-white text-red-600 font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                  Shop Now
-                </a>
-                <a
-                  href="/how-it-works"
-                  className="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-red-600 transition-all duration-300 transform hover:scale-105"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Learn How
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          {/* Bottom Wave */}
-          <div className="absolute bottom-0 left-0 right-0">
-            <svg className="w-full h-16 text-gray-50" viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="currentColor"></path>
-            </svg>
+          <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
+              About Moez Binz
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+              Every visit is a new adventure in savings. We're a community-driven liquidation store where everyone can discover quality goods at prices that make life easier—and a lot more fun.
+            </p>
           </div>
         </div>
 

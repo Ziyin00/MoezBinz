@@ -3,7 +3,12 @@ import React from 'react';
 const VisitUsPage: React.FC = () => {
     return (
         <main className="bg-white">
-            <section className="relative h-[50vh] bg-red-600" style={{background: 'linear-gradient(135deg, #dc2626, #991b1b, #374151)'}}>
+            <section className="relative h-[50vh] bg-black">
+                <img 
+                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    alt="Store interior and shopping experience"
+                    className="absolute inset-0 w-full h-full object-cover opacity-40"
+                />
                 <div className="absolute inset-0 bg-black opacity-30"></div>
                 <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
                     <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
@@ -12,14 +17,6 @@ const VisitUsPage: React.FC = () => {
                     <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
                         Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
                     </p>
-                    <div className="mt-6 flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-400">
-                        <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                            <span className="text-sm font-medium">📍 1150 Sheppard Avenue West</span>
-                        </div>
-                        <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                            <span className="text-sm font-medium">🕒 Open 7 Days a Week</span>
-                        </div>
-                    </div>
                 </div>
             </section>
             

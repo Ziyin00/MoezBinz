@@ -338,31 +338,49 @@ const Header: React.FC = () => {
             ))}
             
             {/* Shop Section */}
-            <div className="w-full max-w-xs">
+            <div className="w-full max-w-xs text-center">
               <div className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 px-4">Shop</div>
               {shopItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.to}
                   onClick={item.onClick}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                  className={`group text-sm font-bold uppercase tracking-wider relative pb-1 transition-all duration-300 block px-4 py-2 ${
+                    location.pathname === item.to
+                      ? 'text-red-600 bg-red-50 rounded-md' 
+                      : 'text-gray-900 hover:text-red-600 hover:bg-red-50 hover:rounded-md'
+                  }`}
                 >
                   {item.name}
+                  <span 
+                    className={`absolute bottom-0 left-4 right-4 h-0.5 bg-red-600 transition-transform duration-300 ease-out transform origin-left ${
+                      location.pathname === item.to ? 'scale-x-100' : 'scale-x-0'
+                    } group-hover:scale-x-100`}
+                  ></span>
                 </Link>
               ))}
             </div>
             
             {/* More Section */}
-            <div className="w-full max-w-xs">
+            <div className="w-full max-w-xs text-center">
               <div className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 px-4">More</div>
               {moreItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.to}
                   onClick={item.onClick}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                  className={`group text-sm font-bold uppercase tracking-wider relative pb-1 transition-all duration-300 block px-4 py-2 ${
+                    location.pathname === item.to
+                      ? 'text-red-600 bg-red-50 rounded-md' 
+                      : 'text-gray-900 hover:text-red-600 hover:bg-red-50 hover:rounded-md'
+                  }`}
                 >
                   {item.name}
+                  <span 
+                    className={`absolute bottom-0 left-4 right-4 h-0.5 bg-red-600 transition-transform duration-300 ease-out transform origin-left ${
+                      location.pathname === item.to ? 'scale-x-100' : 'scale-x-0'
+                    } group-hover:scale-x-100`}
+                  ></span>
                 </Link>
               ))}
             </div>
@@ -376,7 +394,7 @@ const Header: React.FC = () => {
                 {isAdmin && (
                   <Link
                     to="/admin/dashboard"
-                    className="w-full bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5 block"
+                    className="w-full bg-red-600 text-white font-bold py-2.5 px-8 rounded-lg shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:-translate-y-0.5 block"
                   >
                     Dashboard
                   </Link>

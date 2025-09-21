@@ -11,11 +11,12 @@ interface ProductCardProps {
   product: Product;
   onBidClick: (product: Product) => void;
   isLoggedIn: boolean;
+  onImageClick: (imageUrl: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLoggedIn }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLoggedIn, onImageClick }) => {
   // Debug logging
-  console.log('ProductCard received product:', product);
+  // console.log('ProductCard received product:', product);
   
   const isAuctionEnded = new Date() > new Date(product.endDate);
   const timeLeft = new Date(product.endDate).getTime() - new Date().getTime();
@@ -27,7 +28,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLogged
         <img 
           src={getProductImageUrl(product.imageUrl)} 
           alt={product.name} 
-          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+          onClick={() => onImageClick(getProductImageUrl(product.imageUrl))}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = getProductImageUrl('/placeholder.jpg');
@@ -93,20 +95,36 @@ const ProductsPage: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
-  const [selectedDay, setSelectedDay] = useState('sat');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
   
   const { user } = useAppSelector((state) => state.auth);
 
   const dailyPrices = [
-    { day: 'sat', label: 'Sat', price: '$19.99', fullDay: 'Smashing Saturday' },
     { day: 'sun', label: 'Sun', price: '$15.00', fullDay: 'Smart Sunday' },
     { day: 'mon', label: 'Mon', price: '$11.99', fullDay: 'Mega Monday' },
     { day: 'tue', label: 'Tue', price: '$8.99', fullDay: 'Thrifty Tuesday' },
     { day: 'wed', label: 'Wed', price: '$6.99', fullDay: 'Wow Wednesday' },
     { day: 'thu', label: 'Thu', price: '$4.99', fullDay: 'Treasure Thursday' },
     { day: 'fri', label: 'Fri', price: '$1.99', fullDay: 'Freak-out Friday' },
+    { day: 'sat', label: 'Sat', price: '$19.99', fullDay: 'Smashing Saturday' },
   ];
+
+  // Get current day in Canadian timezone
+  const getCurrentDay = () => {
+    const now = new Date();
+    const canadianTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Toronto"}));
+    const dayOfWeek = canadianTime.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    
+    const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    return dayMap[dayOfWeek];
+  };
+
+  const currentDay = getCurrentDay();
 
   const categories = [
     { id: 'all', label: 'All' },
@@ -125,8 +143,8 @@ const ProductsPage: React.FC = () => {
     try {
       setLoading(true);
       const response = await productService.getActiveProducts(1, 12);
-      console.log('Fetched products response:', response);
-      console.log('Products array:', response.products);
+      // console.log('Fetched products response:', response);
+      // console.log('Products array:', response.products);
       setProducts(response.products);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -214,17 +232,19 @@ const ProductsPage: React.FC = () => {
             {/* Daily Prices */}
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               {dailyPrices.map((day) => (
-                <button
+                <div
                   key={day.day}
-                  onClick={() => setSelectedDay(day.day)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                    selectedDay === day.day
+                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                    currentDay === day.day
                       ? 'bg-red-600 text-white shadow-lg transform scale-105'
-                      : 'bg-white text-gray-700 hover:bg-red-50 hover:text-red-600 border border-gray-200'
+                      : 'bg-white text-gray-700 border border-gray-200'
                   }`}
                 >
                   {day.label} {day.price}
-                </button>
+                  {currentDay === day.day && (
+                    <div className="text-xs mt-1 opacity-90 text-center">Today</div>
+                  )}
+                </div>
               ))}
             </div>
 
@@ -278,6 +298,7 @@ const ProductsPage: React.FC = () => {
                     product={product} 
                     onBidClick={handleBidClick}
                     isLoggedIn={!!user}
+                    onImageClick={handleImageClick}
                   />
                 ))}
               </div>
@@ -348,6 +369,31 @@ const ProductsPage: React.FC = () => {
           product={selectedProduct}
           onBidPlaced={handleBidPlaced}
         />
+      )}
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[9999] p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-9xl max-h-[95vh] overflow-hidden flex flex-col">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white hover:text-gray-200 transition-all duration-200 rounded-full p-2 shadow-lg"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <img
+              src={selectedImage}
+              alt="Product"
+              className="w-full h-full object-cover"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
       )}
     </>
   );

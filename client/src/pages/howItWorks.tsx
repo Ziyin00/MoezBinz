@@ -7,107 +7,21 @@ const HowItWorks: React.FC = () => {
       <Header />
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-800 text-white py-20 overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M40 40c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}></div>
-          </div>
+        <div className="relative h-[50vh] bg-black">
+          <img 
+            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            alt="Shopping process and how it works"
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-black opacity-30"></div>
           
-          {/* Animated Elements */}
-          <div className="absolute top-20 left-16 w-24 h-24 bg-white bg-opacity-10 rounded-full animate-pulse"></div>
-          <div className="absolute top-40 right-24 w-20 h-20 bg-yellow-300 bg-opacity-20 rounded-full animate-bounce"></div>
-          {/* <div className="absolute bottom-24 left-1/3 w-16 h-16 bg-green-300 bg-opacity-15 rounded-full animate-pulse"></div> */}
-          {/* <div className="absolute bottom-40 right-16 w-12 h-12 bg-pink-300 bg-opacity-25 rounded-full animate-bounce"></div> */}
-          
-          {/* Geometric Shapes */}
-          {/* <div className="absolute top-32 left-1/4 w-8 h-8 bg-white bg-opacity-20 transform rotate-45 animate-spin" style={{animationDuration: '8s'}}></div> */}
-          {/* <div className="absolute bottom-32 right-1/4 w-6 h-6 bg-white bg-opacity-15 transform rotate-12 animate-pulse"></div> */}
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-6xl mx-auto text-center">
-              {/* Badge */}
-              <div className="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 rounded-full text-sm font-medium mb-8 backdrop-blur-sm">
-                <svg className="w-4 h-4 mr-2 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                Simple 3-Step Process
-              </div>
-              
-              {/* Main Heading */}
-              <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-                <span className="block text-white">How It Works</span>
-                  
-              </h1>
-              
-              {/* Subtitle */}
-              <p className="text-xl md:text-2xl text-blue-100 leading-relaxed mb-12 max-w-3xl mx-auto">
-                Discover amazing deals in three simple steps and start your treasure hunt today
-              </p>
-              
-              {/* Process Preview */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-                <div className="relative">
-                  <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">1. Browse</h3>
-                  <p className="text-blue-200 text-sm">Explore our curated collection</p>
-                </div>
-                
-                <div className="relative">
-                  <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">2. Add to Cart</h3>
-                  <p className="text-blue-200 text-sm">Select your favorites</p>
-                </div>
-                
-                <div className="relative">
-                  <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">3. Enjoy</h3>
-                  <p className="text-blue-200 text-sm">Receive your treasures</p>
-                </div>
-              </div>
-              
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center m-16">
-                <a
-                  href="/product"
-                  className="inline-flex items-center px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                  Start Shopping
-                </a>
-                <a
-                  href="/about"
-                  className="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Learn More
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          {/* Bottom Wave */}
-          <div className="absolute bottom-0 left-0 right-0">
-            <svg className="w-full h-20 text-gray-50" viewBox="0 0 1200 120" preserveAspectRatio="none">
-              <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="currentColor"></path>
-            </svg>
+          <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
+              How It Works
+            </h1>
+            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+              Discover amazing deals in three simple steps and start your treasure hunt today
+            </p>
           </div>
         </div>
 
