@@ -65,7 +65,7 @@ const DealHuntingDays: React.FC = () => {
           {deals.map((deal) => (
             <div
               key={deal.day}
-              className="relative w-48 h-48 sm:w-52 sm:h-52 lg:w-56 lg:h-56 cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="relative w-56 h-56 sm:w-56 sm:h-56 lg:w-72 lg:h-72 cursor-pointer hover:scale-105 transition-transform duration-300"
               style={{ perspective: '1000px' }}
             >
               {/* Card Container with 3D Flip Effect */}

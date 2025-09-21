@@ -30,12 +30,7 @@ const HomePage: React.FC = () => {
                             Ultimate Treasure Hunt
                         </span>
                     </h1>
-                    <div className="flex items-center justify-center md:gap-2 text-sm md:text-lg font-semibold text-gray-700">
-                        <span className="text-red-600">Welcome to</span>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800 font-bold">
-                            Moez Binz
-                        </span>
-                    </div>
+                   
                 </div>
             </section>
 
@@ -44,7 +39,13 @@ const HomePage: React.FC = () => {
               className={` bottom-0 left-0 right-0 z-20 flex justify-center items-end p-4 md:p-6 lg:p-8 transition-opacity duration-1000 ease-in-out `}
             >
               <div className="max-w-7xl mx-auto text-center">
-                <div className="bg-black/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
+            <div className="bg-black/50 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
+               <div className="flex items-center justify-center md:gap-2 text-sm md:text-lg font-semibold text-gray-700">
+                        <span className="text-yellow-300">Welcome to</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500 font-bold">
+                            Moez Binz
+                        </span>
+                    </div>
                   <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-white mb-2">
                     Premium Brand Goods at{' '}
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">

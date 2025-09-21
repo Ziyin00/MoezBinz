@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { type Product } from '../services/productService';
+import { bidService } from '../services/bidService';
+import { useToast } from '../contexts/ToastContext';
 
 interface BidModalProps {
   isOpen: boolean;
@@ -11,6 +13,7 @@ interface BidModalProps {
 const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlaced }) => {
   const [bidAmount, setBidAmount] = useState(product.currentPrice + 1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { success, error } = useToast();
 
   if (!isOpen) return null;
 
@@ -19,12 +22,24 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
     setIsSubmitting(true);
     
     try {
-      // Mock bid submission - will be replaced with API call
-      console.log(`Bidding $${bidAmount} on product ${product._id}`);
+      console.log(`Placing bid: $${bidAmount} on product ${product._id}`);
+      
+      const bidData = {
+        productId: product._id,
+        amount: bidAmount,
+        isAutoBid: false
+      };
+      
+      const response = await bidService.createBid(bidData);
+      console.log('Bid placed successfully:', response);
+      
+      success('Bid placed successfully!', 'Your bid has been recorded.');
       onBidPlaced();
       onClose();
-    } catch (error) {
-      console.error('Failed to place bid:', error);
+    } catch (err: any) {
+      console.error('Failed to place bid:', err);
+      const errorMessage = err.response?.data?.message || 'Failed to place bid. Please try again.';
+      error('Bid Failed', errorMessage);
     } finally {
       setIsSubmitting(false);
     }

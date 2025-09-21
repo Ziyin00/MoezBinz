@@ -234,16 +234,14 @@ const ProductsPage: React.FC = () => {
               {dailyPrices.map((day) => (
                 <div
                   key={day.day}
-                  className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                     currentDay === day.day
                       ? 'bg-red-600 text-white shadow-lg transform scale-105'
                       : 'bg-white text-gray-700 border border-gray-200'
                   }`}
                 >
                   {day.label} {day.price}
-                  {currentDay === day.day && (
-                    <div className="text-xs mt-1 opacity-90 text-center">Today</div>
-                  )}
+                 
                 </div>
               ))}
             </div>

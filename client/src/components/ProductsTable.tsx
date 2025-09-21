@@ -16,6 +16,8 @@ const ProductsTable: React.FC = () => {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [productBids, setProductBids] = useState<Record<string, Bid[]>>({});
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showBidsModal, setShowBidsModal] = useState(false);
+  const [selectedProductForBids, setSelectedProductForBids] = useState<Product | null>(null);
   const { error: showError } = useToast();
 
   const fetchProducts = useCallback(async () => {
@@ -86,8 +88,14 @@ const ProductsTable: React.FC = () => {
     fetchProducts(); // Refresh the list when a product is updated
   };
 
+  const handleViewAllBids = (product: Product) => {
+    setSelectedProductForBids(product);
+    setShowBidsModal(true);
+  };
+
   const formatBidsDisplay = (productId: string) => {
     const bids = productBids[productId] || [];
+    const product = products.find(p => p._id === productId);
     
     if (bids.length === 0) {
       return <span className="text-gray-500 text-xs">No bids</span>;
@@ -112,6 +120,14 @@ const ProductsTable: React.FC = () => {
           <div className="text-xs text-gray-500 text-center">
             +{bids.length - 3} more
           </div>
+        )}
+        {bids.length > 1 && product && (
+          <button
+            onClick={() => handleViewAllBids(product)}
+            className="w-full mt-2 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors"
+          >
+            View All Bids ({bids.length})
+          </button>
         )}
       </div>
     );
@@ -201,7 +217,7 @@ const ProductsTable: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px- py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All Status</option>
               <option value="active">Active</option>
@@ -363,6 +379,100 @@ const ProductsTable: React.FC = () => {
                   fetchProducts();
                 }} 
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View All Bids Modal */}
+      {showBidsModal && selectedProductForBids && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[9999] p-4"
+          onClick={() => setShowBidsModal(false)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            <button
+              onClick={() => setShowBidsModal(false)}
+              className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white text-gray-800 hover:text-gray-600 transition-all duration-200 rounded-full p-2 shadow-lg"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center gap-4">
+                <img
+                  src={getProductImageUrl(selectedProductForBids.imageUrl)}
+                  alt={selectedProductForBids.name}
+                  className="w-16 h-16 rounded-lg object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = getProductImageUrl('/placeholder.jpg');
+                  }}
+                />
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">{selectedProductForBids.name}</h2>
+                  <p className="text-gray-600">Current Price: <span className="font-semibold text-green-600">${selectedProductForBids.currentPrice}</span></p>
+                  <p className="text-sm text-gray-500">Total Bids: {productBids[selectedProductForBids._id]?.length || 0}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">All Bids</h3>
+              {productBids[selectedProductForBids._id] && productBids[selectedProductForBids._id].length > 0 ? (
+                <div className="space-y-3">
+                  {productBids[selectedProductForBids._id]
+                    .sort((a, b) => b.amount - a.amount) // Sort by highest bid first
+                    .map((bid, index) => (
+                    <div key={bid._id} className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                      index === 0 
+                        ? 'bg-green-50 border-green-200 shadow-md' 
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                            index === 0 ? 'bg-green-500' : 'bg-gray-400'
+                          }`}>
+                            {index + 1}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">{bid.bidder.name}</div>
+                            <div className="text-sm text-gray-600">{bid.bidder.email}</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className={`text-xl font-bold ${
+                            index === 0 ? 'text-green-600' : 'text-gray-900'
+                          }`}>
+                            ${bid.amount}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {new Date(bid.bidTime).toLocaleString()}
+                          </div>
+                          {index === 0 && (
+                            <div className="text-xs font-semibold text-green-600 mt-1">
+                              🏆 Highest Bid
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 mb-4">
+                    <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Bids Yet</h3>
+                  <p className="text-gray-500">This product hasn't received any bids yet.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

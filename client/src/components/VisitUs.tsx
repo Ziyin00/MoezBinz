@@ -24,29 +24,40 @@ const VisitUsPage: React.FC = () => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
                         {/* Left Column: Info */}
-                        <div>
-                            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                                Moez Binz - Your Treasure Awaits
+                        <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20">
+                            <h2 className="text-4xl font-bold  mb-8 text-center bg-gradient-to-r from-red-600 via-red-500 to-red-700 bg-clip-text text-transparent drop-shadow-lg shadow-red-200 animate-pulse">
+                                <span className="inline-block transform hover:scale-105 transition-transform duration-300">
+                                     Moez Binz - Your Treasure Awaits 
+                                </span>
                             </h2>
-                            <div className="space-y-6 text-lg text-gray-700">
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Address</h3>
-                                    <p>5 - 1150 Sheppard Avenue West<br/>North York, ON M3K 2B5</p>
+                            <div className="space-y-8 text-lg text-gray-700">
+                                <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-2xl p-6 shadow-lg border-l-4 border-red-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                    <h3 className="font-bold text-gray-900 text-xl mb-3 flex items-center">
+                                        <span className="text-red-600 mr-2">📍</span>
+                                        Address
+                                    </h3>
+                                    <p className="text-gray-700 leading-relaxed">5 - 1150 Sheppard Avenue West<br/>North York, ON M3K 2B5</p>
                                 </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Store Hours</h3>
-                                    <ul className="list-disc list-inside mt-2">
-                                        <li><strong>Saturday:</strong> 9 AM - 8 PM (Restock Day!)</li>
-                                        <li><strong>Sunday:</strong> 10 AM - 6 PM</li>
-                                        <li><strong>Monday - Thursday:</strong> 10 AM - 7 PM</li>
-                                        <li><strong>Friday:</strong> 10 AM - 9 PM (Last Chance!)</li>
-                                        <li><strong>Closed:</strong> For restocking on select days. Check social media for updates!</li>
+                                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 shadow-lg border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                    <h3 className="font-bold text-gray-900 text-xl mb-4 flex items-center">
+                                        <span className="text-blue-600 mr-2">🕒</span>
+                                        Store Hours
+                                    </h3>
+                                    <ul className="space-y-2">
+                                        <li className="flex items-center"><span className="w-2 h-2 bg-red-500 rounded-full mr-3"></span><strong>Saturday:</strong> 9 AM - 8 PM <span className="text-red-600 font-bold">(Restock Day!)</span></li>
+                                        <li className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span><strong>Sunday:</strong> 10 AM - 6 PM</li>
+                                        <li className="flex items-center"><span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span><strong>Monday - Thursday:</strong> 10 AM - 7 PM</li>
+                                        <li className="flex items-center"><span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span><strong>Friday:</strong> 10 AM - 9 PM <span className="text-purple-600 font-bold">(Last Chance!)</span></li>
+                                        <li className="flex items-center"><span className="w-2 h-2 bg-gray-500 rounded-full mr-3"></span><strong>Closed:</strong> For restocking on select days. Check social media for updates!</li>
                                     </ul>
                                 </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">Contact Us</h3>
-                                    <p>Email: <a href="mailto:Thebinzstore23@gmail.com" className="text-red-600 hover:underline">Thebinzstore23@gmail.com</a></p>
-                                    <p>Follow us: @Moezbinzstore</p>
+                                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6 shadow-lg border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                                    <h3 className="font-bold text-gray-900 text-xl mb-3 flex items-center">
+                                        <span className="text-green-600 mr-2">📞</span>
+                                        Contact Us
+                                    </h3>
+                                    <p className="mb-2">Email: <a href="mailto:Thebinzstore23@gmail.com" className="text-red-600 hover:text-red-700 font-semibold hover:underline transition-colors">Thebinzstore23@gmail.com</a></p>
+                                    <p>Follow us: <span className="text-red-600 font-bold">@Moezbinzstore</span></p>
                                 </div>
                             </div>
                         </div>
