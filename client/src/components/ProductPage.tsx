@@ -35,7 +35,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBidClick, isLogged
             target.src = getProductImageUrl('/placeholder.jpg');
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         
         {/* Status badge */}
         <div className="absolute top-3 right-3">

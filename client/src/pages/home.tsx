@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
             {/* Hero Banner Text */}
             <section className="bg-gradient-to-br from-red-50 via-white to-red-50 pb-2 pt-4 px-4">
                 <div className="container mx-auto text-center max-w-4xl">
-                    <h1 className="text-xl md:text-xl lg:text-2xl font-bold text-gray-900 mb-3 leading-tight">
+                    <h1 className="text-md md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-3 leading-tight">
                         More than just a{' '}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800">
                             Discount Store
@@ -30,7 +30,7 @@ const HomePage: React.FC = () => {
                             Ultimate Treasure Hunt
                         </span>
                     </h1>
-                    <div className="flex items-center justify-center gap-2 text-base md:text-lg font-semibold text-gray-700">
+                    <div className="flex items-center justify-center md:gap-2 text-sm md:text-lg font-semibold text-gray-700">
                         <span className="text-red-600">Welcome to</span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800 font-bold">
                             Moez Binz
