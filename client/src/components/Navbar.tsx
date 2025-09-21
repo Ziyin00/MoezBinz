@@ -156,40 +156,34 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
-  const scrollToSection = (sectionId: string) => {
-    // If we're not on the home page, navigate to home first
-    if (location.pathname !== '/') {
-      // Navigate to home page with hash
-      window.location.href = `/#${sectionId}`;
-      return;
-    }
+  // const scrollToSection = (sectionId: string) => {
+  //   // If we're not on the home page, navigate to home first
+  //   if (location.pathname !== '/') {
+  //     // Navigate to home page with hash
+  //     window.location.href = `/#${sectionId}`;
+  //     return;
+  //   }
     
-    // Immediately set the active section when clicking
-    setActiveSection(sectionId);
+  //   // Immediately set the active section when clicking
+  //   setActiveSection(sectionId);
     
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-      // Ensure active section stays set after scrolling
-      setTimeout(() => {
-        setActiveSection(sectionId);
-      }, 500);
-    }
-    setIsMenuOpen(false);
-  };
+  //   const element = document.getElementById(sectionId);
+  //   if (element) {
+  //     element.scrollIntoView({ 
+  //       behavior: 'smooth',
+  //       block: 'start'
+  //     });
+  //     // Ensure active section stays set after scrolling
+  //     setTimeout(() => {
+  //       setActiveSection(sectionId);
+  //     }, 500);
+  //   }
+  //   setIsMenuOpen(false);
+  // };
 
   // Main navigation links
   const mainNavLinks = [
-    { name: 'Home', to: '/', section: 'home', onClick: () => {
-      if (location.pathname !== '/') {
-        window.location.href = '/';
-      } else {
-        scrollToSection('home');
-      }
-    }},
+    { name: 'Home', to: '/', section: 'home', onClick: undefined},
     { name: 'About Us', to: '/about', section: null, onClick: undefined },
     { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
   ];

@@ -164,7 +164,7 @@ router.post('/', verifyAccessToken, async (req, res) => {
 
     // Get user and product info for response (without updating product price)
     const userResult = await pool.query('SELECT id, username, email FROM users WHERE id = $1', [bidderId]);
-    const productResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productId]);
+    const productInfoResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productId]);
 
     const responseBid = {
       _id: bid.id.toString(),
@@ -177,10 +177,10 @@ router.post('/', verifyAccessToken, async (req, res) => {
         email: userResult.rows[0].email
       },
       product: {
-        _id: productResult.rows[0].id.toString(),
-        name: productResult.rows[0].name,
-        imageUrl: productResult.rows[0].image_url,
-        currentPrice: parseFloat(productResult.rows[0].price)
+        _id: productInfoResult.rows[0].id.toString(),
+        name: productInfoResult.rows[0].name,
+        imageUrl: productInfoResult.rows[0].image_url,
+        currentPrice: parseFloat(productInfoResult.rows[0].price)
       }
     };
 
