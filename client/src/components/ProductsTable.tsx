@@ -9,6 +9,7 @@ import { getProductImageUrl } from '../utils/imageUtils';
 const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bidsLoading, setBidsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -23,14 +24,38 @@ const ProductsTable: React.FC = () => {
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      console.log('Fetching products...');
-      const data = await adminService.getProducts(currentPage, 10, categoryFilter, statusFilter);
-      console.log('Products data received:', data);
-      setProducts(data.products);
-      setTotalPages(data.totalPages);
+      setBidsLoading(true);
+      console.log('Fetching products and bids...');
       
-      // Fetch bids for all products
-      await fetchBidsForProducts(data.products);
+      // Fetch products and bids in parallel for better performance
+      const [productsData, bidsResponse] = await Promise.all([
+        adminService.getProducts(currentPage, 10, categoryFilter, statusFilter),
+        adminService.getBids(1, 500) // Get recent bids (optimized for performance)
+      ]);
+      
+      console.log('Products data received:', productsData);
+      setProducts(productsData.products);
+      setTotalPages(productsData.totalPages);
+      
+      // Process bids data
+      const allBids = bidsResponse.bids || [];
+      const bidsData: Record<string, Bid[]> = {};
+      
+      // Initialize empty arrays for all products
+      productsData.products.forEach((product: Product) => {
+        bidsData[product._id] = [];
+      });
+      
+      // Group bids by product ID
+      allBids.forEach((bid: Bid) => {
+        if (bidsData[bid.product._id]) {
+          bidsData[bid.product._id].push(bid);
+        }
+      });
+      
+      console.log('Bids grouped by product:', bidsData);
+      setProductBids(bidsData);
+      
     } catch (error) {
       console.error('Failed to fetch products:', error);
       console.error('Error details:', {
@@ -38,27 +63,16 @@ const ProductsTable: React.FC = () => {
         response: (error as { response?: { data?: unknown; status?: number } })?.response?.data,
         status: (error as { response?: { data?: unknown; status?: number } })?.response?.status
       });
+      
+      // Initialize empty bids data on error
+      const bidsData: Record<string, Bid[]> = {};
+      setProductBids(bidsData);
     } finally {
       setLoading(false);
+      setBidsLoading(false);
     }
   }, [currentPage, categoryFilter, statusFilter]);
 
-  const fetchBidsForProducts = async (products: Product[]) => {
-    const bidsData: Record<string, Bid[]> = {};
-    
-    // Fetch bids for each product
-    for (const product of products) {
-      try {
-        const bids = await adminService.getProductBids(product._id);
-        bidsData[product._id] = bids || [];
-      } catch (error) {
-        console.error(`Failed to fetch bids for product ${product._id}:`, error);
-        bidsData[product._id] = [];
-      }
-    }
-    
-    setProductBids(bidsData);
-  };
 
   useEffect(() => {
     fetchProducts();
@@ -96,6 +110,15 @@ const ProductsTable: React.FC = () => {
   const formatBidsDisplay = (productId: string) => {
     const bids = productBids[productId] || [];
     const product = products.find(p => p._id === productId);
+    
+    if (bidsLoading) {
+      return (
+        <div className="flex items-center space-x-2">
+          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+          <span className="text-gray-500 text-xs">Loading bids...</span>
+        </div>
+      );
+    }
     
     if (bids.length === 0) {
       return <span className="text-gray-500 text-xs">No bids</span>;
