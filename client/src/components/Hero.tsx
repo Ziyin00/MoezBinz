@@ -4,30 +4,35 @@ import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 const slides = [
   {
     image: '/hero-1.jpeg',
+    mobileImage: '/hero-1.jpeg', // Mobile-optimized version
     title: "More than just a Discount Store, it's the Ultimate Treasure Hunt — Welcome to Moez Binz",
     subtitle: 'Premium Brand Goods at Throwaway Prices – New Deals Every Day!',
     description: 'Discover deeply discounted returns and overstock items across every category.',
   },
   {
     image: '/hero-2.jpeg',
+    mobileImage: '/hero-2.jpeg', // Mobile-optimized version
     title: 'Unbeatable Deals on High-End Electronics',
     subtitle: 'Upgrade Your Tech for Less – Limited Time Offers!',
-    description: 'From smartphones to smart homes, find top brands at prices you won’t believe.',
+    description: 'From smartphones to smart homes, find top brands at prices you won\'t believe.',
   },
   {
     image: '/hero-3.jpeg',
+    mobileImage: '/hero-3.jpeg', // Mobile-optimized version
     title: 'Revamp Your Wardrobe with Designer Fashion',
     subtitle: 'Style on a Budget – New Arrivals Weekly!',
     description: 'Shop the latest trends in clothing, shoes, and accessories for the whole family.',
   },
   {
     image: '/hero-4.jpeg',
+    mobileImage: '/hero-4.jpeg', // Mobile-optimized version
     title: 'Revamp Your Wardrobe with Designer Fashion',
     subtitle: 'Style on a Budget – New Arrivals Weekly!',
     description: 'Shop the latest trends in clothing, shoes, and accessories for the whole family.',
   },
   {
     image: '/hero-5.jpeg',
+    mobileImage: '/hero-5.jpeg', // Mobile-optimized version
     title: 'Revamp Your Wardrobe with Designer Fashion',
     subtitle: 'Style on a Budget – New Arrivals Weekly!',
     description: 'Shop the latest trends in clothing, shoes, and accessories for the whole family.',
@@ -90,7 +95,7 @@ const Hero: React.FC = () => {
   return (
     <section 
       id="home" 
-      className="relative w-full h-[45vh] sm:h-[6=50vh] md:h-[50vh] lg:h-[55vh] xl:h-[60vh] overflow-hidden" 
+      className="relative w-full h-[50vh] sm:h-[55vh] md:h-[50vh] lg:h-[55vh] xl:h-[60vh] overflow-hidden" 
       aria-roledescription="carousel" 
       aria-label="Promotional content"
       onTouchStart={handleTouchStart}
@@ -112,10 +117,22 @@ const Hero: React.FC = () => {
             aria-hidden={index !== currentIndex}
           >
             <div className="absolute inset-0 bg-black/30 z-10"></div>
+            {/* Desktop Image */}
             <img 
               src={slide.image} 
               alt={`Hero slide ${index + 1}`} 
-              className="w-full h-full object-cover object-center"
+              className="hidden sm:block w-full h-full object-cover object-center"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              sizes="100vw"
+              onLoad={index === 0 ? handleImageLoad : undefined}
+            />
+            
+            {/* Mobile Image */}
+            <img 
+              src={slide.mobileImage} 
+              alt={`Hero slide ${index + 1}`} 
+              className="block sm:hidden w-full h-full object-cover object-center"
               loading={index === 0 ? 'eager' : 'lazy'}
               decoding="async"
               sizes="100vw"

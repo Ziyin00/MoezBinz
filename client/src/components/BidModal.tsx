@@ -11,7 +11,7 @@ interface BidModalProps {
 }
 
 const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlaced }) => {
-  const [bidAmount, setBidAmount] = useState(product.currentPrice + 1);
+  const [bidAmount, setBidAmount] = useState(product.currentPrice);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [existingBids, setExistingBids] = useState<Bid[]>([]);
   const [loadingBids, setLoadingBids] = useState(false);
@@ -154,7 +154,7 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
               <div className="mb-4">
                 <h4 className="text-md font-medium text-gray-900 mb-2">{product.name}</h4>
                 <p className="text-gray-600 text-sm">Current Price: <span className="font-semibold text-green-600">${product.currentPrice}</span></p>
-                <p className="text-gray-500 text-xs mt-1">Minimum bid: ${product.currentPrice + 1}</p>
+                <p className="text-gray-500 text-xs mt-1">Bid any amount you want - higher or lower than current price</p>
               </div>
 
               <form onSubmit={handleSubmit}>
@@ -168,14 +168,19 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
                       type="number"
                       value={bidAmount}
                       onChange={(e) => setBidAmount(Number(e.target.value))}
-                      min={product.currentPrice + 1}
+                      min="0"
                       className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       placeholder="Enter bid amount"
                     />
                   </div>
                   {bidAmount > product.currentPrice && (
                     <p className="text-xs text-green-600 mt-1">
-                      ✓ Your bid will be ${bidAmount - product.currentPrice} higher than current price
+                      ✓ Your bid is ${bidAmount - product.currentPrice} higher than current price
+                    </p>
+                  )}
+                  {bidAmount < product.currentPrice && bidAmount > 0 && (
+                    <p className="text-xs text-blue-600 mt-1">
+                      ℹ Your bid is ${product.currentPrice - bidAmount} lower than current price
                     </p>
                   )}
                 </div>
@@ -190,7 +195,7 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
                   </button>
                   <button
                     type="submit"
-                    disabled={isSubmitting || bidAmount <= product.currentPrice}
+                    disabled={isSubmitting || bidAmount <= 0}
                     className="flex-1 py-3 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
                   >
                     {isSubmitting ? 'Placing Bid...' : 'Place Bid'}

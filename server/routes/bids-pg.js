@@ -134,12 +134,8 @@ router.post('/', verifyAccessToken, async (req, res) => {
       return res.status(400).json({ message: 'Product is not available for bidding' });
     }
 
-    // Check if bid amount is higher than current price
-    if (amount <= parseFloat(product.price)) {
-      return res.status(400).json({ 
-        message: `Bid must be higher than current price of $${product.price}` 
-      });
-    }
+    // Note: Users can bid any amount they want - higher or lower than current price
+    // This allows for flexible bidding strategies
 
     // Check if user already has a bid on this product
     const existingBidResult = await pool.query(
