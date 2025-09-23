@@ -43,7 +43,7 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
     setIsSubmitting(true);
     
     try {
-      console.log(`Placing bid: $${bidAmount} on product ${product._id}`);
+      // console.log(`Placing bid: $${bidAmount} on product ${product._id}`);
       
       const bidData = {
         productId: product._id,
@@ -52,7 +52,7 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
       };
       
       const response = await bidService.createBid(bidData);
-      console.log('Bid placed successfully:', response);
+      // console.log('Bid placed successfully:', response);
       
       // Refresh the bids list to show the new/updated bid
       await fetchExistingBids();
