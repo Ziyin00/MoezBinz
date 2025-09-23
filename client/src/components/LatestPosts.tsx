@@ -52,9 +52,9 @@ const LatestPosts: React.FC = () => {
       <section className="bg-white py-16 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-left mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+            <h1 className="text-4xl sm:text-5xl font-bold text-red-600 tracking-tight">
               The Latest at Moez Binz
-            </h2>
+            </h1>
             <p className="mt-4 text-lg text-gray-600">
               Watch our latest videos to see new arrivals, customer finds, and behind-the-scenes content!
             </p>

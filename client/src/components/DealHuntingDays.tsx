@@ -50,7 +50,7 @@ const DealHuntingDays: React.FC = () => {
     <section className="bg-white py-16 sm:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold text-red-600 tracking-tight">
             Moez Binz Deal Hunting Days
           </h2>
           <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-600">
@@ -65,7 +65,7 @@ const DealHuntingDays: React.FC = () => {
           {deals.map((deal) => (
             <div
               key={deal.day}
-              className="relative w-56 h-56 sm:w-56 sm:h-56 lg:w-72 lg:h-72 cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="relative w-36 h-36 sm:w-40 sm:h-40 lg:w-52 lg:h-52 cursor-pointer hover:scale-105 transition-transform duration-300"
               style={{ perspective: '1000px' }}
             >
               {/* Card Container with 3D Flip Effect */}

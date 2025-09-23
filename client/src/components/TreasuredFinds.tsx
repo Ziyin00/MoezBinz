@@ -12,22 +12,22 @@ const TreasuredFinds: React.FC = () => {
 
   return (
     <>
-      <section className="bg-gray-50 py-20 sm:py-24">
+      <section className="bg-red-600  py-20 sm:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 lg:gap-20 items-center">
             
             {/* Left Column: Images & Video */}
             <div className="mb-16 lg:mb-0">
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight mb-6">
+              <h2 className="text-4xl sm:text-5xl font-bold text-white tracking-tight mb-6">
                 Some of Our Most Treasured Finds
               </h2>
-              <p className="text-xl text-gray-600 leading-relaxed mb-10">
+              <p className="text-xl text-white leading-relaxed mb-10">
                 Check out a few of the treasures waiting in our bins – new surprises arrive every Saturday.
               </p>
               <div className="grid grid-cols-2 gap-6 h-[500px]">
-                {/* Main Featured Image */}
-                <div className="col-span-2 sm:col-span-1 h-full">
-                   <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br  h-full">
+                {/* First Image */}
+                <div className="col-span-1 h-full">
+                   <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br h-full">
                       <div className="relative overflow-hidden rounded-2xl h-full">
                         <img 
                           src="deal-1.jpg" 
@@ -45,19 +45,17 @@ const TreasuredFinds: React.FC = () => {
                         <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
                           NEW!
                         </div>
-                       
                       </div>
                    </div>
                 </div>
                 
-                {/* Secondary Images */}
-                <div className="col-span-2 sm:col-span-1 h-full flex flex-col gap-6">
-                  {/* First secondary image */}
-                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br  flex-1">
+                {/* Second Image */}
+                <div className="col-span-1 h-full">
+                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br h-full">
                     <div className="relative overflow-hidden rounded-2xl h-full">
                       <img 
                         src="deal-2.jpg" 
-                        alt="Woman with shopping bags" 
+                        alt="Happy customers" 
                         className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:-rotate-1" 
                       />
                       {/* Overlay with gradient and content */}
@@ -73,13 +71,15 @@ const TreasuredFinds: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Second secondary image */}
-                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br  flex-1">
+                </div>
+                
+                {/* Third Image */}
+                <div className="col-span-1 h-full">
+                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br h-full">
                     <div className="relative overflow-hidden rounded-2xl h-full">
                       <img 
                         src="deal-3.jpg" 
-                        alt="Woman with shopping bags" 
+                        alt="Treasure hunt" 
                         className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:rotate-1" 
                       />
                       {/* Overlay with gradient and content */}
@@ -96,13 +96,37 @@ const TreasuredFinds: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                
+                {/* Fourth Image */}
+                <div className="col-span-1 h-full">
+                  <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br h-full">
+                    <div className="relative overflow-hidden rounded-2xl h-full">
+                      <img 
+                        src="deal-4.jpeg" 
+                        alt="Amazing deals" 
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:-rotate-1" 
+                      />
+                      {/* Overlay with gradient and content */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute bottom-4 left-4 right-4 text-white">
+                          <h4 className="text-lg font-bold mb-1">Amazing Deals</h4>
+                          <p className="text-sm opacity-90">Incredible savings daily</p>
+                        </div>
+                      </div>
+                      {/* Floating badge */}
+                      <div className="absolute top-4 right-4 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg transform -rotate-12 group-hover:rotate-0 transition-transform duration-300">
+                        DEAL!
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
           {/* Right Column: Info Boxes */}
-          <div className="space-y-10">
-            <div className="bg-white p-10 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-              <h3 className="text-3xl font-bold text-gray-900 mb-6">Why Shop at Moez Binz?</h3>
+          <div className="space-y-10 ">
+            <div className="bg-white p-10 xl:p-14 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">Why Shop at Moez Binz?</h3>
               <ul className="space-y-4 text-lg text-gray-600">
                 <li className="flex items-start gap-3">
                   <span className="text-red-600 font-bold text-xl">•</span>
@@ -126,8 +150,8 @@ const TreasuredFinds: React.FC = () => {
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-yellow-300 to-yellow-400 p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
-              <h3 className="text-3xl font-bold text-white mb-6">Pro Tips for Bargain Hunters</h3>
+            <div className="bg-gradient-to-br from-yellow-500 to-yellow-500 p-10 xl:p-14 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-3xl lg:text-4xl font-bold text-white mb-6">Pro Tips for Bargain Hunters</h3>
               <ul className="space-y-4 text-lg text-white">
                 <li className="flex items-start gap-3">
                   <span className="text-white font-bold text-xl">•</span>

@@ -2,9 +2,9 @@ import React from 'react';
 
 const BargainHuntBanner: React.FC = () => {
   return (
-    <section className="bg-white pb-16 sm:pb-24">
+    <section className="bg-white pb-10 sm:pb-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-red-600 rounded-2xl p-8 sm:p-12 text-white">
+        <div className="bg-red-600 rounded-2xl p-4 sm:p-6 text-white">
           <div className="max-w-4xl">
             <h2 className="text-2xl sm:text-3xl font-bold">
               Join the bargain hunt of your lifetime

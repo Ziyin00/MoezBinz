@@ -208,6 +208,8 @@ const Header: React.FC = () => {
     { name: 'Home', to: '/', section: 'home', onClick: undefined},
     { name: 'About Us', to: '/about', section: null, onClick: undefined },
     { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
+    { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
+    { name: "What's New", to: '/whats-new', section: null, onClick: undefined },
   ];
 
   // Shop dropdown items
@@ -215,12 +217,6 @@ const Header: React.FC = () => {
     { name: 'Products', to: '/product', onClick: undefined },
     { name: 'Auction', to: '/auction', onClick: undefined },
     ...(isAuthenticated ? [{ name: 'My Bids', to: '/my-bids', onClick: undefined }] : []),
-  ];
-
-  // More dropdown items
-  const moreItems = [
-    { name: 'Visit Us', to: '/visit', onClick: undefined },
-    { name: "What's New", to: '/whats-new', onClick: undefined },
   ];
 
   const handleLogout = () => {
@@ -262,12 +258,6 @@ const Header: React.FC = () => {
               isActive={shopItems.some(item => location.pathname === item.to)}
             />
             
-            {/* More Dropdown */}
-            <DropdownMenu 
-              title="More" 
-              items={moreItems}
-              isActive={moreItems.some(item => location.pathname === item.to)}
-            />
           </div>
 
           {/* Medium Screen Navigation (1024px - 1279px) */}
@@ -288,11 +278,6 @@ const Header: React.FC = () => {
               items={shopItems}
               isActive={shopItems.some(item => location.pathname === item.to)}
             />
-            <DropdownMenu 
-              title="More" 
-              items={moreItems}
-              isActive={moreItems.some(item => location.pathname === item.to)}
-            />
           </div>
 
           {/* Small Desktop Navigation (768px - 1023px) */}
@@ -312,11 +297,6 @@ const Header: React.FC = () => {
               title="Shop" 
               items={shopItems}
               isActive={shopItems.some(item => location.pathname === item.to)}
-            />
-            <DropdownMenu 
-              title="More" 
-              items={moreItems}
-              isActive={moreItems.some(item => location.pathname === item.to)}
             />
           </div>
 
@@ -402,29 +382,6 @@ const Header: React.FC = () => {
               ))}
             </div>
             
-            {/* More Section */}
-            <div className="w-full max-w-xs text-center">
-              <div className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 px-4">More</div>
-              {moreItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  onClick={item.onClick}
-                  className={`group text-sm font-bold uppercase tracking-wider relative pb-1 transition-all duration-300 block px-4 py-2 ${
-                    location.pathname === item.to
-                      ? 'text-red-600 bg-red-50 rounded-md' 
-                      : 'text-gray-900 hover:text-red-600 hover:bg-red-50 hover:rounded-md'
-                  }`}
-                >
-                  {item.name}
-                  <span 
-                    className={`absolute bottom-0 left-4 right-4 h-0.5 bg-red-600 transition-transform duration-300 ease-out transform origin-left ${
-                      location.pathname === item.to ? 'scale-x-100' : 'scale-x-0'
-                    } group-hover:scale-x-100`}
-                  ></span>
-                </Link>
-              ))}
-            </div>
             
             {/* Auth Section */}
             {isAuthenticated ? (

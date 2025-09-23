@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
 const stories = [
   {
@@ -102,97 +103,93 @@ const CustomerStories: React.FC = () => {
         return <span className="text-sm font-medium text-gray-600">{platform}</span>;
     }
   };
+  
+  const imageUrl = '/customer-story.jpg';
 
   return (
-    <section className="bg-gradient-to-br from-pink-50 via-white to-yellow-50 py-20 sm:py-24">
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Side - Header and Ratings */}
-          <div className="text-left">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight mb-4">
-              In their words
-            </h2>
-            <p className="text-lg text-gray-600 mb-8 max-w-md">
-              What people say about how we helped them to that sweet, sweet closing day.
-            </p>
-            
-           
+    <section className="relative bg-red-700 min-h-[500px] lg:min-h-[600px] flex items-center p-4 md:p-10 lg:px-20 overflow-hidden">
+      <div className="container mx-auto">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
+          
+          {/* Left Side - Woman Image */}
+          <div className="relative order-2 lg:order-1">
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold text-white mb-4 text-center">
+                In Their Words
+              </h3>
+              <div className="w-full h-[400px] bg-red-700 relative rounded-2xl">
+                <img 
+                  src={imageUrl} 
+                  className="w-full h-full object-cover" 
+                  alt="Happy Customer" 
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Right Side - Review Carousel */}
-          <div className="relative">
-            <div className="relative h-80 overflow-hidden">
-              {stories.map((story, index) => (
-                <div
-                  key={index}
-                  className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-                    index === currentIndex 
-                      ? 'opacity-100 translate-x-0' 
-                      : index < currentIndex 
-                        ? 'opacity-0 -translate-x-full' 
-                        : 'opacity-0 translate-x-full'
-                  }`}
-                >
-                  <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 h-full flex flex-col">
-                    {/* Platform and Rating */}
-                    <div className="flex justify-between items-start mb-6">
+          {/* Right Side - White Content Box */}
+          <div className="relative z-10 order-1 lg:order-2">
+            <div className="w-full max-w-lg mx-auto lg:mx-0">
+              <div className="bg-white rounded-2xl  p-8 shadow-2xl">
+                <div className="text-center">
+                  
+                  
+                  {/* Current Story Display */}
+                  <div className="bg-gray-50 rounded-xl p-6 mb-6 min-h-[260px] flex flex-col justify-center">
+                    <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-2">
-                        {getPlatformLogo(story.platform)}
+                        {getPlatformLogo(stories[currentIndex].platform)}
                       </div>
                       <div className="flex">
                         {renderStars()}
                       </div>
                     </div>
                     
-                    {/* Review Text */}
-                    <blockquote className="text-lg text-gray-800 leading-relaxed flex-1 mb-6">
-                      "{story.quote}"
+                    <blockquote className="text-sm text-gray-800 leading-relaxed mb-4 text-left flex-grow">
+                      "{stories[currentIndex].quote}"
                     </blockquote>
                     
-                    {/* Author */}
-                    <div className="text-gray-600 font-medium">
-                      <span className="text-gray-900 font-semibold">{story.author}</span> in {story.location}
+                    <div className="text-gray-600 font-medium text-sm text-right">
+                      - <span className="text-gray-900 font-semibold">{stories[currentIndex].author}</span>, {stories[currentIndex].location}
                     </div>
                   </div>
+                  
+                  {/* Navigation Dots */}
+                  <div className="flex justify-center items-center space-x-3 mb-6">
+                    {stories.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToStory(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          currentIndex === index 
+                            ? 'bg-red-600 scale-125' 
+                            : 'bg-gray-300 hover:bg-gray-400'
+                        }`}
+                        aria-label={`Go to review ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Navigation Arrows */}
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={prevStory}
+                      className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200 text-gray-600"
+                      aria-label="Previous Story"
+                    >
+                      <ChevronLeftIcon className="w-5 h-5" />
+                    </button>
+                    
+                    <button
+                      onClick={nextStory}
+                      className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors duration-200 text-gray-600"
+                      aria-label="Next Story"
+                    >
+                      <ChevronRightIcon className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
-            
-            {/* Navigation Arrows */}
-            <button
-              onClick={prevStory}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors duration-200"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            
-            <button
-              onClick={nextStory}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors duration-200"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            
-            {/* Pagination Dots */}
-            <div className="flex justify-center items-center mt-8 space-x-3">
-              {stories.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToStory(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    currentIndex === index 
-                      ? 'bg-pink-500 scale-125' 
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                  aria-label={`Go to review ${index + 1}`}
-                />
-              ))}
+              </div>
             </div>
           </div>
         </div>
