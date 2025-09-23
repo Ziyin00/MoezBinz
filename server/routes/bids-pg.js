@@ -118,19 +118,34 @@ router.post('/', verifyAccessToken, async (req, res) => {
     const bidderId = req.user.id;
     const pool = req.app.locals.pool;
 
+    console.log('Bid creation request:', { productId, amount, bidderId, isAutoBid, maxBidAmount });
+
     // Validate input
     if (!productId || !amount || amount <= 0) {
+      console.log('Validation failed: Invalid bid data', { productId, amount });
       return res.status(400).json({ message: 'Invalid bid data' });
     }
 
+    // Validate productId can be converted to integer
+    const productIdInt = parseInt(productId);
+    if (isNaN(productIdInt)) {
+      console.log('Invalid product ID format:', productId);
+      return res.status(400).json({ message: 'Invalid product ID format' });
+    }
+
     // Check if product exists and is active
-    const productResult = await pool.query('SELECT * FROM products WHERE id = $1', [productId]);
+    console.log('Product ID conversion:', { original: productId, converted: productIdInt });
+    const productResult = await pool.query('SELECT * FROM products WHERE id = $1', [productIdInt]);
+    console.log('Product query result:', productResult.rows);
     if (productResult.rows.length === 0) {
+      console.log('Product not found:', productId);
       return res.status(404).json({ message: 'Product not found' });
     }
 
     const product = productResult.rows[0];
+    console.log('Product found:', { id: product.id, name: product.name, status: product.status });
     if (product.status !== 'active') {
+      console.log('Product not active:', product.status);
       return res.status(400).json({ message: 'Product is not available for bidding' });
     }
 
@@ -140,10 +155,12 @@ router.post('/', verifyAccessToken, async (req, res) => {
     // Check if user already has a bid on this product
     const existingBidResult = await pool.query(
       'SELECT id FROM bids WHERE product_id = $1 AND user_id = $2 AND status = $3',
-      [productId, bidderId, 'active']
+      [productIdInt, bidderId, 'active']
     );
+    console.log('Existing bid check:', { productId, bidderId, existingBids: existingBidResult.rows.length });
 
     if (existingBidResult.rows.length > 0) {
+      console.log('User already has active bid on this product');
       return res.status(400).json({ 
         message: 'You already have an active bid on this product' 
       });
@@ -154,13 +171,13 @@ router.post('/', verifyAccessToken, async (req, res) => {
       INSERT INTO bids (product_id, user_id, amount, status, created_at, updated_at)
       VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
       RETURNING id, amount, status, created_at
-    `, [productId, bidderId, amount, 'active']);
+    `, [productIdInt, bidderId, amount, 'active']);
 
     const bid = bidResult.rows[0];
 
     // Get user and product info for response (without updating product price)
     const userResult = await pool.query('SELECT id, username, email FROM users WHERE id = $1', [bidderId]);
-    const productInfoResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productId]);
+    const productInfoResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productIdInt]);
 
     const responseBid = {
       _id: bid.id.toString(),
@@ -186,6 +203,11 @@ router.post('/', verifyAccessToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating bid:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code
+    });
     res.status(500).json({ message: 'Error creating bid' });
   }
 });
