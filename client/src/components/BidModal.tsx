@@ -54,14 +54,19 @@ const BidModal: React.FC<BidModalProps> = ({ isOpen, onClose, product, onBidPlac
       const response = await bidService.createBid(bidData);
       console.log('Bid placed successfully:', response);
       
-      // Refresh the bids list to show the new bid
+      // Refresh the bids list to show the new/updated bid
       await fetchExistingBids();
       
-      success('Bid placed successfully!', 'Your bid has been recorded.');
+      const isUpdate = response.message?.includes('updated');
+      success(
+        isUpdate ? 'Bid updated successfully!' : 'Bid placed successfully!', 
+        isUpdate ? 'Your bid amount has been updated.' : 'Your bid has been recorded.'
+      );
       onBidPlaced();
       onClose();
     } catch (err: any) {
       console.error('Failed to place bid:', err);
+      console.error('Error response:', err.response?.data);
       const errorMessage = err.response?.data?.message || 'Failed to place bid. Please try again.';
       error('Bid Failed', errorMessage);
     } finally {

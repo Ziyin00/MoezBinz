@@ -154,15 +154,50 @@ router.post('/', verifyAccessToken, async (req, res) => {
 
     // Check if user already has a bid on this product
     const existingBidResult = await pool.query(
-      'SELECT id FROM bids WHERE product_id = $1 AND user_id = $2 AND status = $3',
+      'SELECT id, amount FROM bids WHERE product_id = $1 AND user_id = $2 AND status = $3',
       [productIdInt, bidderId, 'active']
     );
     console.log('Existing bid check:', { productId, bidderId, existingBids: existingBidResult.rows.length });
 
     if (existingBidResult.rows.length > 0) {
-      console.log('User already has active bid on this product');
-      return res.status(400).json({ 
-        message: 'You already have an active bid on this product' 
+      console.log('User already has active bid on this product, updating existing bid');
+      const existingBid = existingBidResult.rows[0];
+      
+      // Update the existing bid instead of creating a new one
+      const updateResult = await pool.query(`
+        UPDATE bids 
+        SET amount = $1, updated_at = CURRENT_TIMESTAMP 
+        WHERE id = $2 
+        RETURNING id, amount, status, created_at
+      `, [amount, existingBid.id]);
+      
+      const updatedBid = updateResult.rows[0];
+      
+      // Get user and product info for response
+      const userResult = await pool.query('SELECT id, username, email FROM users WHERE id = $1', [bidderId]);
+      const productInfoResult = await pool.query('SELECT id, name, image_url, price FROM products WHERE id = $1', [productIdInt]);
+
+      const responseBid = {
+        _id: updatedBid.id.toString(),
+        amount: parseFloat(updatedBid.amount),
+        status: updatedBid.status,
+        bidTime: updatedBid.created_at,
+        bidder: {
+          _id: userResult.rows[0].id.toString(),
+          name: userResult.rows[0].username,
+          email: userResult.rows[0].email
+        },
+        product: {
+          _id: productInfoResult.rows[0].id.toString(),
+          name: productInfoResult.rows[0].name,
+          imageUrl: productInfoResult.rows[0].image_url,
+          currentPrice: parseFloat(productInfoResult.rows[0].price)
+        }
+      };
+
+      return res.json({
+        message: 'Bid updated successfully',
+        bid: responseBid
       });
     }
 
