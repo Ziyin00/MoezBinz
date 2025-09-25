@@ -3,36 +3,36 @@ import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
 const slides = [
   {
-    image: '/hero-1.jpeg',
-    mobileImage: '/hero-1.jpeg', // Mobile-optimized version
+    image: '/Banner 1.jpg',
+    mobileImage: '/Mobile Banner-1.jpg', // Mobile-optimized version
     title: "More than just a Discount Store, it's the Ultimate Treasure Hunt — Welcome to Moez Binz",
     subtitle: 'Premium Brand Goods at Throwaway Prices – New Deals Every Day!',
     description: 'Discover deeply discounted returns and overstock items across every category.',
   },
   {
-    image: '/hero-2.jpeg',
-    mobileImage: '/hero-2.jpeg', // Mobile-optimized version
+    image: '/Banner 2.jpg',
+    mobileImage: '/Mobile Banner-2.jpg', // Mobile-optimized version
     title: 'Unbeatable Deals on High-End Electronics',
     subtitle: 'Upgrade Your Tech for Less – Limited Time Offers!',
     description: 'From smartphones to smart homes, find top brands at prices you won\'t believe.',
   },
   {
-    image: '/hero-3.jpeg',
-    mobileImage: '/hero-3.jpeg', // Mobile-optimized version
+    image: '/Banner 3.jpg',
+    mobileImage: '/Mobile Banner-3.jpg', // Mobile-optimized version
     title: 'Revamp Your Wardrobe with Designer Fashion',
     subtitle: 'Style on a Budget – New Arrivals Weekly!',
     description: 'Shop the latest trends in clothing, shoes, and accessories for the whole family.',
   },
   {
-    image: '/hero-4.jpeg',
-    mobileImage: '/hero-4.jpeg', // Mobile-optimized version
+    image: '/Banner 4.jpg',
+    mobileImage: '/Mobile Banner-4.jpg', // Mobile-optimized version
     title: 'Revamp Your Wardrobe with Designer Fashion',
     subtitle: 'Style on a Budget – New Arrivals Weekly!',
     description: 'Shop the latest trends in clothing, shoes, and accessories for the whole family.',
   },
   {
-    image: '/hero-5.jpeg',
-    mobileImage: '/hero-5.jpeg', // Mobile-optimized version
+    image: '/Banner 5.jpg',
+    mobileImage: '/Mobile Banner-5.jpg', // Mobile-optimized version
     title: 'Revamp Your Wardrobe with Designer Fashion',
     subtitle: 'Style on a Budget – New Arrivals Weekly!',
     description: 'Shop the latest trends in clothing, shoes, and accessories for the whole family.',

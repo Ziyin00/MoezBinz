@@ -104,38 +104,38 @@ const CustomerStories: React.FC = () => {
     }
   };
   
-  const imageUrl = '/customer-story.jpg';
+  const imageUrl = '/Testimonial Visual.jpg';
 
   return (
-    <section className="relative bg-red-700 min-h-[400px] lg:min-h-[500px] flex items-center p-4 md:p-10 lg:px-20 overflow-hidden">
-      <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+    <section className="relative">
+      <div className="w-full">
+        <div className="relative">
           
-          {/* Left Side - Woman Image */}
-          <div className="relative order-2 lg:order-1">
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold text-white mb-4 text-center">
-                In Their Words
-              </h3>
-              <div className="w-full h-[400px] bg-red-700 relative rounded-2xl">
-                <img 
-                  src={imageUrl} 
-                  className="w-full h-full object-cover" 
-                  alt="Happy Customer" 
-                />
-              </div>
-            </div>
+          {/* Full width image as banner - hidden on mobile, shown on desktop */}
+          <div className="w-full h-[400px] sm:h-[500px] lg:h-[600px] hidden md:block">
+            <img 
+              src={imageUrl} 
+              className="w-full h-full object-cover" 
+              alt="Happy Customer" 
+            />
           </div>
 
-          {/* Right Side - White Content Box */}
-          <div className="relative z-10 order-1 lg:order-2">
-            <div className="w-full max-w-lg mx-auto lg:mx-0">
-              <div className="bg-white rounded-2xl  p-8 shadow-2xl">
+          {/* H3 title above image */}
+          <div className="absolute md:top-20 mt-2 md:mt-0  left-50 lg:left-100 md:left-80 xl:left-120 transform -translate-x-1/2 z-20">
+            <h3 className="text-2xl font-bold text-white text-center">
+              In Their Words
+            </h3>
+          </div>
+
+          {/* Story display box positioned above image */}
+          <div className="md:absolute top-20 left-1/2 z-30 md:bg-transparent bg-red-700 py-12 md:py-0 md-px-0 px-4">
+            <div className="w-full max-w-lg ">
+              <div className="bg-white rounded-2xl p-8 shadow-2xl ">
                 <div className="text-center">
                   
                   
                   {/* Current Story Display */}
-                  <div className="bg-gray-50 rounded-xl p-6 mb-6 min-h-[260px] flex flex-col justify-center">
+                  <div className="bg-gray-50 rounded-xl px-6 md:px-0 py-4 md:py-0 lg:mb-6 min-h-[260px] flex flex-col justify-center">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-2">
                         {getPlatformLogo(stories[currentIndex].platform)}
