@@ -125,8 +125,8 @@ const TreasuredFinds: React.FC = () => {
 
           {/* Right Column: Info Boxes */}
           <div className="space-y-10 ">
-            <div className="bg-white p-10 xl:p-14 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-              <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">Why Shop at Moez Binz?</h3>
+            <div className="bg-white p-4 xl:p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">Why Shop at Moez Binz?</h2>
               <ul className="space-y-4 text-lg text-gray-600">
                 <li className="flex items-start gap-3">
                   <span className="text-red-600 font-bold text-xl">•</span>
@@ -150,8 +150,8 @@ const TreasuredFinds: React.FC = () => {
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-yellow-500 to-yellow-500 p-10 xl:p-14 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
-              <h3 className="text-3xl lg:text-4xl font-bold text-white mb-6">Pro Tips for Bargain Hunters</h3>
+            <div className="bg-gradient-to-br from-yellow-500 to-yellow-500 p-4 xl:p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">Pro Tips for Bargain Hunters</h2>
               <ul className="space-y-4 text-lg text-white">
                 <li className="flex items-start gap-3">
                   <span className="text-white font-bold text-xl">•</span>

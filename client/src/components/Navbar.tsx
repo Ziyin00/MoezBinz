@@ -208,8 +208,8 @@ const Header: React.FC = () => {
     { name: 'Home', to: '/', section: 'home', onClick: undefined},
     { name: 'About Us', to: '/about', section: null, onClick: undefined },
     { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
-    { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
     { name: "What's New", to: '/whats-new', section: null, onClick: undefined },
+    { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
   ];
 
   // Shop dropdown items

@@ -107,7 +107,7 @@ const CustomerStories: React.FC = () => {
   const imageUrl = '/customer-story.jpg';
 
   return (
-    <section className="relative bg-red-700 min-h-[500px] lg:min-h-[600px] flex items-center p-4 md:p-10 lg:px-20 overflow-hidden">
+    <section className="relative bg-red-700 min-h-[400px] lg:min-h-[500px] flex items-center p-4 md:p-10 lg:px-20 overflow-hidden">
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           
