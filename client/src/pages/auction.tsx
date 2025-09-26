@@ -27,6 +27,7 @@ const Auction: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null);
   const [showBidModal, setShowBidModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { success, error } = useToast();
   const navigate = useNavigate();
   const { user, accessToken } = useAppSelector((state) => state.auth);
@@ -85,6 +86,10 @@ const Auction: React.FC = () => {
     }
   };
 
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+
   const getTimeRemaining = (endTime: string) => {
     const now = new Date().getTime();
     const end = new Date(endTime).getTime();
@@ -108,27 +113,31 @@ const Auction: React.FC = () => {
         {/* Hero Section */}
         <div className="relative h-[50vh] bg-black">
           <img 
-            src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=2126&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            src='/Auction Visual.jpeg'
             alt="Auction and bidding process"
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-black opacity-30"></div>
-          
-          <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
-              BINZ AUCTION
-            </h1>
-            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
-              Bid. Win. Collect. The Binz Auction is Here! Big brands, small bids — your deal, your win.
-            </p>
-          </div>
         </div>
 
-        {/* How It Works Section */}
+        {/* Hero Text Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">How Our Auctions Work</h2>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-red-600 mb-6">
+                BINZ AUCTION
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                Bid. Win. Collect. The Binz Auction is Here! Big brands, small bids — your deal, your win.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-8">How Our Auctions Work</h2>
               <p className="text-lg text-gray-600 mb-12 leading-relaxed">
                 Join the thrill of bidding on unique Amazon returns and big brand overstocks. 
                 Individual and bulk lots are up for grabs—bid online, collect at our store, and unlock unbeatable deals!
@@ -136,8 +145,8 @@ const Auction: React.FC = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
@@ -146,8 +155,8 @@ const Auction: React.FC = () => {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
@@ -156,8 +165,8 @@ const Auction: React.FC = () => {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   </div>
@@ -166,8 +175,8 @@ const Auction: React.FC = () => {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4 19h6v-2H4v2zM4 5h6V3H4v2zM4 12h6v-2H4v2z" />
                     </svg>
                   </div>
@@ -183,13 +192,13 @@ const Auction: React.FC = () => {
         <section id="auctions" className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Auction Listings</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-red-600 mb-4">Auction Listings</h2>
               <p className="text-lg text-gray-600">Featured auctions right now</p>
             </div>
 
             {loading ? (
               <div className="flex justify-center items-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -198,6 +207,7 @@ const Auction: React.FC = () => {
                     key={auction.id}
                     auction={auction}
                     onBidClick={() => handleBidClick(auction)}
+                    onImageClick={handleImageClick}
                     getTimeRemaining={getTimeRemaining}
                     isAuthenticated={isAuthenticated}
                   />
@@ -208,7 +218,7 @@ const Auction: React.FC = () => {
             <div className="text-center mt-12">
               <a
                 href="/product"
-                className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors"
+                className="inline-flex items-center px-8 py-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors"
               >
                 Browse All Auctions
                 <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,15 +230,15 @@ const Auction: React.FC = () => {
         </section>
 
         {/* Why Bid Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center">Why Bid with Moez Binz?</h2>
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-red-600 mb-16 text-center leading-tight">Why Bid with Moez Binz?</h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
                 <div className="space-y-6">
                   <div className="flex items-start">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center mr-4 mt-1">
                       <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -240,7 +250,7 @@ const Auction: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center mr-4 mt-1">
                       <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -252,7 +262,7 @@ const Auction: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center mr-4 mt-1">
                       <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -264,7 +274,7 @@ const Auction: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center mr-4 mt-1">
                       <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -276,26 +286,26 @@ const Auction: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="bg-gray-50 rounded-lg p-8">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-6">Winning & Collecting Your Items</h3>
-                  <div className="space-y-4">
+                <div className="bg-yellow-300 rounded-lg p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-1">Winning & Collecting Your Items</h3>
+                  <div className="space-y-3">
                     <div className="flex items-start">
-                      <div className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2"></div>
+                      <div className="w-2 h-2 bg-red-600 rounded-full mr-3 mt-2"></div>
                       <p className="text-gray-700">When auction ends, winners receive instant notification</p>
                     </div>
                     <div className="flex items-start">
-                      <div className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2"></div>
+                      <div className="w-2 h-2 bg-red-600 rounded-full mr-3 mt-2"></div>
                       <p className="text-gray-700">Pay online or at pick-up</p>
                     </div>
                     <div className="flex items-start">
-                      <div className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2"></div>
+                      <div className="w-2 h-2 bg-red-600 rounded-full mr-3 mt-2"></div>
                       <p className="text-gray-700">Collect your treasures during store hours - bring ID and order confirmation</p>
                     </div>
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-gray-200">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-4">Auction Rules & Policies</h4>
-                    <div className="space-y-3 text-sm text-gray-600">
+                  <div className=" pt-4 border-t border-yellow-300">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-1">Auction Rules & Policies</h4>
+                    <div className="space-y-2 text-sm text-gray-600">
                       <p>• All sales are final; inspect items at pickup</p>
                       <p>• Payment must be completed before collection</p>
                       <p>• Failure to collect within 7 days may forfeit your win</p>
@@ -316,6 +326,31 @@ const Auction: React.FC = () => {
           onSubmit={handleBidSubmit}
           getTimeRemaining={getTimeRemaining}
         />
+      )}
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-[9999] p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-9xl max-h-[95vh] overflow-hidden flex flex-col">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white hover:text-gray-200 transition-all duration-200 rounded-full p-2 shadow-lg"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <img
+              src={selectedImage}
+              alt="Auction Item"
+              className="w-full h-full object-cover"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
       )}
 
     </>

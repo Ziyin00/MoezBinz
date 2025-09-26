@@ -9,9 +9,9 @@ const About: React.FC = () => {
         {/* Hero Section */}
         <div className="relative h-[50vh] bg-black">
           <img 
-            src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            src="/About Us Visual.jpeg"
             alt="A diverse group of people shopping"
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
           />
           <div className="absolute inset-0 bg-black opacity-30"></div>
           
@@ -19,7 +19,7 @@ const About: React.FC = () => {
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
               About Moez Binz
             </h1>
-            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+            <p className="mt-4 text-lg text-center sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
               At Moez Binz, every visit is a new adventure in savings. We're a community-driven liquidation store where newcomers, students, and families can discover quality Amazon returns at prices that make life in Canada easier—and a lot more fun.
             </p>
           </div>
@@ -30,9 +30,9 @@ const About: React.FC = () => {
           <div className="max-w-4xl mx-auto">
             {/* Our Story and Purpose */}
             <section className="mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Story and Purpose</h2>
+              <h2 className="text-3xl font-bold text-red-600  mb-8 text-center">Our Story and Purpose</h2>
               <div className="bg-white rounded-lg shadow-lg p-8">
-                <p className="text-lg text-gray-700 leading-relaxed">
+                <p className="text-lg text-center text-gray-700 leading-relaxed">
                   Founded with one clear goal - to help people live smarter and better - Moez Binz is here to stretch every dollar. Our unique bins-store model means you get access to an ever-changing selection of home goods, fashion, gadgets, and everything in between, all at a fraction of regular retail prices.
                 </p>
               </div>
@@ -40,9 +40,9 @@ const About: React.FC = () => {
 
             {/* More Than a Discount Store */}
             <section className="mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">More Than a Discount Store</h2>
+              <h2 className="text-3xl font-bold text-red-600  mb-8 text-center">More Than a Discount Store</h2>
               <div className="bg-white rounded-lg shadow-lg p-8">
-                <p className="text-lg text-gray-700 leading-relaxed">
+                <p className="text-lg text-center text-gray-700 leading-relaxed">
                   Moez Binz isn't just about bargains. Our friendly team knows regulars by name, welcomes newcomers with warm smiles, and celebrates the diversity of our community. Whether furnishing a new home, shopping for campus life, or just looking for life's little surprises, customers feel right at home here.
                 </p>
               </div>
@@ -50,9 +50,9 @@ const About: React.FC = () => {
 
             {/* Our Commitment to Community */}
             <section className="mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Commitment to Community</h2>
+              <h2 className="text-3xl font-bold text-red-600  mb-8 text-center">Our Commitment to Community</h2>
               <div className="bg-white rounded-lg shadow-lg p-8">
-                <p className="text-lg text-gray-700 leading-relaxed">
+                <p className="text-lg text-center text-gray-700 leading-relaxed">
                   We believe everyone deserves the comfort and possibility of a well-equipped home. That's why we work every day to make quality goods affordable, build real relationships, and support our neighbourhood's diverse mix of cultures and stories.
                 </p>
               </div>
@@ -60,7 +60,7 @@ const About: React.FC = () => {
 
             {/* Join the Moez Binz Family */}
             <section className="mb-16">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Join the Moez Binz Family</h2>
+              <h2 className="text-3xl font-bold text-red-600  mb-8 text-center">Join the Moez Binz Family</h2>
               <div className="bg-white rounded-lg shadow-lg p-8 text-center">
                 <p className="text-lg text-gray-700 leading-relaxed">
                   Come see what's new in the bins this week - there's always a surprise waiting. Discover the true meaning of smart shopping, right here in North York.

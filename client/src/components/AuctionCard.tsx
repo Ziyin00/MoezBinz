@@ -19,6 +19,7 @@ interface Auction {
 interface AuctionCardProps {
   auction: Auction;
   onBidClick: () => void;
+  onImageClick: (imageUrl: string) => void;
   getTimeRemaining: (endTime: string) => {
     hours: number;
     minutes: number;
@@ -28,7 +29,7 @@ interface AuctionCardProps {
   isAuthenticated?: boolean;
 }
 
-const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeRemaining, isAuthenticated = true }) => {
+const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, onImageClick, getTimeRemaining, isAuthenticated = true }) => {
   const timeRemaining = getTimeRemaining(auction.end_time);
   
   const getStatusColor = (status: string) => {
@@ -46,107 +47,69 @@ const AuctionCard: React.FC<AuctionCardProps> = ({ auction, onBidClick, getTimeR
 
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      {/* Image */}
-      <div className="relative h-48 bg-gray-200">
-        <img
-          src={auction.image_url ? getProductImageUrl(auction.image_url) : getProductImageUrl('/placeholder.jpg')}
-          alt={auction.title}
-          className="w-full h-full object-cover"
+    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden border border-gray-100">
+      <div className="relative overflow-hidden">
+        <img 
+          src={auction.image_url ? getProductImageUrl(auction.image_url) : getProductImageUrl('/placeholder.jpg')} 
+          alt={auction.title} 
+          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+          onClick={() => onImageClick(auction.image_url ? getProductImageUrl(auction.image_url) : getProductImageUrl('/placeholder.jpg'))}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = getProductImageUrl('/placeholder.jpg');
           }}
         />
-        <div className="absolute top-4 right-4">
-          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(auction.status)}`}>
-            {auction.status.charAt(0).toUpperCase() + auction.status.slice(1)}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        
+        {/* Status badge */}
+        <div className="absolute top-3 right-3">
+          <span className={`px-3 py-1 text-xs font-bold rounded-full shadow-lg ${
+            auction.status === 'active' 
+              ? 'bg-green-500 text-white' 
+              : auction.status === 'completed'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-500 text-white'
+          }`}>
+            {auction.status === 'active' ? 'LIVE' : auction.status === 'completed' ? 'ENDED' : 'CANCELLED'}
+          </span>
+        </div>
+
+        {/* Category badge */}
+        <div className="absolute top-3 left-3">
+          <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/90 text-gray-700 shadow-lg">
+            {auction.category}
           </span>
         </div>
       </div>
-
-      {/* Content */}
+      
       <div className="p-6">
-        {/* Title and Category */}
-        <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
-            {auction.title}
-          </h3>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-sm text-gray-500">{auction.category}</span>
+        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-red-600 transition-colors">
+          {auction.title}
+        </h3>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{auction.description}</p>
+        
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-2xl font-bold text-red-600">${auction.current_price}</p>
+            <p className="text-sm text-gray-500">Start: ${auction.starting_price}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-gray-500">Ends in</p>
+            <p className="text-sm font-semibold text-gray-900">
+              {timeRemaining.expired ? 'Ended' : `${Math.ceil((new Date(auction.end_time).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} day${Math.ceil((new Date(auction.end_time).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) !== 1 ? 's' : ''}`}
+            </p>
           </div>
         </div>
-
-        {/* Description */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {auction.description}
-        </p>
-
-        {/* Pricing */}
-        <div className="mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <span className="text-sm text-gray-500">Starting Price:</span>
-              <span className="text-lg font-semibold text-gray-900 ml-2">${auction.starting_price}</span>
-            </div>
-            <div className="text-right">
-              <span className="text-sm text-gray-500">Current Bid:</span>
-              <span className="text-xl font-bold text-purple-600 ml-2">${auction.current_price}</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>Bid Increment: ${auction.bid_increment}</span>
-            <span>{auction.bid_count} bids</span>
-          </div>
-        </div>
-
-        {/* Time Remaining */}
-        <div className="mb-6">
-          {timeRemaining.expired ? (
-            <div className="text-center py-3 bg-red-50 rounded-lg">
-              <span className="text-red-600 font-semibold">Auction Ended</span>
-            </div>
-          ) : (
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-center mb-2">
-                <span className="text-sm text-gray-500">Time Remaining</span>
-              </div>
-              <div className="flex justify-center space-x-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{timeRemaining.hours}</div>
-                  <div className="text-xs text-gray-500">Hours</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{timeRemaining.minutes}</div>
-                  <div className="text-xs text-gray-500">Minutes</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{timeRemaining.seconds}</div>
-                  <div className="text-xs text-gray-500">Seconds</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Bid Button */}
-        <button
+        
+        <button 
           onClick={onBidClick}
-          disabled={timeRemaining.expired || auction.status === 'completed' || auction.status === 'cancelled'}
-          className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-200 ${
-            timeRemaining.expired || auction.status === 'completed' || auction.status === 'cancelled'
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : !isAuthenticated
-              ? 'bg-red-500 text-white hover:bg-red-600'
-              : 'bg-red-600 text-white hover:bg-red-700'
-          }`}
+          disabled={timeRemaining.expired || auction.status !== 'active'}
+          className="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-red-700 transition-all duration-300 transform group-hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl"
         >
-          {timeRemaining.expired || auction.status === 'completed' || auction.status === 'cancelled'
-            ? 'Auction Ended' 
-            : !isAuthenticated 
-            ? 'Login to Bid' 
-            : 'Place Bid'
-          }
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          {timeRemaining.expired ? 'Auction Ended' : !isAuthenticated ? 'Login to Bid' : 'Place Bid'}
         </button>
       </div>
     </div>
