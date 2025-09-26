@@ -42,17 +42,21 @@ const HowItWorks: React.FC = () => {
             alt="Shopping process and how it works"
             className="absolute inset-0 w-full h-full object-cover opacity-70"
           />
-          {/* <div className="absolute inset-0 bg-black opacity-30"></div> */}
-          
-          {/* <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
-              What is the Store Concept All About?
-            </h1>
-            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
-              Discover our unique daily-decreasing price model and start your treasure hunt today
-            </p>
-          </div> */}
         </div>
+
+        {/* Hero Text Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-red-600 mb-6">
+                How It Works
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                Discover our unique daily-decreasing price model and start your treasure hunt today
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Main Content */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">

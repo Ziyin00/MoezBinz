@@ -5,10 +5,7 @@ const Logo: React.FC = () => {
   return (
     <div className="flex items-center">
       <img src="/Logo.png" alt="Moez Binz Logo" className="h-10 md:h-12 w-auto mr-3" />
-      {/* <div className="text-2xl font-bold tracking-wider">
-        <span className="text-red-600">MOEZ</span>
-        <span className="text-gray-900"> BINZ</span>
-      </div> */}
+    
     </div>
   );
 };

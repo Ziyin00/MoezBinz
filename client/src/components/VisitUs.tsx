@@ -7,16 +7,21 @@ const VisitUsPage: React.FC = () => {
                 <img 
                     src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                     alt="Store interior and shopping experience"
-                    className="absolute inset-0 w-full h-full object-cover opacity-40"
+                    className="absolute inset-0 w-full h-full object-cover opacity-70"
                 />
-                <div className="absolute inset-0 bg-black opacity-30"></div>
-                <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4 z-10">
-                    <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
-                        Visit Our Store
-                    </h1>
-                    <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
-                        Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
-                    </p>
+            </section>
+
+            {/* Hero Text Section */}
+            <section className="py-16 bg-white">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-red-600 mb-6">
+                            Visit Our Store
+                        </h1>
+                        <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                            Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
+                        </p>
+                    </div>
                 </div>
             </section>
             

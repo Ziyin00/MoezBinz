@@ -139,15 +139,21 @@ const WhatsNew: React.FC = () => {
           <img 
             src='/Whats New visual.jpeg'
             alt="News and updates"
-            className="absolute inset-0 w-full h-full object-cover opacity-50"
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
           />
-          <div className="relative h-full flex flex-col justify-center items-center text-center text-white px-4">
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight animate-fade-in-up">
-              What's New
-            </h1>
-            <p className="mt-4 text-lg sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
-              Stay updated with the latest news, announcements, and updates from Moez Binz
-            </p>
+        </section>
+
+        {/* Hero Text Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-red-600 mb-6">
+                What's New
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                Stay updated with the latest news, announcements, and updates from Moez Binz
+              </p>
+            </div>
           </div>
         </section>
 

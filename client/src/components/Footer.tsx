@@ -1,7 +1,6 @@
 // FIX: Implemented a complete Footer component.
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from './Logo';
 import { FacebookIcon, InstagramIcon, TikTokIcon } from './Icons';
 
 const Footer: React.FC = () => {
@@ -12,7 +11,10 @@ const Footer: React.FC = () => {
           {/* Logo and mission */}
           <div className="lg:col-span-1">
             <Link to="/" className="mb-4 inline-block">
-              <Logo />
+               <div className="flex items-center">
+      <img src="/MB-Logo.png" alt="Moez Binz Logo" className="h-10 md:h-12 w-auto mr-3" />
+    
+    </div>
             </Link>
             <p className="text-white/90 text-sm leading-relaxed mb-4">
               The ultimate treasure hunt for premium brand goods at throwaway prices. Discover amazing deals on Amazon returns and overstock items.
