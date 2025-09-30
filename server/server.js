@@ -34,7 +34,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ CORS configuration for deployment
 const allowedOrigins = [
-  'https://moez-binz-sepia.vercel.app',
+  'https://thebinzstore.vercel.app/',
   'https://moez-binz-sepia.vercel.app/',
   'http://localhost:5173',
   'http://localhost:5174',
