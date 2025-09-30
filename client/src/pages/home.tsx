@@ -6,7 +6,6 @@ import TreasuredFinds from '../components/TreasuredFinds';
 import LatestPosts from '../components/LatestPosts';
 import CustomerStories from '../components/CustomerStories';
 import SubmitFind from '../components/SubmitFind';
-import BargainHuntBanner from '../components/BargainHuntBanner';
 // import AboutPage from '../components/AboutPage';
 // import HowItWorksPage from '../components/HowItWorks';
 // import ProductsPage from '../components/ProductsPage';
@@ -26,7 +25,7 @@ const HomePage: React.FC = () => {
                             Moez Binz
                         </span>
                     </div>
-                    <h1 className="text-md md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-3 leading-tight">
+                    <h1 className="text-xl md:text-2xl lg:text-5xl font-bold text-gray-900 mb-1 md:mb-3 leading-tight">
                         More than just a{' '}
                         <span className=" bg-clip-text bg-gradient-to-r text-red-600">
                             Discount Store
@@ -42,7 +41,7 @@ const HomePage: React.FC = () => {
 
             <Hero />
               <section 
-              className={` bottom-0 left-0 right-0 z-20 flex justify-center items-end p-4 md:p-6 lg:p-8  transition-opacity duration-1000 ease-in-out border-b-2 border-red-500 `}
+              className={` bottom-0 left-0 right-0 z-20 flex justify-center items-end p-2 md:p-2 lg:p-2  transition-opacity duration-1000 ease-in-out border-b-2 border-red-500 `}
             >
               <div className="max-w-7xl mx-auto text-center">
             <div className=" rounded-xl p-4 md:p-6 border border-white/20">
@@ -79,10 +78,6 @@ const HomePage: React.FC = () => {
                 <CustomerStories />
          
                 <SubmitFind />
-            
-            <div className="border-b-2 border-red-500">
-                <BargainHuntBanner />
-            </div>
             {/* <AboutPage /> */}
             {/* <div className="border-b-2 border-red-500">
                 <HowItWorksPage />

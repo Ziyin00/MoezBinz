@@ -122,7 +122,7 @@ const CustomerStories: React.FC = () => {
 
           {/* H3 title above image */}
           <div className="absolute md:top-20 mt-2 md:mt-0  left-50 lg:left-100 md:left-80 xl:left-120 transform -translate-x-1/2 z-20">
-            <h3 className="text-2xl font-bold text-white text-center">
+            <h3 className="text-3xl font-bold text-white text-center">
               In Their Words
             </h3>
           </div>

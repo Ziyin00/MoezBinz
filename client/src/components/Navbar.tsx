@@ -209,7 +209,6 @@ const Header: React.FC = () => {
     { name: 'About Us', to: '/about', section: null, onClick: undefined },
     { name: 'How It Works', to: '/how-it-works', section: null, onClick: undefined },
     { name: "What's New", to: '/whats-new', section: null, onClick: undefined },
-    { name: 'Visit Us', to: '/visit', section: null, onClick: undefined },
   ];
 
   // Shop dropdown items
@@ -258,6 +257,14 @@ const Header: React.FC = () => {
               isActive={shopItems.some(item => location.pathname === item.to)}
             />
             
+            {/* Visit Us Link */}
+            <NavLink 
+              to="/visit" 
+              isActive={location.pathname === '/visit'}
+            >
+              Visit Us
+            </NavLink>
+            
           </div>
 
           {/* Medium Screen Navigation (1024px - 1279px) */}
@@ -278,6 +285,12 @@ const Header: React.FC = () => {
               items={shopItems}
               isActive={shopItems.some(item => location.pathname === item.to)}
             />
+            <NavLink 
+              to="/visit" 
+              isActive={location.pathname === '/visit'}
+            >
+              Visit Us
+            </NavLink>
           </div>
 
           {/* Small Desktop Navigation (768px - 1023px) */}
@@ -298,6 +311,12 @@ const Header: React.FC = () => {
               items={shopItems}
               isActive={shopItems.some(item => location.pathname === item.to)}
             />
+            <NavLink 
+              to="/visit" 
+              isActive={location.pathname === '/visit'}
+            >
+              Visit Us
+            </NavLink>
           </div>
 
           {/* Desktop Auth Section */}
@@ -381,6 +400,14 @@ const Header: React.FC = () => {
                 </Link>
               ))}
             </div>
+            
+            {/* Visit Us Link */}
+            <NavLink 
+              to="/visit" 
+              isActive={location.pathname === '/visit'}
+            >
+              Visit Us
+            </NavLink>
             
             
             {/* Auth Section */}

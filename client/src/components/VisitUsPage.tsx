@@ -8,10 +8,10 @@ const VisitUsPage: React.FC = () => {
 
             <div className="bg-gray-50 py-16 sm:py-24">
                  <div className="relative h-full flex mb-10 flex-col justify-center items-center text-center px-4 z-10">
-                    <h1 className="text-4xl text-red-600 sm:text-6xl font-bold tracking-tight animate-fade-in-up">
+                    <h1 className="text-4xl text-red-600 sm:text-5xl font-bold tracking-tight animate-fade-in-up">
                         Plan Your Visit to Moez Binz
                     </h1>
-                                        <p className="mt-4 text-lg text-gray-700 sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
+                      <p className="mt-4 text-lg text-gray-700 sm:text-xl max-w-3xl animate-fade-in-up animation-delay-200">
                         Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
                     </p>
 
@@ -22,7 +22,7 @@ const VisitUsPage: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
                     {/* Location & Hours Card */}
                     <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 opacity-0 animate-fade-in-up animation-delay-200">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-6">Location & Hours</h2>
+                        <h2 className="text-3xl font-bold text-red-600 mb-6">Location & Hours</h2>
                         <div className="space-y-4 text-gray-700">
                             <div>
                                 <h3 className="font-bold text-gray-800">Address:</h3>
@@ -46,7 +46,7 @@ const VisitUsPage: React.FC = () => {
 
                     {/* Map Card */}
                     <div className="bg-white p-4 rounded-2xl  shadow-lg border border-gray-100 opacity-0 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                        <div className="relative h-[450px] rounded-lg overflow-hidden">
+                        <div className="relative h-[350px] rounded-lg overflow-hidden">
                              <iframe
                                 src="https://maps.google.com/maps?q=1150%20Sheppard%20Avenue%20West%20North%20York%20ON%20M3K%202B5%20Canada&t=&z=15&ie=UTF8&iwloc=&output=embed"
                                 width="100%"
