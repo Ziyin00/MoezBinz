@@ -34,8 +34,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ CORS configuration for deployment
 const allowedOrigins = [
-  'https://thebinzstore.vercel.app/',
-  'https://moez-binz-sepia.vercel.app/',
+  'https://thebinzstore.vercel.app',
+  'https://moez-binz-sepia.vercel.app',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000'
@@ -46,7 +46,11 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Check if origin is in allowed list (with or without trailing slash)
+    const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+    const normalizedAllowedOrigins = allowedOrigins.map(o => o.endsWith('/') ? o.slice(0, -1) : o);
+    
+    if (normalizedAllowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
       console.log('CORS blocked origin:', origin);
@@ -54,7 +58,7 @@ app.use(cors({
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
 }));
 
