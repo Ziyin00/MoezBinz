@@ -157,23 +157,24 @@ const Auction: React.FC = () => {
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/30 z-10"></div>
           
-          {/* Hero Content */}
-          <div className="absolute inset-0 z-20 flex items-center justify-center">
-            <div className="text-center text-white px-4 max-w-4xl">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-                BINZ AUCTION
-              </h1>
-              <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-                Bid. Win. Collect. The Binz Auction is Here! Big brands, small bids — your deal, your win.
-              </p>
-            </div>
-          </div>
+        
         </section>
 
         {/* Additional Hero Text Section */}
         <section className="py-8 bg-white border-b-2 border-red-500">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
+                {/* Hero Content */}
+          <div className=" z-20 flex items-center justify-center">
+            <div className="text-center  px-4 max-w-4xl">
+              <h1 className="text-3xl text-red-600 sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                BINZ AUCTION
+              </h1>
+              <p className="text-lg sm:text-xl md:text-2xl mb-10 text-gray-800 max-w-3xl mx-auto">
+                Bid. Win. Collect. The Binz Auction is Here! Big brands, small bids — your deal, your win.
+              </p>
+            </div>
+          </div>
               <h2 className="text-2xl md:text-3xl font-bold text-red-600 mb-4">
                 Premium Brand Goods at{' '}
                 <span className="text-red-600 bg-clip-text bg-gradient-to-r">
