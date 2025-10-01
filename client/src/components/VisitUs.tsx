@@ -3,26 +3,87 @@ import React from 'react';
 const VisitUsPage: React.FC = () => {
     return (
         <main className="bg-white">
-            <section className="relative h-[50vh] bg-black">
-                <img 
-                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                    alt="Store interior and shopping experience"
-                    className="absolute inset-0 w-full h-full object-cover opacity-70"
-                />
+            {/* Hero Banner Section - Similar to About Us Page */}
+            <section className="bg-gradient-to-br from-red-50 via-white to-red-50 pb-2 pt-4 px-4">
+              <div className="container mx-auto text-center max-w-4xl">
+                <div className="flex items-center justify-center md:gap-2 text-sm md:text-lg font-semibold text-gray-700">
+                  <span className="text-red-600">Welcome to</span>
+                  <span className="text-red-600 bg-clip-text bg-gradient-to-r font-bold">
+                    Moez Binz
+                  </span>
+                </div>
+                <h1 className="text-xl md:text-2xl lg:text-5xl font-bold text-gray-900 mb-1 md:mb-3 leading-tight">
+                  More than just a{' '}
+                  <span className="bg-clip-text bg-gradient-to-r text-red-600">
+                    Discount Store
+                  </span>
+                  , it's the{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-800">
+                    Ultimate Treasure Hunt
+                  </span>
+                </h1>
+              </div>
             </section>
 
-            {/* Hero Text Section */}
-            <section className="py-16 bg-white">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-red-600 mb-6">
-                            Visit Our Store
-                        </h1>
-                        <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">
-                            Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
-                        </p>
-                    </div>
+            {/* Hero Image Section with Mobile/Desktop Versions */}
+            <section className="relative w-full h-[50vh] sm:h-[55vh] md:h-[50vh] lg:h-[55vh] xl:h-[60vh] overflow-hidden">
+              {/* Desktop Image */}
+              <img 
+                src="/Visit Us Visual.jpg"
+                alt="Visit Moez Binz - Our Store Location"
+                className="hidden sm:block w-full h-full object-cover object-center"
+                loading="eager"
+                decoding="async"
+                sizes="100vw"
+              />
+              
+              {/* Mobile Image */}
+              <img 
+                src="/Visit Us Visual-Mobile.jpg"
+                alt="Visit Moez Binz - Our Store Location"
+                className="block sm:hidden w-full h-full object-cover object-center"
+                loading="eager"
+                decoding="async"
+                sizes="100vw"
+              />
+              
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/30 z-10"></div>
+              
+              {/* Hero Content */}
+              <div className="absolute inset-0 z-20 flex items-center justify-center">
+                <div className="text-center text-white px-4 max-w-4xl">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                    Visit Our Store
+                  </h1>
+                  <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+                    Come experience the thrill of treasure hunting at our North York location. Find amazing deals on quality items every day.
+                  </p>
                 </div>
+              </div>
+            </section>
+
+            {/* Additional Hero Text Section */}
+            <section className="py-8 bg-white border-b-2 border-red-500">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl mx-auto text-center">
+                  <h2 className="text-2xl md:text-3xl font-bold text-red-600 mb-4">
+                    Premium Brand Goods at{' '}
+                    <span className="text-red-600 bg-clip-text bg-gradient-to-r">
+                      Throwaway Prices
+                    </span>
+                    {' '}– New Deals Every Day!
+                  </h2>
+                  <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+                    Discover deeply discounted Amazon returns and overstock items in every category: 
+                    <span className="font-semibold"> home goods</span>, 
+                    <span className="font-semibold"> electronics</span>, 
+                    <span className="font-semibold"> fashion</span>, 
+                    <span className="font-semibold"> arts & crafts</span>, 
+                    and more. Every visit is a treasure hunt with daily-changing prices!
+                  </p>
+                </div>
+              </div>
             </section>
             
             <section className="py-16 sm:py-24">

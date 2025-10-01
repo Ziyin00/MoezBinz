@@ -127,12 +127,48 @@ const ProductsPage: React.FC = () => {
   const currentDay = getCurrentDay();
 
   const categories = [
-    { id: 'all', label: 'All' },
-    { id: 'electronics', label: 'Electronics' },
-    { id: 'home', label: 'Home & Garden' },
-    { id: 'fashion', label: 'Fashion' },
-    { id: 'sports', label: 'Sports & Outdoors' },
-    { id: 'toys', label: 'Toys & Games' },
+    { 
+      id: 'all', 
+      label: 'All', 
+      image: '/deal-1.jpg',
+      icon: '🛍️',
+      description: 'Browse all categories'
+    },
+    { 
+      id: 'electronics', 
+      label: 'Electronics', 
+      image: '/deal-2.jpg',
+      icon: '📱',
+      description: 'Phones, laptops & gadgets'
+    },
+    { 
+      id: 'home', 
+      label: 'Home & Garden', 
+      image: '/deal-3.jpg',
+      icon: '🏠',
+      description: 'Furniture & decor'
+    },
+    { 
+      id: 'fashion', 
+      label: 'Fashion', 
+      image: '/deal-4.jpeg',
+      icon: '👗',
+      description: 'Clothing & accessories'
+    },
+    { 
+      id: 'sports', 
+      label: 'Sports & Outdoors', 
+      image: '/deal-1.jpg',
+      icon: '⚽',
+      description: 'Fitness & outdoor gear'
+    },
+    { 
+      id: 'toys', 
+      label: 'Toys & Games', 
+      image: '/deal-2.jpg',
+      icon: '🧸',
+      description: 'Kids toys & games'
+    },
   ];
 
   useEffect(() => {
@@ -246,19 +282,63 @@ const ProductsPage: React.FC = () => {
               ))}
             </div>
 
-            {/* Category Filters */}
-            <div className="flex flex-wrap justify-center gap-3">
+            {/* Category Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
               {categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                  className={`group relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-105 ${
                     selectedCategory === category.id
-                      ? 'bg-red-600 text-white shadow-lg transform scale-105'
-                      : 'bg-white text-gray-700 hover:bg-red-50 hover:text-red-600 border border-gray-200'
+                      ? 'ring-4 ring-red-500 ring-opacity-75 shadow-2xl'
+                      : 'shadow-lg hover:shadow-xl'
                   }`}
                 >
-                  {category.label}
+                  {/* Background Image */}
+                  <div className="relative h-32 w-full">
+                    <img 
+                      src={category.image} 
+                      alt={category.label}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.jpg';
+                      }}
+                    />
+                    
+                    {/* Overlay */}
+                    <div className={`absolute inset-0 transition-opacity duration-300 ${
+                      selectedCategory === category.id 
+                        ? 'bg-red-600/80' 
+                        : 'bg-black/40 group-hover:bg-black/60'
+                    }`}></div>
+                    
+                    {/* Content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-2">
+                      <div className="text-2xl mb-1">{category.icon}</div>
+                      <h3 className="text-sm font-bold text-center leading-tight">
+                        {category.label}
+                      </h3>
+                    </div>
+                    
+                    {/* Selection Indicator */}
+                    {selectedCategory === category.id && (
+                      <div className="absolute top-2 right-2">
+                        <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                          <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Description */}
+                  <div className="absolute -bottom-8 left-0 right-0 bg-white p-2 rounded-b-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    <p className="text-xs text-gray-600 text-center font-medium">
+                      {category.description}
+                    </p>
+                  </div>
                 </button>
               ))}
             </div>

@@ -24,7 +24,7 @@ const TreasuredFinds: React.FC = () => {
               <p className="text-xl text-white leading-relaxed mb-10">
                 Check out a few of the treasures waiting in our bins – new surprises arrive every Saturday.
               </p>
-              <div className="grid grid-cols-2 gap-6 h-[400px]">
+              <div className="grid grid-cols-2 gap-6 h-[500px]">
                 {/* First Image */}
                 <div className="col-span-1 h-full">
                    <div className="group relative overflow-hidden rounded-3xl shadow-2xl bg-gradient-to-br h-full">
@@ -125,7 +125,7 @@ const TreasuredFinds: React.FC = () => {
 
           {/* Right Column: Info Boxes */}
           <div className="space-y-10 ">
-            <div className="bg-white p-8 xl:p-9 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-white p-8 xl:p-14 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
               <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-6">Why Shop at Moez Binz?</h2>
               <ul className="space-y-4 text-lg text-gray-600">
                 <li className="flex items-start gap-3">
@@ -150,7 +150,7 @@ const TreasuredFinds: React.FC = () => {
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-yellow-500 to-yellow-500 p-8 xl:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+            <div className="bg-gradient-to-br from-yellow-500 to-yellow-500 p-8 xl:p-14 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
               <h2 className="text-xl sm:text-3xl font-bold text-white mb-6">Pro Tips for Bargain Hunters</h2>
               <ul className="space-y-4 text-lg text-white">
                 <li className="flex items-start gap-3">
