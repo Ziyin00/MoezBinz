@@ -206,7 +206,7 @@ const HowItWorks: React.FC = () => {
             <section className="mb-24">
               <div className="flex items-center justify-center mb-16">
                 <InformationCircleIcon className="w-10 h-10 text-red-600 mr-4" />
-                <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-red-600 leading-tight">Frequently Asked Questions</h2>
+                <h2 className="text-4xl lg:text-4xl xl:text-4xl font-bold text-red-600 leading-tight">Frequently Asked Questions</h2>
               </div>
               <div className="max-w-5xl mx-auto">
                 <FaqItem question="What kinds of products do you sell?" icon={<MagnifyingGlassIcon className="w-6 h-6" />}>
