@@ -385,7 +385,7 @@ const ProductsPage: React.FC = () => {
         </div>
 
         {/* Pro Tips Section */}
-        <div className="bg-yellow-400 py-12">
+        {/* <div className="bg-yellow-400 py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Pro Tips for Treasure Hunters</h2>
@@ -411,10 +411,10 @@ const ProductsPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Visit Us Section */}
-        <div className="bg-white py-16">
+        {/* <div className="bg-white py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Visit Us</h2>
@@ -436,7 +436,7 @@ const ProductsPage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
 
       {/* Bid Modal */}
