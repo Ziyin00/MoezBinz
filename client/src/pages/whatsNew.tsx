@@ -215,7 +215,7 @@ const WhatsNew: React.FC = () => {
 
           {/* All News Section */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">All News</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Offers & Promotions</h2>
             
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -272,7 +272,7 @@ const WhatsNew: React.FC = () => {
                           />
                         </div>
                       )}
-                      <div className="p-6">
+                      {/* <div className="p-6">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-gray-500">{formatDate(newsItem.publishedAt)}</span>
                           {newsItem.featured && (
@@ -287,7 +287,7 @@ const WhatsNew: React.FC = () => {
                         {newsItem.excerpt && (
                           <p className="text-gray-600 text-sm line-clamp-3">{newsItem.excerpt}</p>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>
