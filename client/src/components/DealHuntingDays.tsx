@@ -87,7 +87,7 @@ const DealHuntingDays: React.FC = () => {
               {/* Smashing Saturday Banner */}
               <div 
                 className={`relative h-46 mb-6 cursor-pointer  ${
-                  currentDay === 'Saturday' ? 'ring-4 ring-yellow-400 ring-opacity-75 rounded-2xl shadow-2xl' : ''
+                  currentDay === 'Saturday' ? 'ring-4 ring-yellow-400 ring-opacity-75  shadow-2xl' : ''
                 }`}
                 style={{ perspective: '1000px' }}
               >
