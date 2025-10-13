@@ -141,7 +141,7 @@ const Auction: React.FC = () => {
         </section>
 
         {/* Additional Hero Text Section */}
-        <section className="py-8 bg-white border-b-2 border-red-500">
+        <section className="py-8 bg-white ">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
                 {/* Hero Content */}
@@ -155,21 +155,7 @@ const Auction: React.FC = () => {
               </p>
             </div>
           </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-red-600 mb-4">
-                Premium Brand Goods at{' '}
-                <span className="text-red-600 bg-clip-text bg-gradient-to-r">
-                  Throwaway Prices
-                </span>
-                {' '}– New Deals Every Day!
-              </h2>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                Discover deeply discounted Amazon returns and overstock items in every category: 
-                <span className="font-semibold"> home goods</span>, 
-                <span className="font-semibold"> electronics</span>, 
-                <span className="font-semibold"> fashion</span>, 
-                <span className="font-semibold"> arts & crafts</span>, 
-                and more. Every visit is a treasure hunt with daily-changing prices!
-              </p>
+             
             </div>
           </div>
         </section>
