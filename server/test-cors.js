@@ -3,6 +3,7 @@ const axios = require('axios');
 // Test CORS configuration
 async function testCORS() {
   const testOrigins = [
+    "https://www.thebinzstore.com",
     'https://thebinzstore.vercel.app',
     'https://moez-binz-sepia.vercel.app',
     'http://localhost:5173'
